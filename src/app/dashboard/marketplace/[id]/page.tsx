@@ -184,27 +184,27 @@ export default function PostDetail() {
         Back to listings
       </button>
 
-      <div className="flex gap-6">
-        <div className="flex-1">
-          <div className={`flex h-[420px] items-center justify-center rounded-[24px] bg-gradient-to-br ${cfg.gradient}`}>
+      <div className="flex gap-8">
+        <div className="w-[480px] flex-shrink-0">
+          <div className={`flex h-[380px] items-center justify-center rounded-[20px] bg-gradient-to-br ${cfg.gradient}`}>
             {post.images && post.images.length > 0 ? (
-              <img src={post.images[selectedImage] || post.images[0]} alt={post.title} className="h-full w-full rounded-[24px] object-cover" />
+              <img src={post.images[selectedImage] || post.images[0]} alt={post.title} className="h-full w-full rounded-[20px] object-cover" />
             ) : post.image_url ? (
-              <img src={post.image_url} alt={post.title} className="h-full w-full rounded-[24px] object-cover" />
+              <img src={post.image_url} alt={post.title} className="h-full w-full rounded-[20px] object-cover" />
             ) : (
-              <Icon size={120} strokeWidth={1.5} className="text-white" />
+              <Icon size={100} strokeWidth={1.5} className="text-white" />
             )}
           </div>
           {post.images && post.images.length > 1 && (
-            <div className="mt-3 flex gap-3">
+            <div className="mt-3 flex gap-2.5">
               {post.images.map((img, i) => (
                 <button
                   key={i}
                   onClick={() => setSelectedImage(i)}
-                  className={`h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[12px] transition-all ${
+                  className={`h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[12px] border-2 transition-all ${
                     selectedImage === i
-                      ? "ring-2 ring-[#B8F25E] ring-offset-2 opacity-100"
-                      : "opacity-60 hover:opacity-100"
+                      ? "border-[#202124] opacity-100"
+                      : "border-transparent opacity-50 hover:opacity-100"
                   }`}
                 >
                   <img src={img} alt={`Photo ${i + 1}`} className="h-full w-full object-cover" />
@@ -214,7 +214,7 @@ export default function PostDetail() {
           )}
         </div>
 
-        <div className="w-[420px] flex flex-col gap-4">
+        <div className="flex flex-1 flex-col gap-4">
           <div className="rounded-[24px] bg-white p-6 shadow-sm">
             <div className="flex items-center gap-3">
               <span className={`rounded-full px-4 py-1.5 text-xs font-semibold ${cfg.badge}`}>
