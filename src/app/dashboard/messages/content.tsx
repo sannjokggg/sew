@@ -92,7 +92,7 @@ export default function MessagesContent() {
   useEffect(() => { messagesLenRef.current = messages.length; }, [messages.length]);
   useEffect(() => { selectedIdRef.current = selectedId; }, [selectedId]);
 
-  const myId = (session?.user as { id?: string })?.id ? Number((session.user as { id: string }).id) : 0;
+  const myId = session?.user ? Number((session.user as { id: string }).id) : 0;
 
   async function loadConvos() {
     try {

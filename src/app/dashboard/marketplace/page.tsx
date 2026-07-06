@@ -170,7 +170,11 @@ export default function Marketplace() {
             const cfg = typeConfig[item.type] || typeConfig.Sell;
             const Icon = cfg.icon;
             return (
-              <div key={item.id} className="rounded-[24px] bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+              <Link
+                key={item.id}
+                href={`/dashboard/marketplace/${item.id}`}
+                className="rounded-[24px] bg-white p-5 shadow-sm transition-all hover:shadow-md"
+              >
                 <div className={`flex h-[200px] items-center justify-center rounded-[16px] bg-gradient-to-br ${cfg.gradient}`}>
                   {item.image_url ? (
                     <img
@@ -207,31 +211,31 @@ export default function Marketplace() {
                     {item.type === "Request" ? (
                       myId === item.user_id ? (
                         <button
-                          onClick={() => router.push("/dashboard/messages")}
+                          onClick={(e) => { e.stopPropagation(); router.push("/dashboard/messages"); }}
                           className="w-full rounded-full border border-gray-200 px-4 py-2.5 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
                         >
                           <MessageSquare size={14} className="inline mr-1.5" />Inbox
                         </button>
                       ) : (
-                        <button className="w-full rounded-full bg-[#B8F25E] px-4 py-2.5 text-sm font-semibold text-[#202124] transition-colors hover:bg-[#a8e04e]">
+                        <button onClick={(e) => e.stopPropagation()} className="w-full rounded-full bg-[#B8F25E] px-4 py-2.5 text-sm font-semibold text-[#202124] transition-colors hover:bg-[#a8e04e]">
                           I Have This
                         </button>
                       )
                     ) : (
                       <>
-                        <button className="flex-1 rounded-full bg-[#B8F25E] px-4 py-2.5 text-sm font-semibold text-[#202124] transition-colors hover:bg-[#a8e04e]">
+                        <button onClick={(e) => e.stopPropagation()} className="flex-1 rounded-full bg-[#B8F25E] px-4 py-2.5 text-sm font-semibold text-[#202124] transition-colors hover:bg-[#a8e04e]">
                           {item.type === "Sell" ? "Buy" : item.type === "Exchange" ? "Swap" : "Claim"}
                         </button>
                         {myId === item.user_id ? (
                           <button
-                            onClick={() => router.push("/dashboard/messages")}
+                            onClick={(e) => { e.stopPropagation(); router.push("/dashboard/messages"); }}
                             className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
                           >
                             <MessageSquare size={14} className="inline mr-1.5" />Inbox
                           </button>
                         ) : (
                           <button
-                            onClick={() => router.push(`/dashboard/messages?userId=${item.user_id}`)}
+                            onClick={(e) => { e.stopPropagation(); router.push(`/dashboard/messages?userId=${item.user_id}`); }}
                             className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
                           >
                             Message
@@ -241,7 +245,7 @@ export default function Marketplace() {
                     )}
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
