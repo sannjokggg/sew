@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Tag, ArrowLeftRight, Gift, UserPlus, Loader2, MessageSquare } from "lucide-react";
 
 interface Post {
@@ -37,6 +38,8 @@ function timeAgo(dateStr: string) {
 
 export default function Marketplace() {
   const router = useRouter();
+  const { data: session } = useSession();
+  const myId = Number((session?.user as { id?: string })?.id || 0);
   const [posts, setPosts] = useState<Post[]>([]);
   const [filter, setFilter] = useState("All");
   const [loading, setLoading] = useState(true);
@@ -195,20 +198,38 @@ export default function Marketplace() {
                   </div>
                   <div className="mt-3 flex gap-2">
                     {item.type === "Request" ? (
-                      <button className="w-full rounded-full bg-[#B8F25E] px-4 py-2.5 text-sm font-semibold text-[#202124] transition-colors hover:bg-[#a8e04e]">
-                        I Have This
-                      </button>
+                      myId === item.user_id ? (
+                        <button
+                          onClick={() => router.push("/dashboard/messages")}
+                          className="w-full rounded-full border border-gray-200 px-4 py-2.5 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
+                        >
+                          <MessageSquare size={14} className="inline mr-1.5" />Inbox
+                        </button>
+                      ) : (
+                        <button className="w-full rounded-full bg-[#B8F25E] px-4 py-2.5 text-sm font-semibold text-[#202124] transition-colors hover:bg-[#a8e04e]">
+                          I Have This
+                        </button>
+                      )
                     ) : (
                       <>
                         <button className="flex-1 rounded-full bg-[#B8F25E] px-4 py-2.5 text-sm font-semibold text-[#202124] transition-colors hover:bg-[#a8e04e]">
                           {item.type === "Sell" ? "Buy" : item.type === "Exchange" ? "Swap" : "Claim"}
                         </button>
-                        <button
-                          onClick={() => router.push(`/dashboard/messages?userId=${item.user_id}`)}
-                          className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
-                        >
-                          Message
-                        </button>
+                        {myId === item.user_id ? (
+                          <button
+                            onClick={() => router.push("/dashboard/messages")}
+                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
+                          >
+                            <MessageSquare size={14} className="inline mr-1.5" />Inbox
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => router.push(`/dashboard/messages?userId=${item.user_id}`)}
+                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
+                          >
+                            Message
+                          </button>
+                        )}
                       </>
                     )}
                   </div>
