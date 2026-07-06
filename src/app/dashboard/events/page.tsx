@@ -76,12 +76,6 @@ export default function EventsPage() {
   const upcoming = filtered.filter((e) => !isPast(e.event_date));
   const past = filtered.filter((e) => isPast(e.event_date));
 
-  const stats = {
-    total: events.length,
-    upcoming: events.filter((e) => !isPast(e.event_date)).length,
-    categories: new Set(events.map((e) => e.category)).size,
-  };
-
   return (
     <div className="flex flex-col gap-6 p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       <div className="flex items-center justify-between">
@@ -96,37 +90,6 @@ export default function EventsPage() {
           <Plus size={18} strokeWidth={2.5} />
           Create Event
         </Link>
-      </div>
-
-      {/* Stats */}
-      <div className="flex gap-4">
-        <div className="flex flex-1 items-center gap-4 rounded-[24px] bg-white p-5 shadow-sm">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#B8F25E]/20">
-            <CalendarDays size={22} className="text-[#202124]" />
-          </div>
-          <div>
-            <p className="text-2xl font-semibold text-[#202124]">{stats.total}</p>
-            <p className="text-xs text-[#9A9A9A]">Total Events</p>
-          </div>
-        </div>
-        <div className="flex flex-1 items-center gap-4 rounded-[24px] bg-white p-5 shadow-sm">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
-            <Clock size={22} className="text-blue-500" />
-          </div>
-          <div>
-            <p className="text-2xl font-semibold text-[#202124]">{stats.upcoming}</p>
-            <p className="text-xs text-[#9A9A9A]">Upcoming</p>
-          </div>
-        </div>
-        <div className="flex flex-1 items-center gap-4 rounded-[24px] bg-white p-5 shadow-sm">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-50">
-            <Palette size={22} className="text-purple-500" />
-          </div>
-          <div>
-            <p className="text-2xl font-semibold text-[#202124]">{stats.categories}</p>
-            <p className="text-xs text-[#9A9A9A]">Categories</p>
-          </div>
-        </div>
       </div>
 
       {/* Category Filters */}
