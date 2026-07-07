@@ -84,8 +84,8 @@ export default function CreatePostPage() {
             )}
 
             <div className="mb-6">
-              <label className="mb-1 block text-base font-semibold text-[#202124]">What are you posting?</label>
-              <p className="text-sm text-[#9A9A9A]">Select the type of listing</p>
+              <label className="mb-1 block text-lg font-semibold text-[#202124]">What are you posting?</label>
+              <p className="text-base text-[#9A9A9A]">Select the type of listing</p>
               <div className="mt-4 flex gap-3">
                 {postTypes.map((t) => {
                   const Icon = t.icon;
@@ -95,7 +95,7 @@ export default function CreatePostPage() {
                       key={t.value}
                       type="button"
                       onClick={() => setType(t.value)}
-                      className={`flex items-center gap-3 rounded-full px-6 py-3.5 text-base font-medium transition-all duration-200 ${
+                      className={`flex items-center gap-3 rounded-full px-6 py-3.5 text-lg font-medium transition-all duration-200 ${
                         isSelected
                           ? "bg-white text-[#202124] shadow-md ring-2 ring-[#B8F25E]"
                           : "bg-gray-50 text-[#6B6B6B] hover:bg-gray-100 hover:text-[#202124]"
@@ -113,28 +113,28 @@ export default function CreatePostPage() {
 
             <div className="mb-6 grid grid-cols-[1fr_200px_220px] gap-5">
               <div>
-                <label className="mb-2 block text-base font-medium text-[#202124]">Title</label>
+                <label className="mb-2 block text-lg font-medium text-[#202124]">Title</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-base outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
+                  className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
                   placeholder="e.g. MacBook Pro 2021"
                   required
                 />
               </div>
               <div>
-                <label className="mb-2 block text-base font-medium text-[#202124]">
+                <label className="mb-2 block text-lg font-medium text-[#202124]">
                   {type === "Sell" ? "Price" : type === "Exchange" ? "Want in return" : "Type"}
                 </label>
                 {type === "Sell" ? (
                   <div className="relative">
-                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-base font-medium text-[#9A9A9A]">$</span>
+                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-medium text-[#9A9A9A]">$</span>
                     <input
                       type="text"
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
-                      className="w-full rounded-[14px] border border-gray-200 bg-gray-50 pl-10 pr-5 py-3.5 text-base outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
+                      className="w-full rounded-[14px] border border-gray-200 bg-gray-50 pl-10 pr-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
                       placeholder="0.00"
                     />
                   </div>
@@ -143,22 +143,22 @@ export default function CreatePostPage() {
                     type="text"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
-                    className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-base outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
+                    className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
                     placeholder="e.g. Samsung case"
                   />
                 ) : (
-                  <div className="flex items-center rounded-[14px] border border-gray-100 bg-gray-50 px-5 py-3.5 text-base text-[#9A9A9A]">
+                  <div className="flex items-center rounded-[14px] border border-gray-100 bg-gray-50 px-5 py-3.5 text-lg text-[#9A9A9A]">
                     {type === "Giveaway" ? "Free" : "Looking for this"}
                   </div>
                 )}
               </div>
               <div>
-                <label className="mb-2 block text-base font-medium text-[#202124]">Category</label>
+                <label className="mb-2 block text-lg font-medium text-[#202124]">Category</label>
                 <div className="relative">
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full appearance-none rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 pr-10 text-base outline-none transition-all focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
+                    className="w-full appearance-none rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 pr-10 text-lg outline-none transition-all focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
                   >
                     <option value="">Select</option>
                     {categories.map((cat) => (
@@ -171,20 +171,20 @@ export default function CreatePostPage() {
             </div>
 
             <div className="mb-6">
-              <label className="mb-2 block text-base font-medium text-[#202124]">Description</label>
+              <label className="mb-2 block text-lg font-medium text-[#202124]">Description</label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
-                className="w-full resize-none rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-base outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
+                className="w-full resize-none rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
                 placeholder="Describe your item, condition, any details buyers should know..."
                 required
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-base font-medium text-[#202124]">Photos</label>
-              <p className="mb-2 text-xs text-[#9A9A9A]">Up to 4 photos</p>
+              <label className="mb-2 block text-lg font-medium text-[#202124]">Photos</label>
+              <p className="mb-2 text-sm text-[#9A9A9A]">Up to 4 photos</p>
               <MultiImageUploader onUpload={setImages} currentImages={images} maxImages={4} />
             </div>
           </div>
@@ -192,14 +192,14 @@ export default function CreatePostPage() {
           <div className="flex items-center gap-4 mt-5">
             <Link
               href="/dashboard/marketplace"
-              className="rounded-full border border-gray-200 bg-white px-10 py-3.5 text-base font-medium text-[#6B6B6B] transition-all hover:bg-gray-50"
+              className="rounded-full border border-gray-200 bg-white px-10 py-3.5 text-lg font-medium text-[#6B6B6B] transition-all hover:bg-gray-50"
             >
               Cancel
             </Link>
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2.5 rounded-full bg-[#B8F25E] px-12 py-3.5 text-base font-semibold text-[#202124] transition-all hover:bg-[#a8e04e] disabled:opacity-50"
+              className="flex items-center gap-2.5 rounded-full bg-[#B8F25E] px-12 py-3.5 text-lg font-semibold text-[#202124] transition-all hover:bg-[#a8e04e] disabled:opacity-50"
             >
               {loading ? <Loader2 size={18} className="animate-spin" /> : null}
               {loading ? "Posting..." : "Post Listing"}
