@@ -32,17 +32,17 @@ export default function Sidebar() {
             <div key={href} className="relative group/item">
               <Link
                 href={href}
-                className={`flex h-12 w-12 items-center justify-center rounded-full ${
+                className={`flex h-14 w-14 items-center justify-center rounded-full ${
                   active
                     ? "bg-[#1D1B17] text-white"
-                    : "text-gray-400 group-hover/item:bg-gray-100 group-hover/item:text-gray-700"
+                    : "text-gray-400 group-hover/item:bg-white/40 group-hover/item:backdrop-blur-md group-hover/item:border group-hover/item:border-white/30 group-hover/item:text-gray-800"
                 }`}
               >
                 <Icon size={22} />
               </Link>
               {!active && (
                 <div className="absolute left-0 top-1/2 -translate-y-1/2 z-50 opacity-0 pointer-events-none group-hover/item:opacity-100">
-                  <div className="h-12 bg-[#1D1B17] text-white text-base font-medium rounded-full pl-2.5 pr-4 flex items-center gap-2.5 whitespace-nowrap shadow-lg">
+                  <div className="h-14 bg-white/30 backdrop-blur-md border border-white/40 text-[#202124] text-base font-medium rounded-full pl-2.5 pr-4 flex items-center gap-2.5 whitespace-nowrap shadow-lg">
                     <Icon size={22} className="flex-shrink-0" />
                     {label}
                   </div>
