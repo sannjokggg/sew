@@ -75,8 +75,8 @@ export default function CreatePostPage() {
       </div>
 
       <div className="flex gap-6 items-stretch">
-        <form onSubmit={handleSubmit} className="flex-1">
-          <div className="rounded-[24px] bg-white p-6 shadow-sm">
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
+          <div className="rounded-[24px] bg-white p-6 shadow-sm flex-1 flex flex-col">
             {error && (
               <div className="mb-6 rounded-[16px] border border-red-200 bg-red-50 px-5 py-4 text-base text-red-600">
                 {error}
@@ -187,23 +187,24 @@ export default function CreatePostPage() {
               <p className="mb-2 text-xs text-[#9A9A9A]">Up to 4 photos</p>
               <MultiImageUploader onUpload={setImages} currentImages={images} maxImages={4} />
             </div>
-          </div>
+            </div>
 
-          <div className="flex items-center gap-4 mt-5">
-            <Link
-              href="/dashboard/marketplace"
-              className="rounded-full border border-gray-200 bg-white px-10 py-3.5 text-base font-medium text-[#6B6B6B] transition-all hover:bg-gray-50"
-            >
-              Cancel
-            </Link>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex items-center gap-2.5 rounded-full bg-[#B8F25E] px-12 py-3.5 text-base font-semibold text-[#202124] transition-all hover:bg-[#a8e04e] disabled:opacity-50"
-            >
-              {loading ? <Loader2 size={18} className="animate-spin" /> : null}
-              {loading ? "Posting..." : "Post Listing"}
-            </button>
+            <div className="flex items-center gap-4 mt-auto pt-4">
+              <Link
+                href="/dashboard/marketplace"
+                className="rounded-full border border-gray-200 bg-white px-10 py-3.5 text-base font-medium text-[#6B6B6B] transition-all hover:bg-gray-50"
+              >
+                Cancel
+              </Link>
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex items-center gap-2.5 rounded-full bg-[#B8F25E] px-12 py-3.5 text-base font-semibold text-[#202124] transition-all hover:bg-[#a8e04e] disabled:opacity-50"
+              >
+                {loading ? <Loader2 size={18} className="animate-spin" /> : null}
+                {loading ? "Posting..." : "Post Listing"}
+              </button>
+            </div>
           </div>
         </form>
 
