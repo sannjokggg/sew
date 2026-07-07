@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Tag, ArrowLeftRight, Gift, UserPlus, ArrowLeft, ChevronDown, Loader2, ImagePlus } from "lucide-react";
+import { Tag, ArrowLeftRight, Gift, UserPlus, ArrowLeft, ChevronDown, Loader2 } from "lucide-react";
 import Link from "next/link";
 import MultiImageUploader from "@/components/multi-image-uploader";
 
@@ -64,28 +64,28 @@ export default function CreatePostPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/dashboard/marketplace"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition-all hover:bg-gray-100 hover:shadow-md"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm transition-all hover:bg-gray-100 hover:shadow-md"
         >
-          <ArrowLeft size={20} strokeWidth={2} />
+          <ArrowLeft size={22} strokeWidth={2} />
         </Link>
         <div>
           <h1 className="text-4xl font-normal text-[#202124]">Create Listing</h1>
-          <p className="text-base text-[#6B6B6B]">Post something to the community</p>
+          <p className="text-lg text-[#6B6B6B]">Post something to the community</p>
         </div>
       </div>
 
       <div className="flex gap-6">
         <form onSubmit={handleSubmit} className="flex-1">
-          <div className="rounded-[24px] bg-white p-7 shadow-sm">
+          <div className="rounded-[24px] bg-white p-8 shadow-sm">
             {error && (
-              <div className="mb-5 rounded-[16px] border border-red-200 bg-red-50 px-5 py-3 text-sm text-red-600">
+              <div className="mb-6 rounded-[16px] border border-red-200 bg-red-50 px-5 py-4 text-base text-red-600">
                 {error}
               </div>
             )}
 
-            <div className="mb-7">
-              <label className="mb-1 block text-sm font-semibold text-[#202124]">What are you posting?</label>
-              <p className="text-xs text-[#9A9A9A]">Select the type of listing</p>
+            <div className="mb-8">
+              <label className="mb-1 block text-base font-semibold text-[#202124]">What are you posting?</label>
+              <p className="text-sm text-[#9A9A9A]">Select the type of listing</p>
               <div className="mt-4 flex gap-3">
                 {postTypes.map((t) => {
                   const Icon = t.icon;
@@ -95,14 +95,14 @@ export default function CreatePostPage() {
                       key={t.value}
                       type="button"
                       onClick={() => setType(t.value)}
-                      className={`flex items-center gap-2.5 rounded-full px-5 py-3 text-sm font-medium transition-all duration-200 ${
+                      className={`flex items-center gap-3 rounded-full px-6 py-3.5 text-base font-medium transition-all duration-200 ${
                         isSelected
                           ? "bg-white text-[#202124] shadow-md ring-2 ring-[#B8F25E]"
                           : "bg-gray-50 text-[#6B6B6B] hover:bg-gray-100 hover:text-[#202124]"
                       }`}
                     >
-                      <div className={`flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br ${t.gradient}`}>
-                        <Icon size={14} strokeWidth={2.5} className="text-white" />
+                      <div className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br ${t.gradient}`}>
+                        <Icon size={16} strokeWidth={2.5} className="text-white" />
                       </div>
                       {t.label}
                     </button>
@@ -111,50 +111,50 @@ export default function CreatePostPage() {
               </div>
             </div>
 
-            <div className="mb-7 grid grid-cols-2 gap-5">
+            <div className="mb-8 grid grid-cols-2 gap-6">
               <div className="col-span-2">
-                <label className="mb-1.5 block text-sm font-medium text-[#202124]">Title</label>
+                <label className="mb-2 block text-base font-medium text-[#202124]">Title</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
+                  className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-base outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
                   placeholder="e.g. MacBook Pro 2021"
                   required
                 />
               </div>
               <div className="col-span-2">
-                <label className="mb-1.5 block text-sm font-medium text-[#202124]">Description</label>
+                <label className="mb-2 block text-base font-medium text-[#202124]">Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  rows={3}
-                  className="w-full resize-none rounded-[14px] border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
+                  rows={4}
+                  className="w-full resize-none rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-base outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
                   placeholder="Describe your item, condition, any details buyers should know..."
                   required
                 />
               </div>
             </div>
 
-            <div className="mb-7">
-              <label className="mb-1.5 block text-sm font-medium text-[#202124]">Photos</label>
-              <p className="mb-3 text-xs text-[#9A9A9A]">Add up to 4 photos. First photo is the main image.</p>
+            <div className="mb-8">
+              <label className="mb-2 block text-base font-medium text-[#202124]">Photos</label>
+              <p className="mb-3 text-sm text-[#9A9A9A]">Add up to 4 photos. First photo is the main image.</p>
               <MultiImageUploader onUpload={setImages} currentImages={images} maxImages={4} />
             </div>
 
-            <div className="mb-7 grid grid-cols-2 gap-5">
+            <div className="mb-8 grid grid-cols-2 gap-6">
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-[#202124]">
+                <label className="mb-2 block text-base font-medium text-[#202124]">
                   {type === "Sell" ? "Price" : type === "Exchange" ? "What you want in return" : "Type"}
                 </label>
                 {type === "Sell" ? (
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-[#9A9A9A]">$</span>
+                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-base font-medium text-[#9A9A9A]">$</span>
                     <input
                       type="text"
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
-                      className="w-full rounded-[14px] border border-gray-200 bg-gray-50 pl-8 pr-4 py-3 text-sm outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
+                      className="w-full rounded-[14px] border border-gray-200 bg-gray-50 pl-10 pr-5 py-3.5 text-base outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
                       placeholder="0.00"
                     />
                   </div>
@@ -163,46 +163,46 @@ export default function CreatePostPage() {
                     type="text"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
-                    className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
+                    className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-base outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
                     placeholder="e.g. Samsung case"
                   />
                 ) : (
-                  <div className="flex items-center rounded-[14px] border border-gray-100 bg-gray-50 px-4 py-3 text-sm text-[#9A9A9A]">
+                  <div className="flex items-center rounded-[14px] border border-gray-100 bg-gray-50 px-5 py-3.5 text-base text-[#9A9A9A]">
                     {type === "Giveaway" ? "Free — no price needed" : "You're looking for this item"}
                   </div>
                 )}
               </div>
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-[#202124]">Category</label>
+                <label className="mb-2 block text-base font-medium text-[#202124]">Category</label>
                 <div className="relative">
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full appearance-none rounded-[14px] border border-gray-200 bg-gray-50 px-4 py-3 pr-10 text-sm outline-none transition-all focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
+                    className="w-full appearance-none rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 pr-10 text-base outline-none transition-all focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
                   >
                     <option value="">Select category</option>
                     {categories.map((cat) => (
                       <option key={cat} value={cat}>{cat}</option>
                     ))}
                   </select>
-                  <ChevronDown size={16} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#9A9A9A]" />
+                  <ChevronDown size={18} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#9A9A9A]" />
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 pt-1">
+            <div className="flex items-center gap-4 pt-1">
               <Link
                 href="/dashboard/marketplace"
-                className="rounded-full border border-gray-200 bg-white px-8 py-3 text-sm font-medium text-[#6B6B6B] transition-all hover:bg-gray-50"
+                className="rounded-full border border-gray-200 bg-white px-10 py-3.5 text-base font-medium text-[#6B6B6B] transition-all hover:bg-gray-50"
               >
                 Cancel
               </Link>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex items-center gap-2 rounded-full bg-[#B8F25E] px-10 py-3 text-sm font-semibold text-[#202124] transition-all hover:bg-[#a8e04e] disabled:opacity-50"
+                className="flex items-center gap-2.5 rounded-full bg-[#B8F25E] px-12 py-3.5 text-base font-semibold text-[#202124] transition-all hover:bg-[#a8e04e] disabled:opacity-50"
               >
-                {loading ? <Loader2 size={16} className="animate-spin" /> : null}
+                {loading ? <Loader2 size={18} className="animate-spin" /> : null}
                 {loading ? "Posting..." : "Post Listing"}
               </button>
             </div>
@@ -234,17 +234,17 @@ export default function CreatePostPage() {
               <h3 className="mt-3 text-base font-semibold text-[#202124]">
                 {title || "Your title here"}
               </h3>
-              <p className="mt-1 text-xs text-[#6B6B6B] line-clamp-2">
+              <p className="mt-1 text-sm text-[#6B6B6B] line-clamp-2">
                 {description || "Your description will appear here..."}
               </p>
               <div className="mt-3 flex items-center justify-between">
-                <span className="text-lg font-semibold text-[#202124]">
+                <span className="text-xl font-semibold text-[#202124]">
                   {type === "Sell" ? (price ? `$${price}` : "$0") :
                    type === "Giveaway" ? "Free" :
                    type === "Exchange" ? (price || "Swap") :
                    "Request"}
                 </span>
-                <span className="text-xs text-[#9A9A9A]">by you</span>
+                <span className="text-sm text-[#9A9A9A]">by you</span>
               </div>
             </div>
           </div>
