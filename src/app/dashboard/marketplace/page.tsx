@@ -178,12 +178,12 @@ export default function Marketplace() {
                 href={`/dashboard/marketplace/${item.id}`}
                 className="rounded-[24px] bg-white p-5 shadow-sm transition-all hover:shadow-md"
               >
-                <div className={`flex h-[200px] items-center justify-center overflow-hidden rounded-[16px] ${(item.images && item.images.length > 0) || item.image_url ? "bg-gray-50" : `bg-gradient-to-br ${cfg.gradient}`}`}>
+                <div className={`flex h-[240px] items-center justify-center overflow-hidden rounded-[16px] ${(item.images && item.images.length > 0) || item.image_url ? "bg-gray-50" : `bg-gradient-to-br ${cfg.gradient}`}`}>
                   {(item.images && item.images.length > 0) || item.image_url ? (
                     <img
                       src={(item.images && item.images[0]) || item.image_url || ""}
                       alt={item.title}
-                      className="h-full w-full cursor-pointer object-contain transition-transform hover:scale-105"
+                      className="max-h-full max-w-full cursor-pointer object-contain transition-transform hover:scale-105"
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
