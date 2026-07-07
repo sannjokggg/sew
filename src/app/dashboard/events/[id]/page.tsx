@@ -103,7 +103,7 @@ export default function EventDetailPage() {
         <div className="w-[480px] flex-shrink-0">
           <div className={`flex h-[380px] items-center justify-center rounded-[20px] ${cfg.bg}`}>
             {event.image_url ? (
-              <img src={event.image_url} alt={event.title} className="h-full w-full rounded-[20px] object-cover" />
+              <img src={event.image_url} alt={event.title} className="h-full w-full rounded-[20px] object-contain" />
             ) : (
               <Icon size={100} strokeWidth={1.2} className={cfg.color} />
             )}

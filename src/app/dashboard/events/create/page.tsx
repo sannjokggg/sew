@@ -235,7 +235,7 @@ export default function CreateEventPage() {
               category ? "bg-gray-50" : "bg-gradient-to-br from-gray-100 to-gray-200"
             }`}>
               {images.length > 0 ? (
-                <img src={images[0]} alt="Preview" className="h-full w-full rounded-[16px] object-cover" />
+                <img src={images[0]} alt="Preview" className="h-full w-full rounded-[16px] object-contain" />
               ) : category ? (
                 <CalendarDays size={56} strokeWidth={1.2} className="text-[#9A9A9A]" />
               ) : (
