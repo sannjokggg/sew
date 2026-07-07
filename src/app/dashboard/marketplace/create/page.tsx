@@ -111,8 +111,8 @@ export default function CreatePostPage() {
               </div>
             </div>
 
-            <div className="mb-6 grid grid-cols-2 gap-6">
-              <div className="col-span-2">
+            <div className="mb-6 grid grid-cols-3 gap-5">
+              <div>
                 <label className="mb-2 block text-base font-medium text-[#202124]">Title</label>
                 <input
                   type="text"
@@ -123,28 +123,9 @@ export default function CreatePostPage() {
                   required
                 />
               </div>
-              <div className="col-span-2">
-                <label className="mb-2 block text-base font-medium text-[#202124]">Description</label>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows={4}
-                  className="w-full resize-none rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-base outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
-                  placeholder="Describe your item, condition, any details buyers should know..."
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-5">
-              <div>
-                <label className="mb-2 block text-base font-medium text-[#202124]">Photos</label>
-                <p className="mb-2 text-xs text-[#9A9A9A]">Up to 4 photos</p>
-                <MultiImageUploader onUpload={setImages} currentImages={images} maxImages={4} />
-              </div>
               <div>
                 <label className="mb-2 block text-base font-medium text-[#202124]">
-                  {type === "Sell" ? "Price" : type === "Exchange" ? "What you want in return" : "Type"}
+                  {type === "Sell" ? "Price" : type === "Exchange" ? "Want in return" : "Type"}
                 </label>
                 {type === "Sell" ? (
                   <div className="relative">
@@ -187,6 +168,24 @@ export default function CreatePostPage() {
                   <ChevronDown size={18} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#9A9A9A]" />
                 </div>
               </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="mb-2 block text-base font-medium text-[#202124]">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+                className="w-full resize-none rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-base outline-none transition-all placeholder:text-[#B0B0B0] focus:border-[#B8F25E] focus:bg-white focus:ring-2 focus:ring-[#B8F25E]/30"
+                placeholder="Describe your item, condition, any details buyers should know..."
+                required
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-base font-medium text-[#202124]">Photos</label>
+              <p className="mb-2 text-xs text-[#9A9A9A]">Up to 4 photos</p>
+              <MultiImageUploader onUpload={setImages} currentImages={images} maxImages={4} />
             </div>
           </div>
 
