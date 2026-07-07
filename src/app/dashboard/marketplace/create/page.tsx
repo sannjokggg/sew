@@ -111,7 +111,7 @@ export default function CreatePostPage() {
               </div>
             </div>
 
-            <div className="mb-6 grid grid-cols-[1fr_140px_160px] gap-5">
+            <div className="mb-6 grid grid-cols-[1fr_155px_175px] gap-5">
               <div>
                 <label className="mb-2 block text-base font-medium text-[#202124]">Title</label>
                 <input
