@@ -227,7 +227,7 @@ export default function CreatePostPage() {
           <div className="rounded-[24px] bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
             <div className={`flex h-[200px] items-center justify-center rounded-[16px] bg-gradient-to-br ${selectedType?.gradient || "from-gray-200 to-gray-300"}`}>
               {images.length > 0 ? (
-                <img src={images[0]} alt="Preview" className="h-full w-full rounded-[16px] object-cover" />
+                <img src={images[0]} alt="Preview" className="h-full w-full rounded-[16px] object-contain" />
               ) : (
                 selectedType && <selectedType.icon size={72} strokeWidth={1.5} className="text-white" />
               )}

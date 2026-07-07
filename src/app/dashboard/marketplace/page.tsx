@@ -181,7 +181,7 @@ export default function Marketplace() {
                     <img
                       src={item.images[0]}
                       alt={item.title}
-                      className="h-full w-full rounded-[16px] object-cover"
+                      className="h-full w-full rounded-[16px] object-contain"
                       onError={(e) => {
                         (e.target as HTMLImageElement).style.display = "none";
                         (e.target as HTMLImageElement).parentElement!.querySelector(".fallback-icon")?.classList.remove("hidden");
@@ -191,7 +191,7 @@ export default function Marketplace() {
                     <img
                       src={item.image_url}
                       alt={item.title}
-                      className="h-full w-full rounded-[16px] object-cover"
+                      className="h-full w-full rounded-[16px] object-contain"
                       onError={(e) => {
                         (e.target as HTMLImageElement).style.display = "none";
                         (e.target as HTMLImageElement).parentElement!.querySelector(".fallback-icon")?.classList.remove("hidden");

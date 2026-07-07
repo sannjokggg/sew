@@ -188,9 +188,9 @@ export default function PostDetail() {
         <div className="w-[560px] flex-shrink-0">
           <div className={`flex h-[440px] items-center justify-center rounded-[20px] bg-gradient-to-br ${cfg.gradient}`}>
             {post.images && post.images.length > 0 ? (
-              <img src={post.images[selectedImage] || post.images[0]} alt={post.title} className="h-full w-full rounded-[20px] object-cover" />
+              <img src={post.images[selectedImage] || post.images[0]} alt={post.title} className="h-full w-full rounded-[20px] object-contain" />
             ) : post.image_url ? (
-              <img src={post.image_url} alt={post.title} className="h-full w-full rounded-[20px] object-cover" />
+              <img src={post.image_url} alt={post.title} className="h-full w-full rounded-[20px] object-contain" />
             ) : (
               <Icon size={100} strokeWidth={1.5} className="text-white" />
             )}
@@ -207,7 +207,7 @@ export default function PostDetail() {
                       : "border-transparent opacity-50 hover:opacity-100"
                   }`}
                 >
-                  <img src={img} alt={`Photo ${i + 1}`} className="h-full w-full object-cover" />
+                  <img src={img} alt={`Photo ${i + 1}`} className="h-full w-full object-contain" />
                 </button>
               ))}
             </div>
