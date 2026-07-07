@@ -76,14 +76,14 @@ export default function CreatePostPage() {
 
       <div className="flex gap-6 items-stretch">
         <form onSubmit={handleSubmit} className="flex-1">
-          <div className="rounded-[24px] bg-white p-8 shadow-sm">
+          <div className="rounded-[24px] bg-white p-6 shadow-sm">
             {error && (
               <div className="mb-6 rounded-[16px] border border-red-200 bg-red-50 px-5 py-4 text-base text-red-600">
                 {error}
               </div>
             )}
 
-            <div className="mb-8">
+            <div className="mb-6">
               <label className="mb-1 block text-base font-semibold text-[#202124]">What are you posting?</label>
               <p className="text-sm text-[#9A9A9A]">Select the type of listing</p>
               <div className="mt-4 flex gap-3">
@@ -111,7 +111,7 @@ export default function CreatePostPage() {
               </div>
             </div>
 
-            <div className="mb-8 grid grid-cols-2 gap-6">
+            <div className="mb-6 grid grid-cols-2 gap-6">
               <div className="col-span-2">
                 <label className="mb-2 block text-base font-medium text-[#202124]">Title</label>
                 <input
@@ -136,13 +136,13 @@ export default function CreatePostPage() {
               </div>
             </div>
 
-            <div className="mb-8">
+            <div className="mb-6">
               <label className="mb-2 block text-base font-medium text-[#202124]">Photos</label>
               <p className="mb-3 text-sm text-[#9A9A9A]">Add up to 4 photos. First photo is the main image.</p>
               <MultiImageUploader onUpload={setImages} currentImages={images} maxImages={4} />
             </div>
 
-            <div className="mb-8 grid grid-cols-2 gap-6">
+            <div className="mb-6 grid grid-cols-2 gap-6">
               <div>
                 <label className="mb-2 block text-base font-medium text-[#202124]">
                   {type === "Sell" ? "Price" : type === "Exchange" ? "What you want in return" : "Type"}
