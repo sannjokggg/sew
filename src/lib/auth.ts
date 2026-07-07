@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import pool from "@/lib/db";
+import { initializeAuthTables } from "@/lib/db-init";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -10,21 +11,68 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        phone: { label: "Phone", type: "text" },
+        otp: { label: "OTP", type: "text" },
       },
       async authorize(credentials) {
+        await initializeAuthTables();
+
+        if (credentials?.phone && credentials?.otp) {
+          const cleaned = credentials.phone.replace(/\s/g, "");
+
+          const otpResult = await pool.query(
+            `SELECT * FROM otp_verifications
+             WHERE phone_number = $1 AND verified = FALSE
+             ORDER BY created_at DESC LIMIT 1`,
+            [cleaned]
+          );
+
+          if (otpResult.rows.length === 0) {
+            throw new Error("No OTP found. Please request a new code.");
+          }
+
+          const otpRecord = otpResult.rows[0];
+
+          if (new Date(otpRecord.expires_at) < new Date()) {
+            throw new Error("OTP has expired. Please request a new code.");
+          }
+
+          const isValid = await bcrypt.compare(credentials.otp, otpRecord.otp_code);
+
+          if (!isValid) {
+            throw new Error("Invalid OTP code");
+          }
+
+          await pool.query(
+            `UPDATE otp_verifications SET verified = TRUE WHERE id = $1`,
+            [otpRecord.id]
+          );
+
+          let userResult = await pool.query(
+            "SELECT id, name, email FROM users WHERE phone_number = $1",
+            [cleaned]
+          );
+
+          if (userResult.rows.length === 0) {
+            userResult = await pool.query(
+              `INSERT INTO users (name, phone_number) VALUES ($1, $2)
+               RETURNING id, name, email`,
+              ["User", cleaned]
+            );
+          }
+
+          const user = userResult.rows[0];
+
+          return {
+            id: user.id.toString(),
+            email: user.email || `${cleaned}@phone.local`,
+            name: user.name,
+          };
+        }
+
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required");
         }
-
-        await pool.query(`
-          CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            email VARCHAR(255) UNIQUE NOT NULL,
-            password VARCHAR(255) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-          );
-        `);
 
         const result = await pool.query("SELECT * FROM users WHERE email = $1", [
           credentials.email,
@@ -34,6 +82,10 @@ export const authOptions: NextAuthOptions = {
 
         if (!user) {
           throw new Error("No account found with this email");
+        }
+
+        if (!user.password) {
+          throw new Error("This account uses phone login. Please use phone number to sign in.");
         }
 
         const isValid = await bcrypt.compare(credentials.password, user.password);

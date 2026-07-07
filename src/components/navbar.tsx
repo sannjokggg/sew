@@ -6,12 +6,12 @@ import { useSession } from "next-auth/react";
 import { Search, Bell, Info, ChevronDown } from "lucide-react";
 
 const navLinks = [
-  { label: "Overview", href: "/dashboard" },
-  { label: "Activity", href: "/dashboard/activity" },
-  { label: "Manage", href: "/dashboard/manage" },
-  { label: "Program", href: "/dashboard/program" },
-  { label: "Account", href: "/dashboard/account" },
-  { label: "Reports", href: "/dashboard/reports" },
+  { label: "Home", href: "/" },
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Contact", href: "/contact" },
+  { label: "Profile", href: "/dashboard/profile" },
 ];
 
 export default function Navbar() {
@@ -25,17 +25,20 @@ export default function Navbar() {
 
   return (
     <div className="relative flex flex-1 items-center" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
-      <div className="absolute left-[42%] -translate-x-1/2 flex items-center gap-[16px] bg-white px-4 py-2 rounded-[36px] shadow-sm">
+      <div
+        className="absolute left-[42%] -translate-x-1/2 flex items-center gap-[6px] bg-white px-4 py-2 rounded-[36px]"
+        style={{ boxShadow: "0 -4px 20px rgba(184, 242, 94, 0.35), 0 4px 12px rgba(0,0,0,0.06)" }}
+      >
         {navLinks.map(({ label, href }) => {
           const active = pathname === href;
           return (
             <Link
               key={href}
               href={href}
-              className={`px-[28px] py-2 rounded-[36px] text-[18px] font-medium transition-colors ${
+              className={`px-[28px] py-2 rounded-[36px] text-[18px] font-medium transition-all duration-200 ${
                 active
-                  ? "bg-[#1D1B17] text-white"
-                  : "text-[#666666] hover:bg-gray-100 hover:text-[#222222]"
+                  ? "bg-[#1D1B17] text-white shadow-md"
+                  : "text-[#666666] hover:bg-[#1D1B17] hover:text-white hover:shadow-md"
               }`}
             >
               {label}
