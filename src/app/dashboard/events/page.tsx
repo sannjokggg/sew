@@ -139,7 +139,7 @@ export default function EventsPage() {
                   const Icon = cfg.icon;
                   return (
                     <div key={event.id} className="rounded-[24px] bg-white shadow-sm transition-shadow hover:shadow-md overflow-hidden">
-                      <div className={`flex w-full items-center justify-center ${cfg.bg}`} style={{ aspectRatio: "664 / 760" }}>
+                      <div className={`flex w-full items-center justify-center ${cfg.bg}`} style={{ aspectRatio: "4 / 3" }}>
                         {event.image_url ? (
                           <img src={event.image_url} alt={event.title} className="h-full w-full object-cover" />
                         ) : (
@@ -196,7 +196,7 @@ export default function EventsPage() {
                   const Icon = cfg.icon;
                   return (
                     <div key={event.id} className="rounded-[24px] bg-white shadow-sm overflow-hidden opacity-60">
-                      <div className={`flex w-full items-center justify-center ${cfg.bg}`} style={{ aspectRatio: "664 / 760" }}>
+                      <div className={`flex w-full items-center justify-center ${cfg.bg}`} style={{ aspectRatio: "4 / 3" }}>
                         {event.image_url ? (
                           <img src={event.image_url} alt={event.title} className="h-full w-full object-cover" />
                         ) : (
