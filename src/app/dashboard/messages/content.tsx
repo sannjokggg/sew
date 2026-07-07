@@ -7,19 +7,21 @@ import {
   Search,
   Send,
   Paperclip,
-  Phone,
-  Video,
   MoreHorizontal,
   ArrowLeft,
   Image as ImageIcon,
   Check,
   CheckCheck,
   Loader2,
+  Trash2,
+  BellOff,
+  UserX,
 } from "lucide-react";
 
 interface Message {
   id: number;
   text: string;
+  image_url: string | null;
   sender_id: number;
   sender_name: string;
   created_at: string;
@@ -82,6 +84,10 @@ export default function MessagesContent() {
   const [loadingMsgs, setLoadingMsgs] = useState(false);
   const [sending, setSending] = useState(false);
   const [showMobileList, setShowMobileList] = useState(true);
+  const [showMenu, setShowMenu] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
@@ -195,23 +201,42 @@ export default function MessagesContent() {
 
   const selectedConvo = conversations.find((c) => c.id === selectedId) || null;
 
+  const handleImageUpload = async (file: File) => {
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (data.url) {
+        setPreviewImage(data.url);
+      }
+    } catch (e) {
+      console.error("Image upload failed:", e);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   const filteredConvos = conversations.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase()) ||
     c.lastMessage.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleSend = async () => {
-    if (!newMessage.trim() || !selectedConvo || sending) return;
+    if ((!newMessage.trim() && !previewImage) || !selectedConvo || sending) return;
 
     setSending(true);
     const text = newMessage;
+    const image = previewImage;
     setNewMessage("");
+    setPreviewImage(null);
 
     try {
       const res = await fetch("/api/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ conversationId: selectedConvo.id, text }),
+        body: JSON.stringify({ conversationId: selectedConvo.id, text, imageUrl: image }),
       });
       const msg = await res.json();
       if (msg.id) {
@@ -219,7 +244,7 @@ export default function MessagesContent() {
         setConversations((prev) =>
           prev.map((c) =>
             c.id === selectedConvo.id
-              ? { ...c, lastMessage: text, lastTime: "Just now" }
+              ? { ...c, lastMessage: text || "[Image]", lastTime: "Just now" }
               : c
           )
         );
@@ -236,7 +261,7 @@ export default function MessagesContent() {
       {/* Conversations List */}
       <div className={`w-[360px] flex flex-col border-r border-gray-100 ${showMobileList ? "flex" : "hidden md:flex"}`}>
         <div className="flex items-center justify-between px-6 py-5">
-          <h2 className="text-2xl font-semibold text-[#202124]">Messages</h2>
+          <h2 className="text-3xl font-semibold text-[#202124]">Messages</h2>
           <button
             onClick={() => router.push("/dashboard/marketplace")}
             className="text-xs text-[#9A9A9A] hover:text-[#202124] transition-colors"
@@ -253,7 +278,7 @@ export default function MessagesContent() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search conversations..."
-              className="w-full rounded-full bg-gray-50 py-3 pl-11 pr-4 text-sm text-[#202124] outline-none transition-all placeholder:text-[#B0B0B0] focus:bg-gray-100 focus:ring-1 focus:ring-gray-100"
+              className="w-full rounded-full bg-gray-50 py-3 pl-11 pr-4 text-base text-[#202124] outline-none transition-all placeholder:text-[#B0B0B0] focus:bg-gray-100 focus:ring-1 focus:ring-gray-100"
             />
           </div>
         </div>
@@ -287,11 +312,11 @@ export default function MessagesContent() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-[#202124]">{convo.name}</span>
-                      <span className="text-[11px] text-[#9A9A9A]">{convo.lastTime}</span>
+                      <span className="text-base font-semibold text-[#202124]">{convo.name}</span>
+                      <span className="text-xs text-[#9A9A9A]">{convo.lastTime}</span>
                     </div>
                     <div className="flex items-center justify-between mt-0.5">
-                      <span className={`text-xs truncate ${convo.unread > 0 ? "font-semibold text-[#202124]" : "text-[#9A9A9A]"}`}>
+                      <span className={`text-sm truncate ${convo.unread > 0 ? "font-semibold text-[#202124]" : "text-[#9A9A9A]"}`}>
                         {convo.lastMessage}
                       </span>
                       {convo.unread > 0 && (
@@ -324,20 +349,46 @@ export default function MessagesContent() {
                 {getInitials(selectedConvo.name)}
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-[#202124]">{selectedConvo.name}</h3>
-                <p className="text-[11px] text-[#9A9A9A]">{selectedConvo.email}</p>
+                <h3 className="text-base font-semibold text-[#202124]">{selectedConvo.name}</h3>
+                <p className="text-xs text-[#9A9A9A]">{selectedConvo.email}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button className="flex h-9 w-9 items-center justify-center rounded-full text-[#6B6B6B] transition-colors hover:bg-gray-100 hover:text-[#202124]">
-                <Phone size={18} />
-              </button>
-              <button className="flex h-9 w-9 items-center justify-center rounded-full text-[#6B6B6B] transition-colors hover:bg-gray-100 hover:text-[#202124]">
-                <Video size={18} />
-              </button>
-              <button className="flex h-9 w-9 items-center justify-center rounded-full text-[#6B6B6B] transition-colors hover:bg-gray-100 hover:text-[#202124]">
+            <div className="flex items-center gap-2 relative">
+              <button
+                onClick={() => setShowMenu(!showMenu)}
+                className="flex h-9 w-9 items-center justify-center rounded-full text-[#6B6B6B] transition-colors hover:bg-gray-100 hover:text-[#202124]"
+              >
                 <MoreHorizontal size={18} />
               </button>
+              {showMenu && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+                  <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-[16px] border border-gray-100 bg-white py-2 shadow-lg">
+                    <button
+                      onClick={() => { setShowMenu(false); }}
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
+                    >
+                      <BellOff size={16} className="text-[#9A9A9A]" />
+                      Mute notifications
+                    </button>
+                    <button
+                      onClick={() => { setShowMenu(false); }}
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
+                    >
+                      <UserX size={16} className="text-[#9A9A9A]" />
+                      Block user
+                    </button>
+                    <div className="my-1 border-t border-gray-100" />
+                    <button
+                      onClick={() => { setShowMenu(false); }}
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-red-500 hover:bg-red-50"
+                    >
+                      <Trash2 size={16} />
+                      Delete conversation
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -368,15 +419,24 @@ export default function MessagesContent() {
                       {!isMe && !showAvatar && <div className="w-7 flex-shrink-0" />}
 
                       <div className="max-w-[65%]">
-                        <div className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
-                          isMe
-                            ? "bg-[#202124] text-white rounded-br-md"
-                            : "bg-gray-100 text-[#202124] rounded-bl-md"
-                        }`}>
-                          {msg.text}
-                        </div>
+                        {msg.image_url && (
+                          <img
+                            src={msg.image_url}
+                            alt="Shared image"
+                            className="mb-1 max-h-[280px] rounded-2xl object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                          />
+                        )}
+                        {msg.text && (
+                          <div className={`rounded-2xl px-4 py-2.5 text-base leading-relaxed ${
+                            isMe
+                              ? "bg-[#202124] text-white rounded-br-md"
+                              : "bg-gray-100 text-[#202124] rounded-bl-md"
+                          }`}>
+                            {msg.text}
+                          </div>
+                        )}
                         <div className={`mt-1 flex items-center gap-1 ${isMe ? "justify-end" : "justify-start"}`}>
-                          <span className="text-[10px] text-[#B0B0B0]">{timeAgo(msg.created_at)}</span>
+                          <span className="text-xs text-[#B0B0B0]">{timeAgo(msg.created_at)}</span>
                           {isMe && (
                             msg.read ? (
                               <CheckCheck size={12} className="text-[#B8F25E]" />
@@ -403,14 +463,47 @@ export default function MessagesContent() {
 
           {/* Input */}
           <div className="border-t border-gray-100 px-6 py-4">
+            {previewImage && (
+              <div className="mb-3 flex items-center gap-3">
+                <div className="relative">
+                  <img src={previewImage} alt="Preview" className="h-20 w-20 rounded-xl object-cover" />
+                  <button
+                    onClick={() => setPreviewImage(null)}
+                    className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-gray-800 text-white text-xs"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <span className="text-sm text-[#9A9A9A]">Image ready to send</span>
+              </div>
+            )}
             <div className="flex items-end gap-3">
               <div className="flex items-center gap-1">
-                <button className="flex h-9 w-9 items-center justify-center rounded-full text-[#9A9A9A] transition-colors hover:bg-gray-100 hover:text-[#202124]">
-                  <Paperclip size={18} />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingImage}
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-[#9A9A9A] transition-colors hover:bg-gray-100 hover:text-[#202124] disabled:opacity-50"
+                >
+                  {uploadingImage ? <Loader2 size={18} className="animate-spin" /> : <Paperclip size={18} />}
                 </button>
-                <button className="flex h-9 w-9 items-center justify-center rounded-full text-[#9A9A9A] transition-colors hover:bg-gray-100 hover:text-[#202124]">
-                  <ImageIcon size={18} />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingImage}
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-[#9A9A9A] transition-colors hover:bg-gray-100 hover:text-[#202124] disabled:opacity-50"
+                >
+                  {uploadingImage ? <Loader2 size={18} className="animate-spin" /> : <ImageIcon size={18} />}
                 </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleImageUpload(file);
+                    e.target.value = "";
+                  }}
+                />
               </div>
               <div className="flex flex-1 items-end rounded-2xl bg-gray-50 px-4 py-2.5 transition-all focus-within:bg-gray-100 focus-within:ring-1 focus-within:ring-gray-100">
                 <textarea
@@ -425,7 +518,7 @@ export default function MessagesContent() {
                   }}
                   placeholder="Type a message..."
                   rows={1}
-                  className="flex-1 resize-none bg-transparent text-sm text-[#202124] outline-none placeholder:text-[#B0B0B0]"
+                  className="flex-1 resize-none bg-transparent text-base text-[#202124] outline-none placeholder:text-[#B0B0B0]"
                 />
               </div>
               <button
@@ -451,8 +544,8 @@ export default function MessagesContent() {
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
             <Send size={32} className="text-[#9A9A9A]" />
           </div>
-          <p className="mt-4 text-lg font-medium text-[#9A9A9A]">Select a conversation</p>
-          <p className="mt-1 text-sm text-[#B0B0B0]">Click Message on any listing to start chatting</p>
+          <p className="mt-4 text-xl font-medium text-[#9A9A9A]">Select a conversation</p>
+          <p className="mt-1 text-base text-[#B0B0B0]">Click Message on any listing to start chatting</p>
         </div>
       )}
     </div>

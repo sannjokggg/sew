@@ -62,7 +62,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md rounded-[24px] bg-white p-8 shadow-sm">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-semibold text-[#202124]">Create Account</h1>
-          <p className="mt-2 text-sm text-[#9A9A9A]">Join the Sewago community</p>
+          <p className="mt-2 text-base text-[#9A9A9A]">Join the Sewago community</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -73,46 +73,46 @@ export default function RegisterPage() {
           )}
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-[#202124]">Name</label>
+            <label className="mb-1 block text-base font-medium text-[#202124]">Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-full border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+              className="w-full rounded-full border border-gray-200 px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               placeholder="Your name"
               required
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-[#202124]">Phone Number</label>
+            <label className="mb-1 block text-base font-medium text-[#202124]">Phone Number</label>
             <input
               type="tel"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              className="w-full rounded-full border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+              className="w-full rounded-full border border-gray-200 px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               placeholder="+91 98765 43210"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-[#202124]">Email</label>
+            <label className="mb-1 block text-base font-medium text-[#202124]">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-full border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+              className="w-full rounded-full border border-gray-200 px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-[#202124]">Password</label>
+            <label className="mb-1 block text-base font-medium text-[#202124]">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-full border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+              className="w-full rounded-full border border-gray-200 px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               placeholder="••••••••"
               minLength={6}
             />
@@ -121,13 +121,13 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-full bg-[#B8F25E] px-4 py-3 text-sm font-semibold text-[#202124] transition-colors  disabled:opacity-50"
+            className="w-full rounded-full bg-[#B8F25E] px-4 py-3 text-base font-semibold text-[#202124] transition-colors  disabled:opacity-50"
           >
             {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-[#9A9A9A]">
+        <p className="mt-6 text-center text-base text-[#9A9A9A]">
           Already have an account?{" "}
           <Link href="/login" className="font-medium text-[#202124] hover:underline">
             Sign In

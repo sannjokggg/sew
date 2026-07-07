@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Tag, ArrowLeftRight, Gift, UserPlus, Loader2, MessageSquare, Trash2 } from "lucide-react";
+import { Tag, ArrowLeftRight, Gift, UserPlus, Loader2, MessageSquare, MoreHorizontal, Trash2, Pencil, Flag, EyeOff, Share2 } from "lucide-react";
 import ImageLightbox from "@/components/image-lightbox";
 
 interface Post {
@@ -47,6 +47,7 @@ export default function Marketplace() {
   const [loading, setLoading] = useState(true);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
   const [deleting, setDeleting] = useState<number | null>(null);
+  const [openMenu, setOpenMenu] = useState<number | null>(null);
   const categories = ["All", "Sell", "Exchange", "Giveaway", "Request"];
 
   useEffect(() => {
@@ -67,6 +68,7 @@ export default function Marketplace() {
   const handleDelete = async (e: React.MouseEvent, id: number) => {
     e.preventDefault();
     e.stopPropagation();
+    setOpenMenu(null);
     if (!confirm("Are you sure you want to delete this listing?")) return;
     setDeleting(id);
     try {
@@ -79,13 +81,6 @@ export default function Marketplace() {
     } finally { setDeleting(null); }
   };
 
-  const stats = {
-    sell: posts.filter((p) => p.type === "Sell").length,
-    exchange: posts.filter((p) => p.type === "Exchange").length,
-    giveaway: posts.filter((p) => p.type === "Giveaway").length,
-    request: posts.filter((p) => p.type === "Request").length,
-  };
-
   return (
     <div className="flex flex-col gap-6 p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       <div className="flex items-center justify-between">
@@ -95,57 +90,10 @@ export default function Marketplace() {
         </div>
         <Link
           href="/dashboard/marketplace/create"
-          className="rounded-full bg-[#B8F25E] px-6 py-3 text-sm font-semibold text-[#202124] shadow-sm transition-colors "
+          className="rounded-full bg-[#B8F25E] px-6 py-3 text-base font-semibold text-[#202124] shadow-sm transition-colors "
         >
           + Post Listing
         </Link>
-      </div>
-
-      {/* Stats Row */}
-      <div className="flex gap-4">
-        <div className="flex-1 rounded-[24px] bg-white p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-[#9A9A9A]">For Sale</span>
-            <Tag size={24} strokeWidth={1.5} />
-          </div>
-          <p className="mt-1 text-[28px] font-semibold text-[#202124]">{stats.sell}</p>
-          <div className="mt-1 flex items-center gap-1">
-            <span className="text-[11px] font-semibold text-green-500">Active</span>
-            <span className="text-[11px] text-[#9A9A9A]">listings</span>
-          </div>
-        </div>
-        <div className="flex-1 rounded-[24px] bg-white p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-[#9A9A9A]">Exchanges</span>
-            <ArrowLeftRight size={24} strokeWidth={1.5} />
-          </div>
-          <p className="mt-1 text-[28px] font-semibold text-[#202124]">{stats.exchange}</p>
-          <div className="mt-1 flex items-center gap-1">
-            <span className="text-[11px] font-semibold text-green-500">Open</span>
-            <span className="text-[11px] text-[#9A9A9A]">swaps</span>
-          </div>
-        </div>
-        <div className="flex-1 rounded-[24px] bg-white p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-[#9A9A9A]">Giveaways</span>
-            <Gift size={24} strokeWidth={1.5} />
-          </div>
-          <p className="mt-1 text-[28px] font-semibold text-[#202124]">{stats.giveaway}</p>
-          <div className="mt-1 flex items-center gap-1">
-            <span className="text-[11px] font-semibold text-green-500">Free</span>
-            <span className="text-[11px] text-[#9A9A9A]">items</span>
-          </div>
-        </div>
-        <div className="flex-1 rounded-[24px] bg-white p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-[#9A9A9A]">Requests</span>
-            <UserPlus size={24} strokeWidth={1.5} />
-          </div>
-          <p className="mt-1 text-[28px] font-semibold text-[#202124]">{stats.request}</p>
-          <div className="mt-1 flex items-center gap-1">
-            <span className="text-[11px] text-[#9A9A9A]">Looking for</span>
-          </div>
-        </div>
       </div>
 
       {/* Category Filters */}
@@ -154,7 +102,7 @@ export default function Marketplace() {
           <button
             key={cat}
             onClick={() => setFilter(cat)}
-            className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer ${
+            className={`rounded-full px-5 py-2.5 text-base font-medium transition-all duration-200 cursor-pointer ${
               filter === cat
                 ? "bg-[#1D1B17] text-white shadow-sm"
                 : "bg-white text-[#666666] hover:bg-gray-100 hover:text-[#222222]"
@@ -175,10 +123,10 @@ export default function Marketplace() {
         <div className="flex flex-col items-center justify-center rounded-[24px] bg-white py-16 shadow-sm">
           <Tag size={48} strokeWidth={1} className="text-[#9A9A9A]" />
           <p className="mt-4 text-lg font-medium text-[#9A9A9A]">No listings yet</p>
-          <p className="mt-1 text-sm text-[#9A9A9A]">Be the first to post something!</p>
+          <p className="mt-1 text-base text-[#9A9A9A]">Be the first to post something!</p>
           <Link
             href="/dashboard/marketplace/create"
-            className="mt-4 rounded-full bg-[#B8F25E] px-6 py-3 text-sm font-semibold text-[#202124] shadow-sm transition-colors "
+            className="mt-4 rounded-full bg-[#B8F25E] px-6 py-3 text-base font-semibold text-[#202124] shadow-sm transition-colors "
           >
             + Post Listing
           </Link>
@@ -195,13 +143,58 @@ export default function Marketplace() {
                 className="relative rounded-[24px] bg-white p-5 shadow-sm transition-all hover:shadow-md"
               >
                 {myId === item.user_id && (
-                  <button
-                    onClick={(e) => handleDelete(e, item.id)}
-                    disabled={deleting === item.id}
-                    className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-red-500 shadow-sm transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
-                  >
-                    {deleting === item.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-                  </button>
+                  <div className="absolute right-4 top-4 z-10">
+                    <button
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(openMenu === item.id ? null : item.id); }}
+                      className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-[#6B6B6B] shadow-sm transition-colors hover:bg-gray-100"
+                    >
+                      <MoreHorizontal size={16} />
+                    </button>
+                    {openMenu === item.id && (
+                      <>
+                        <div className="fixed inset-0 z-40" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(null); }} />
+                        <div className="absolute right-0 top-full z-50 mt-1 w-44 rounded-[16px] border border-gray-100 bg-white py-2 shadow-lg">
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(null); router.push(`/dashboard/marketplace/${item.id}`); }}
+                            className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
+                          >
+                            <EyeOff size={16} className="text-[#9A9A9A]" />
+                            View
+                          </button>
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(null); router.push(`/dashboard/marketplace/create?edit=${item.id}`); }}
+                            className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
+                          >
+                            <Pencil size={16} className="text-[#9A9A9A]" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(null); }}
+                            className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
+                          >
+                            <Share2 size={16} className="text-[#9A9A9A]" />
+                            Share
+                          </button>
+                          <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(null); }}
+                            className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
+                          >
+                            <Flag size={16} className="text-[#9A9A9A]" />
+                            Report
+                          </button>
+                          <div className="my-1 border-t border-gray-100" />
+                          <button
+                            onClick={(e) => handleDelete(e, item.id)}
+                            disabled={deleting === item.id}
+                            className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-red-500 hover:bg-red-50 disabled:opacity-50"
+                          >
+                            {deleting === item.id ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                            Delete
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 )}
                 <div className={`flex h-[240px] items-center justify-center overflow-hidden rounded-[16px] ${(item.images && item.images.length > 0) || item.image_url ? "bg-gray-50" : "border border-gray-200 bg-white"}`}>
                   {(item.images && item.images.length > 0) || item.image_url ? (
@@ -220,14 +213,14 @@ export default function Marketplace() {
                   )}
                 </div>
                 <div className="mt-4">
-                  <div className="flex items-center justify-between">
-                    <span className={`rounded-full px-3 py-1 text-[10px] font-semibold ${cfg.badge}`}>
+                   <div className="flex items-center justify-between">
+                    <span className={`rounded-full px-3 py-1 text-base font-semibold ${cfg.badge}`}>
                       {item.type}
                     </span>
-                    <span className="text-[10px] text-[#9A9A9A]">{timeAgo(item.created_at)}</span>
+                    <span className="text-base text-[#9A9A9A]">{timeAgo(item.created_at)}</span>
                   </div>
-                  <h3 className="mt-3 text-base font-semibold text-[#202124]">{item.title}</h3>
-                  <p className="mt-1 text-xs text-[#6B6B6B] line-clamp-2">{item.description}</p>
+                  <h3 className="mt-3 text-lg font-semibold text-[#202124]">{item.title}</h3>
+                  <p className="mt-1 text-base text-[#6B6B6B] line-clamp-2">{item.description}</p>
                   <div className="mt-3 flex items-center justify-between">
                     <span className="text-lg font-semibold text-[#202124]">
                       {item.type === "Sell" ? `$${item.price || "0"}` :
@@ -240,33 +233,33 @@ export default function Marketplace() {
                   <div className="mt-3 flex gap-2">
                     {item.type === "Request" ? (
                       myId === item.user_id ? (
-                        <button
+                         <button
                           onClick={(e) => { e.stopPropagation(); router.push("/dashboard/messages"); }}
-                          className="w-full rounded-full border border-gray-200 px-4 py-2.5 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
+                          className="w-full rounded-full border border-gray-200 px-4 py-2.5 text-base font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
                         >
                           <MessageSquare size={14} className="inline mr-1.5" />Inbox
                         </button>
                       ) : (
-                        <button onClick={(e) => e.stopPropagation()} className="w-full rounded-full bg-[#B8F25E] px-4 py-2.5 text-sm font-semibold text-[#202124] transition-colors ">
+                        <button onClick={(e) => e.stopPropagation()} className="w-full rounded-full bg-[#B8F25E] px-4 py-2.5 text-base font-semibold text-[#202124] transition-colors ">
                           I Have This
                         </button>
                       )
                     ) : (
                       <>
-                        <button onClick={(e) => e.stopPropagation()} className="flex-1 rounded-full bg-[#B8F25E] px-4 py-2.5 text-sm font-semibold text-[#202124] transition-colors ">
+                        <button onClick={(e) => e.stopPropagation()} className="flex-1 rounded-full bg-[#B8F25E] px-4 py-2.5 text-base font-semibold text-[#202124] transition-colors ">
                           {item.type === "Sell" ? "Buy" : item.type === "Exchange" ? "Swap" : "Claim"}
                         </button>
                         {myId === item.user_id ? (
                           <button
                             onClick={(e) => { e.stopPropagation(); router.push("/dashboard/messages"); }}
-                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
+                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-base font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
                           >
                             <MessageSquare size={14} className="inline mr-1.5" />Inbox
                           </button>
                         ) : (
                           <button
                             onClick={(e) => { e.stopPropagation(); router.push(`/dashboard/messages?userId=${item.user_id}`); }}
-                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
+                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-base font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
                           >
                             Message
                           </button>

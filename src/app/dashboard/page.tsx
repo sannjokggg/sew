@@ -21,7 +21,7 @@ export default function Dashboard() {
         {/* Total Balance Card */}
         <div className="flex w-[400px] flex-col rounded-[24px] bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-[#9A9A9A]">Total Balance</span>
+            <span className="text-lg font-medium text-[#9A9A9A]">Total Balance</span>
             <span className="flex items-center gap-1 rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-[#6B6B6B]">
               🇺🇸 USD ▾
             </span>
@@ -33,17 +33,17 @@ export default function Dashboard() {
           </div>
 
           <div className="mt-5 flex gap-3">
-            <button className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[#B8F25E] px-4 py-3 text-sm font-semibold text-[#202124]">
+            <button className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[#B8F25E] px-4 py-3 text-lg font-semibold text-[#202124]">
               ↗ Transfer
             </button>
-            <button className="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-200 px-4 py-3 text-sm font-medium text-[#6B6B6B]">
+            <button className="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-200 px-4 py-3 text-lg font-medium text-[#6B6B6B]">
               ⇄ Request
             </button>
           </div>
 
           <div className="mt-5">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-[#9A9A9A]">Wallets</span>
+              <span className="text-lg font-medium text-[#9A9A9A]">Wallets</span>
               <span className="text-xs text-[#9A9A9A]">Total 6 wallets</span>
             </div>
             <div className="mt-3 flex gap-3">
@@ -72,7 +72,7 @@ export default function Dashboard() {
             {/* Total Earnings */}
             <div className="flex-1 rounded-[24px] bg-gradient-to-br from-[#B8F25E] to-[#4CAF50] p-6 shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-[#202124]">Total Earnings</span>
+                <span className="text-lg font-medium text-[#202124]">Total Earnings</span>
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/40 text-sm">💰</span>
               </div>
               <p className="mt-4 text-[32px] font-semibold text-[#202124]">$950</p>
@@ -85,7 +85,7 @@ export default function Dashboard() {
             {/* Total Spending */}
             <div className="flex-1 rounded-[24px] bg-white p-6 shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-[#9A9A9A]">Total Spending</span>
+                <span className="text-lg font-medium text-[#9A9A9A]">Total Spending</span>
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-sm">📊</span>
               </div>
               <p className="mt-4 text-[32px] font-semibold text-[#202124]">$700</p>
@@ -101,7 +101,7 @@ export default function Dashboard() {
             {/* Total Income */}
             <div className="flex-1 rounded-[24px] bg-white p-6 shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-[#9A9A9A]">Total Income</span>
+                <span className="text-lg font-medium text-[#9A9A9A]">Total Income</span>
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-sm">📈</span>
               </div>
               <p className="mt-4 text-[32px] font-semibold text-[#202124]">$1,050</p>
@@ -114,7 +114,7 @@ export default function Dashboard() {
             {/* Total Revenue */}
             <div className="flex-1 rounded-[24px] bg-white p-6 shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-[#9A9A9A]">Total Revenue</span>
+                <span className="text-lg font-medium text-[#9A9A9A]">Total Revenue</span>
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-sm">💵</span>
               </div>
               <p className="mt-4 text-[32px] font-semibold text-[#202124]">$850</p>

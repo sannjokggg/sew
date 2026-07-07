@@ -38,7 +38,7 @@ export default function Navbar() {
               className={`px-[28px] py-2 rounded-[36px] text-[18px] font-medium transition-all duration-200 ${
                 active
                   ? "bg-[#1D1B17] text-white shadow-md"
-                  : "text-[#666666] hover:bg-[#1D1B17] hover:text-white hover:shadow-md"
+                  : "text-[#666666] hover:bg-gray-100 hover:text-[#1D1B17] active:bg-[#1D1B17] active:text-white"
               }`}
             >
               {label}
@@ -48,18 +48,18 @@ export default function Navbar() {
       </div>
 
       <div className="absolute right-8 flex items-center gap-4">
-        <div className="flex items-center gap-6 bg-white px-[21px] py-[13px] rounded-[36px] shadow-sm">
+        <div className="flex items-center gap-3 bg-white px-[21px] py-[13px] rounded-[36px] shadow-sm">
           <button
             onClick={() => router.push("/dashboard/messages")}
-            className="flex items-center justify-center text-[#222222] transition-colors hover:text-[#1D1B17]"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-[#222222] transition-all duration-200 hover:bg-gray-100 hover:text-[#1D1B17] active:bg-gray-800 active:text-white active:scale-95"
           >
-            <Search size={28} strokeWidth={2} />
+            <Search size={22} strokeWidth={2} />
           </button>
-          <button className="flex items-center justify-center text-[#222222] transition-colors hover:text-[#1D1B17]">
-            <Bell size={28} strokeWidth={2} />
+          <button className="flex h-11 w-11 items-center justify-center rounded-full text-[#222222] transition-all duration-200 hover:bg-gray-100 hover:text-[#1D1B17] active:bg-gray-800 active:text-white active:scale-95">
+            <Bell size={22} strokeWidth={2} />
           </button>
-          <button className="flex items-center justify-center text-[#222222] transition-colors hover:text-[#1D1B17]">
-            <Info size={28} strokeWidth={2} />
+          <button className="flex h-11 w-11 items-center justify-center rounded-full text-[#222222] transition-all duration-200 hover:bg-gray-100 hover:text-[#1D1B17] active:bg-gray-800 active:text-white active:scale-95">
+            <Info size={22} strokeWidth={2} />
           </button>
         </div>
 

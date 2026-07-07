@@ -29,18 +29,24 @@ export default function Sidebar() {
         {navItems.map(({ icon: Icon, href, label }) => {
           const active = pathname === href;
           return (
-            <Link
-              key={href}
-              href={href}
-              title={label}
-              className={`flex h-12 w-12 items-center justify-center rounded-full transition-colors ${
-                active
-                  ? "bg-gray-800 text-white"
-                  : "text-gray-400 hover:bg-gray-100 hover:text-gray-700"
-              }`}
-            >
-              <Icon size={22} />
-            </Link>
+            <div key={href} className="relative group">
+              <Link
+                href={href}
+                className={`flex h-12 w-12 items-center justify-center rounded-full ${
+                  active
+                    ? "bg-[#1D1B17] text-white"
+                    : "text-gray-400 hover:bg-[#1D1B17] hover:text-white"
+                }`}
+              >
+                <Icon size={22} />
+              </Link>
+              <div className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 z-50 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150">
+                <div className="bg-[#1D1B17] text-white text-sm font-medium rounded-full px-4 py-2.5 whitespace-nowrap shadow-lg flex items-center gap-2">
+                  <Icon size={16} />
+                  {label}
+                </div>
+              </div>
+            </div>
           );
         })}
       </nav>

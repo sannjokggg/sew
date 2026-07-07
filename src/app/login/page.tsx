@@ -120,14 +120,14 @@ export default function LoginPage() {
       <div className="w-full max-w-md rounded-[24px] bg-white p-8 shadow-sm">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-semibold text-[#202124]">Welcome Back</h1>
-          <p className="mt-2 text-sm text-[#9A9A9A]">Sign in to your Sewago account</p>
+          <p className="mt-2 text-base text-[#9A9A9A]">Sign in to your Sewago account</p>
         </div>
 
         <div className="mb-6 flex rounded-full bg-[#f3f4f6] p-1">
           <button
             type="button"
             onClick={() => { setTab("email"); setError(""); setOtp(""); setOtpSent(false); }}
-            className={`flex-1 rounded-full py-2.5 text-sm font-medium transition-colors ${
+            className={`flex-1 rounded-full py-2.5 text-base font-medium transition-colors ${
               tab === "email"
                 ? "bg-white text-[#202124] shadow-sm"
                 : "text-[#9A9A9A] hover:text-[#202124]"
@@ -138,7 +138,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => { setTab("phone"); setError(""); setOtp(""); setOtpSent(false); }}
-            className={`flex-1 rounded-full py-2.5 text-sm font-medium transition-colors ${
+            className={`flex-1 rounded-full py-2.5 text-base font-medium transition-colors ${
               tab === "phone"
                 ? "bg-white text-[#202124] shadow-sm"
                 : "text-[#9A9A9A] hover:text-[#202124]"
@@ -157,24 +157,24 @@ export default function LoginPage() {
         {tab === "email" && (
           <form onSubmit={handleEmailLogin} className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-[#202124]">Email</label>
+              <label className="mb-1 block text-base font-medium text-[#202124]">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-full border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                className="w-full rounded-full border border-gray-200 px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
                 placeholder="you@example.com"
                 required
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-[#202124]">Password</label>
+              <label className="mb-1 block text-base font-medium text-[#202124]">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-full border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                className="w-full rounded-full border border-gray-200 px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
                 placeholder="••••••••"
                 required
               />
@@ -183,7 +183,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-full bg-[#B8F25E] px-4 py-3 text-sm font-semibold text-[#202124] transition-colors  disabled:opacity-50"
+              className="w-full rounded-full bg-[#B8F25E] px-4 py-3 text-base font-semibold text-[#202124] transition-colors  disabled:opacity-50"
             >
               {loading ? "Signing in..." : "Sign In"}
             </button>
@@ -193,12 +193,12 @@ export default function LoginPage() {
         {tab === "phone" && (
           <form onSubmit={otpSent ? handleOtpLogin : (e) => { e.preventDefault(); handleSendOtp(); }} className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-[#202124]">Phone Number</label>
+              <label className="mb-1 block text-base font-medium text-[#202124]">Phone Number</label>
               <input
                 type="tel"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                className="w-full rounded-full border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                className="w-full rounded-full border border-gray-200 px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
                 placeholder="+91 98765 43210"
                 required
                 disabled={otpSent}
@@ -208,7 +208,7 @@ export default function LoginPage() {
             {otpSent && (
               <div className="space-y-3">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-[#202124]">Enter OTP</label>
+                  <label className="mb-1 block text-base font-medium text-[#202124]">Enter OTP</label>
                   <OtpInput
                     length={6}
                     value={otp}
@@ -238,7 +238,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading || (otpSent && otp.length !== 6)}
-              className="w-full rounded-full bg-[#B8F25E] px-4 py-3 text-sm font-semibold text-[#202124] transition-colors  disabled:opacity-50"
+              className="w-full rounded-full bg-[#B8F25E] px-4 py-3 text-base font-semibold text-[#202124] transition-colors  disabled:opacity-50"
             >
               {loading
                 ? otpSent ? "Verifying..." : "Sending..."
@@ -247,7 +247,7 @@ export default function LoginPage() {
           </form>
         )}
 
-        <p className="mt-6 text-center text-sm text-[#9A9A9A]">
+        <p className="mt-6 text-center text-base text-[#9A9A9A]">
           Don&apos;t have an account?{" "}
           <Link href="/register" className="font-medium text-[#202124] hover:underline">
             Sign Up

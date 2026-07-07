@@ -130,31 +130,31 @@ export default function EventDetailPage() {
         <div className="flex flex-1 flex-col gap-4 max-w-[380px]">
           <div className="rounded-[24px] bg-white p-6 shadow-sm">
             <div className="flex items-center gap-3">
-              <span className={`rounded-full px-4 py-1.5 text-xs font-semibold ${cfg.badge}`}>
+              <span className={`rounded-full px-4 py-1.5 text-base font-semibold ${cfg.badge}`}>
                 {event.category}
               </span>
               {isPast ? (
-                <span className="rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-[#9A9A9A]">Past Event</span>
+                <span className="rounded-full bg-gray-100 px-3 py-1.5 text-base font-medium text-[#9A9A9A]">Past Event</span>
               ) : (
-                <span className="rounded-full bg-[#B8F25E]/20 px-3 py-1.5 text-xs font-semibold text-[#202124]">{daysUntil(event.event_date)}</span>
+                <span className="rounded-full bg-[#B8F25E]/20 px-3 py-1.5 text-base font-semibold text-[#202124]">{daysUntil(event.event_date)}</span>
               )}
             </div>
 
             <h1 className="mt-5 text-3xl font-normal text-[#202124]">{event.title}</h1>
 
             <div className="mt-5 flex flex-col gap-3">
-              <div className="flex items-center gap-3 text-sm text-[#6B6B6B]">
+              <div className="flex items-center gap-3 text-base text-[#6B6B6B]">
                 <CalendarDays size={18} className="text-[#9A9A9A]" />
                 {formatDate(event.event_date)}
               </div>
               {event.event_time && (
-                <div className="flex items-center gap-3 text-sm text-[#6B6B6B]">
+                <div className="flex items-center gap-3 text-base text-[#6B6B6B]">
                   <Clock size={18} className="text-[#9A9A9A]" />
                   {formatTime(event.event_time)}
                 </div>
               )}
               {event.location && (
-                <div className="flex items-center gap-3 text-sm text-[#6B6B6B]">
+                <div className="flex items-center gap-3 text-base text-[#6B6B6B]">
                   <MapPin size={18} className="text-[#9A9A9A]" />
                   {event.location}
                 </div>
@@ -168,8 +168,8 @@ export default function EventDetailPage() {
                 {event.organizer_name[0]?.toUpperCase() || "?"}
               </div>
               <div>
-                <p className="text-sm font-semibold text-[#202124]">{event.organizer_name}</p>
-                <p className="text-xs text-[#9A9A9A]">Organizer</p>
+                <p className="text-base font-semibold text-[#202124]">{event.organizer_name}</p>
+                <p className="text-base text-[#9A9A9A]">Organizer</p>
               </div>
             </div>
             <div className="mt-4 flex gap-2">
@@ -177,12 +177,12 @@ export default function EventDetailPage() {
                 <button
                   onClick={handleDelete}
                   disabled={deleting}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-red-50 border border-red-200 px-4 py-3 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-red-50 border border-red-200 px-4 py-3 text-base font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50"
                 >
                   {deleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />} Delete Event
                 </button>
               ) : !isPast && (
-                <button className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[#B8F25E] px-4 py-3 text-sm font-semibold text-[#202124] transition-colors ">
+                <button className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[#B8F25E] px-4 py-3 text-base font-semibold text-[#202124] transition-colors ">
                   RSVP
                 </button>
               )}
@@ -197,7 +197,7 @@ export default function EventDetailPage() {
       {/* Description */}
       <div className="rounded-[24px] bg-white p-8 shadow-sm">
         <h2 className="text-xl font-semibold text-[#202124]">About this event</h2>
-        <p className="mt-4 text-sm leading-relaxed text-[#6B6B6B]">{event.description}</p>
+        <p className="mt-4 text-base leading-relaxed text-[#6B6B6B]">{event.description}</p>
       </div>
     </div>
   );

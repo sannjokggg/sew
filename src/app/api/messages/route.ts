@@ -18,11 +18,13 @@ async function ensureTables() {
       id SERIAL PRIMARY KEY,
       conversation_id INTEGER REFERENCES conversations(id) ON DELETE CASCADE,
       sender_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-      text TEXT NOT NULL,
+      text TEXT NOT NULL DEFAULT '',
+      image_url TEXT,
       read BOOLEAN DEFAULT FALSE,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `);
+  await pool.query(`ALTER TABLE messages ADD COLUMN IF NOT EXISTS image_url TEXT;`);
 }
 
 export async function GET() {
@@ -74,10 +76,10 @@ export async function POST(req: Request) {
     }
 
     const userId = (session.user as { id: string }).id;
-    const { conversationId, text, receiverId } = await req.json();
+    const { conversationId, text, receiverId, imageUrl } = await req.json();
 
-    if (!text) {
-      return NextResponse.json({ error: "Message text required" }, { status: 400 });
+    if (!text && !imageUrl) {
+      return NextResponse.json({ error: "Message text or image required" }, { status: 400 });
     }
 
     let convId = conversationId;
@@ -104,8 +106,8 @@ export async function POST(req: Request) {
     }
 
     const result = await pool.query(
-      `INSERT INTO messages (conversation_id, sender_id, text) VALUES ($1, $2, $3) RETURNING *`,
-      [convId, userId, text]
+      `INSERT INTO messages (conversation_id, sender_id, text, image_url) VALUES ($1, $2, $3, $4) RETURNING *`,
+      [convId, userId, text || "", imageUrl || null]
     );
 
     return NextResponse.json(result.rows[0], { status: 201 });

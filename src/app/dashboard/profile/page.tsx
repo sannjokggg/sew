@@ -21,7 +21,7 @@ export default function ProfilePage() {
           </div>
           <h2 className="mt-4 text-xl font-semibold text-[#202124]">{user?.name || "User"}</h2>
           <p className="text-sm text-[#9A9A9A]">{user?.email || ""}</p>
-          <button className="mt-4 rounded-full border border-gray-200 px-5 py-2 text-sm font-medium text-[#6B6B6B] hover:bg-gray-50">
+          <button className="mt-4 rounded-full border border-gray-200 px-5 py-2 text-base font-medium text-[#6B6B6B] hover:bg-gray-50">
             Edit Photo
           </button>
         </div>
@@ -30,39 +30,39 @@ export default function ProfilePage() {
           <h3 className="text-lg font-semibold text-[#202124]">Personal Information</h3>
           <div className="mt-4 grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-[#9A9A9A]">Full Name</label>
+              <label className="mb-1 block text-lg font-medium text-[#9A9A9A]">Full Name</label>
               <input
                 type="text"
                 defaultValue={user?.name || ""}
-                className="w-full rounded-full border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                className="w-full rounded-full border border-gray-200 px-4 py-3 text-lg outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-[#9A9A9A]">Email</label>
+              <label className="mb-1 block text-lg font-medium text-[#9A9A9A]">Email</label>
               <input
                 type="email"
                 defaultValue={user?.email || ""}
-                className="w-full rounded-full border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                className="w-full rounded-full border border-gray-200 px-4 py-3 text-lg outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-[#9A9A9A]">Phone</label>
+              <label className="mb-1 block text-lg font-medium text-[#9A9A9A]">Phone</label>
               <input
                 type="tel"
                 placeholder="Not set"
-                className="w-full rounded-full border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                className="w-full rounded-full border border-gray-200 px-4 py-3 text-lg outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-[#9A9A9A]">Location</label>
+              <label className="mb-1 block text-lg font-medium text-[#9A9A9A]">Location</label>
               <input
                 type="text"
                 placeholder="Not set"
-                className="w-full rounded-full border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                className="w-full rounded-full border border-gray-200 px-4 py-3 text-lg outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               />
             </div>
           </div>
-          <button className="mt-6 rounded-full bg-[#B8F25E] px-6 py-3 text-sm font-semibold text-[#202124] ">
+          <button className="mt-6 rounded-full bg-[#B8F25E] px-6 py-3 text-lg font-semibold text-[#202124] ">
             Save Changes
           </button>
         </div>

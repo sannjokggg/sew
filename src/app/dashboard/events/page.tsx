@@ -104,7 +104,7 @@ export default function EventsPage() {
         </div>
         <Link
           href="/dashboard/events/create"
-          className="flex items-center gap-2 rounded-full bg-[#B8F25E] px-6 py-3 text-sm font-semibold text-[#202124] shadow-sm transition-colors "
+          className="flex items-center gap-2 rounded-full bg-[#B8F25E] px-6 py-3 text-lg font-semibold text-[#202124] shadow-sm transition-colors "
         >
           <Plus size={18} strokeWidth={2.5} />
           Create Event
@@ -117,7 +117,7 @@ export default function EventsPage() {
           <button
             key={cat}
             onClick={() => setFilter(cat)}
-            className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer ${
+            className={`rounded-full px-5 py-2.5 text-lg font-medium transition-all duration-200 cursor-pointer ${
               filter === cat
                 ? "bg-[#1D1B17] text-white shadow-sm"
                 : "bg-white text-[#666666] hover:bg-gray-100 hover:text-[#222222]"
@@ -137,11 +137,11 @@ export default function EventsPage() {
       ) : filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-[24px] bg-white py-16 shadow-sm">
           <CalendarDays size={48} strokeWidth={1} className="text-[#9A9A9A]" />
-          <p className="mt-4 text-lg font-medium text-[#9A9A9A]">No events found</p>
-          <p className="mt-1 text-sm text-[#9A9A9A]">Be the first to create an event!</p>
+            <p className="mt-3 text-base text-[#9A9A9A]">No events found</p>
+            <p className="mt-1 text-base text-[#9A9A9A]">Be the first to create an event!</p>
           <Link
             href="/dashboard/events/create"
-            className="mt-4 rounded-full bg-[#B8F25E] px-6 py-3 text-sm font-semibold text-[#202124] shadow-sm transition-colors "
+            className="mt-4 rounded-full bg-[#B8F25E] px-6 py-3 text-base font-semibold text-[#202124] shadow-sm transition-colors "
           >
             Create Event
           </Link>
@@ -181,32 +181,32 @@ export default function EventsPage() {
                       </div>
                       <div className="p-5">
                         <div className="flex items-center gap-2">
-                          <span className={`rounded-full px-3 py-1 text-[10px] font-semibold ${cfg.badge}`}>
+                           <span className={`rounded-full px-3 py-1 text-base font-semibold ${cfg.badge}`}>
                             {event.category}
                           </span>
-                          <span className="text-[10px] text-[#9A9A9A]">{formatDate(event.event_date)}</span>
+                          <span className="text-base text-[#9A9A9A]">{formatDate(event.event_date)}</span>
                         </div>
-                        <h3 className="mt-3 text-base font-semibold text-[#202124] line-clamp-1">{event.title}</h3>
-                        <p className="mt-1 text-xs text-[#6B6B6B] line-clamp-2">{event.description}</p>
+                         <h3 className="mt-3 text-lg font-semibold text-[#202124] line-clamp-1">{event.title}</h3>
+                        <p className="mt-1 text-base text-[#6B6B6B] line-clamp-2">{event.description}</p>
                         <div className="mt-3 flex flex-col gap-1.5">
-                          {event.event_time && (
-                            <div className="flex items-center gap-1.5 text-xs text-[#9A9A9A]">
+                           {event.event_time && (
+                            <div className="flex items-center gap-1.5 text-base text-[#9A9A9A]">
                               <Clock size={12} />
                               {formatTime(event.event_time)}
                             </div>
                           )}
                           {event.location && (
-                            <div className="flex items-center gap-1.5 text-xs text-[#9A9A9A]">
+                            <div className="flex items-center gap-1.5 text-base text-[#9A9A9A]">
                               <MapPin size={12} />
                               {event.location}
                             </div>
                           )}
                         </div>
                         <div className="mt-4 flex items-center justify-between">
-                          <span className="text-xs text-[#9A9A9A]">by {event.organizer_name}</span>
-                          <button
+                           <span className="text-base text-[#9A9A9A]">by {event.organizer_name}</span>
+                           <button
                             onClick={() => router.push(`/dashboard/events/${event.id}`)}
-                            className="rounded-full bg-[#B8F25E] px-4 py-2 text-xs font-semibold text-[#202124] transition-colors "
+                            className="rounded-full bg-[#B8F25E] px-4 py-2 text-base font-semibold text-[#202124] transition-colors "
                           >
                             View Details
                           </button>
@@ -250,11 +250,11 @@ export default function EventsPage() {
                         )}
                       </div>
                       <div className="p-5">
-                        <span className={`rounded-full px-3 py-1 text-[10px] font-semibold ${cfg.badge}`}>
-                          {event.category}
-                        </span>
-                        <h3 className="mt-2 text-base font-semibold text-[#202124] line-clamp-1">{event.title}</h3>
-                        <p className="mt-1 text-xs text-[#9A9A9A]">{formatDate(event.event_date)}</p>
+                         <span className={`rounded-full px-3 py-1 text-base font-semibold ${cfg.badge}`}>
+                            {event.category}
+                          </span>
+                          <h3 className="mt-2 text-lg font-semibold text-[#202124] line-clamp-1">{event.title}</h3>
+                          <p className="mt-1 text-base text-[#9A9A9A]">{formatDate(event.event_date)}</p>
                       </div>
                     </div>
                   );
