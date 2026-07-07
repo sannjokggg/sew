@@ -187,7 +187,6 @@ export default function CreatePostPage() {
               <p className="mb-2 text-xs text-[#9A9A9A]">Up to 4 photos</p>
               <MultiImageUploader onUpload={setImages} currentImages={images} maxImages={4} />
             </div>
-            </div>
 
             <div className="flex items-center gap-4 mt-auto pt-4">
               <Link
