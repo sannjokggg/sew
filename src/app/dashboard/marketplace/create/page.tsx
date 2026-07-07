@@ -74,7 +74,7 @@ export default function CreatePostPage() {
         </div>
       </div>
 
-      <div className="flex gap-6">
+      <div className="flex gap-6 items-start">
         <form onSubmit={handleSubmit} className="flex-1">
           <div className="rounded-[24px] bg-white p-8 shadow-sm">
             {error && (
@@ -209,9 +209,9 @@ export default function CreatePostPage() {
           </div>
         </form>
 
-        <div className="w-[320px] flex-shrink-0 flex flex-col gap-3">
+        <div className="w-[320px] flex-shrink-0 flex flex-col gap-3 sticky top-6">
           <span className="text-sm font-medium text-[#9A9A9A]">Live Preview</span>
-          <div className="rounded-[24px] bg-white p-5 shadow-sm">
+          <div className="rounded-[24px] bg-white p-5 shadow-sm flex-1 flex flex-col">
             <div className={`flex h-[200px] items-center justify-center overflow-hidden rounded-[16px] ${images.length > 0 ? "bg-gray-50" : `bg-gradient-to-br ${selectedType?.gradient || "from-gray-200 to-gray-300"}`}`}>
               {images.length > 0 ? (
                 <img src={images[0]} alt="Preview" className="h-full w-full object-contain" />
