@@ -182,7 +182,7 @@ export default function Marketplace() {
                       <img
                         src={(item.images && item.images[0]) || item.image_url || ""}
                         alt=""
-                        className="absolute inset-0 h-full w-full scale-110 object-cover blur-md opacity-40"
+                        className="absolute inset-0 h-full w-full scale-110 object-cover blur-sm opacity-30"
                       />
                       <img
                         src={(item.images && item.images[0]) || item.image_url || ""}
