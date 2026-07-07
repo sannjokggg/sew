@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
-  ArrowLeft, CalendarDays, Clock, MapPin, Loader2, Share2,
+  ArrowLeft, CalendarDays, Clock, MapPin, Loader2, Share2, Trash2,
   GraduationCap, Cpu, Heart, Users, Trophy, Palette, Briefcase, PartyPopper,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 interface EventDetail {
   id: number;
@@ -60,6 +61,9 @@ export default function EventDetailPage() {
   const eventId = params.id as string;
   const [event, setEvent] = useState<EventDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
+  const { data: session } = useSession();
+  const myId = (session?.user as { id?: string })?.id;
 
   useEffect(() => {
     fetch(`/api/events`)
@@ -72,6 +76,19 @@ export default function EventDetailPage() {
       .catch(() => router.push("/dashboard/events"))
       .finally(() => setLoading(false));
   }, [eventId, router]);
+
+  const handleDelete = async () => {
+    if (!confirm("Are you sure you want to delete this event?")) return;
+    setDeleting(true);
+    try {
+      const res = await fetch("/api/events", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: Number(eventId) }),
+      });
+      if (res.ok) router.push("/dashboard/events");
+    } finally { setDeleting(false); }
+  };
 
   if (loading) {
     return (
@@ -156,7 +173,15 @@ export default function EventDetailPage() {
               </div>
             </div>
             <div className="mt-4 flex gap-2">
-              {!isPast && (
+              {myId === String(event.user_id) ? (
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-red-50 border border-red-200 px-4 py-3 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50"
+                >
+                  {deleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />} Delete Event
+                </button>
+              ) : !isPast && (
                 <button className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[#B8F25E] px-4 py-3 text-sm font-semibold text-[#202124] transition-colors hover:bg-[#a8e04e]">
                   RSVP
                 </button>

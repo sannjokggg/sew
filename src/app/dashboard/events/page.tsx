@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   CalendarDays, MapPin, Clock, Loader2, GraduationCap, Cpu, Heart,
-  Users, Trophy, Palette, Briefcase, PartyPopper, Plus,
+  Users, Trophy, Palette, Briefcase, PartyPopper, Plus, Trash2,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import ImageLightbox from "@/components/image-lightbox";
 
 interface Event {
@@ -60,6 +61,9 @@ export default function EventsPage() {
   const [filter, setFilter] = useState("All");
   const [loading, setLoading] = useState(true);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+  const [deleting, setDeleting] = useState<number | null>(null);
+  const { data: session } = useSession();
+  const myId = (session?.user as { id?: string })?.id;
 
   useEffect(() => {
     fetch("/api/events")
@@ -77,6 +81,19 @@ export default function EventsPage() {
   const filtered = filter === "All" ? events : events.filter((e) => e.category === filter);
   const upcoming = filtered.filter((e) => !isPast(e.event_date));
   const past = filtered.filter((e) => isPast(e.event_date));
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this event?")) return;
+    setDeleting(id);
+    try {
+      const res = await fetch("/api/events", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) setEvents((prev) => prev.filter((e) => e.id !== id));
+    } finally { setDeleting(null); }
+  };
 
   return (
     <div className="flex flex-col gap-6 p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
@@ -140,7 +157,16 @@ export default function EventsPage() {
                   const cfg = categoryConfig[event.category] || categoryConfig.Community;
                   const Icon = cfg.icon;
                   return (
-                    <div key={event.id} className="rounded-[24px] bg-white shadow-sm transition-shadow hover:shadow-md overflow-hidden">
+                    <div key={event.id} className="relative rounded-[24px] bg-white shadow-sm transition-shadow hover:shadow-md overflow-hidden">
+                      {myId === String(event.user_id) && (
+                        <button
+                          onClick={() => handleDelete(event.id)}
+                          disabled={deleting === event.id}
+                          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-red-500 shadow-sm transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                        >
+                          {deleting === event.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                        </button>
+                      )}
                       <div className={`relative flex w-full items-center justify-center overflow-hidden ${event.image_url ? "bg-gray-50" : cfg.bg}`} style={{ aspectRatio: "4 / 3" }}>
                         {event.image_url ? (
                           <img
@@ -202,7 +228,16 @@ export default function EventsPage() {
                   const cfg = categoryConfig[event.category] || categoryConfig.Community;
                   const Icon = cfg.icon;
                   return (
-                    <div key={event.id} className="rounded-[24px] bg-white shadow-sm overflow-hidden opacity-60">
+                    <div key={event.id} className="relative rounded-[24px] bg-white shadow-sm overflow-hidden opacity-60">
+                      {myId === String(event.user_id) && (
+                        <button
+                          onClick={() => handleDelete(event.id)}
+                          disabled={deleting === event.id}
+                          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-red-500 shadow-sm transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                        >
+                          {deleting === event.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                        </button>
+                      )}
                       <div className={`relative flex w-full items-center justify-center overflow-hidden ${event.image_url ? "bg-gray-50" : cfg.bg}`} style={{ aspectRatio: "4 / 3" }}>
                         {event.image_url ? (
                           <img

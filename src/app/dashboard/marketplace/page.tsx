@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Tag, ArrowLeftRight, Gift, UserPlus, Loader2, MessageSquare } from "lucide-react";
+import { Tag, ArrowLeftRight, Gift, UserPlus, Loader2, MessageSquare, Trash2 } from "lucide-react";
 import ImageLightbox from "@/components/image-lightbox";
 
 interface Post {
@@ -46,6 +46,7 @@ export default function Marketplace() {
   const [filter, setFilter] = useState("All");
   const [loading, setLoading] = useState(true);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+  const [deleting, setDeleting] = useState<number | null>(null);
   const categories = ["All", "Sell", "Exchange", "Giveaway", "Request"];
 
   useEffect(() => {
@@ -62,6 +63,21 @@ export default function Marketplace() {
   }, []);
 
   const filtered = filter === "All" ? posts : posts.filter((p) => p.type === filter);
+
+  const handleDelete = async (e: React.MouseEvent, id: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!confirm("Are you sure you want to delete this listing?")) return;
+    setDeleting(id);
+    try {
+      const res = await fetch("/api/posts", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) setPosts((prev) => prev.filter((p) => p.id !== id));
+    } finally { setDeleting(null); }
+  };
 
   const stats = {
     sell: posts.filter((p) => p.type === "Sell").length,
@@ -176,8 +192,17 @@ export default function Marketplace() {
               <Link
                 key={item.id}
                 href={`/dashboard/marketplace/${item.id}`}
-                className="rounded-[24px] bg-white p-5 shadow-sm transition-all hover:shadow-md"
+                className="relative rounded-[24px] bg-white p-5 shadow-sm transition-all hover:shadow-md"
               >
+                {myId === item.user_id && (
+                  <button
+                    onClick={(e) => handleDelete(e, item.id)}
+                    disabled={deleting === item.id}
+                    className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-red-500 shadow-sm transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                  >
+                    {deleting === item.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                  </button>
+                )}
                 <div className={`flex h-[240px] items-center justify-center overflow-hidden rounded-[16px] ${(item.images && item.images.length > 0) || item.image_url ? "bg-gray-50" : `bg-gradient-to-br ${cfg.gradient}`}`}>
                   {(item.images && item.images.length > 0) || item.image_url ? (
                     <img

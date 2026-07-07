@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { ArrowLeft, Tag, ArrowLeftRight, Gift, UserPlus, Star, Loader2, MessageSquare, Send, Clock } from "lucide-react";
+import { ArrowLeft, Tag, ArrowLeftRight, Gift, UserPlus, Star, Loader2, MessageSquare, Send, Clock, Trash2 } from "lucide-react";
 import ImageLightbox from "@/components/image-lightbox";
 
 interface Review {
@@ -100,6 +100,7 @@ export default function PostDetail() {
   const [commentContent, setCommentContent] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchPost = async () => {
     try {
@@ -156,6 +157,19 @@ export default function PostDetail() {
     } finally {
       setSubmittingComment(false);
     }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm("Are you sure you want to delete this listing?")) return;
+    setDeleting(true);
+    try {
+      const res = await fetch("/api/posts", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: Number(postId) }),
+      });
+      if (res.ok) router.push("/dashboard/marketplace");
+    } finally { setDeleting(false); }
   };
 
   if (loading) {
@@ -284,12 +298,21 @@ export default function PostDetail() {
             </div>
             <div className="mt-4">
               {myId === post.user_id ? (
-                <button
-                  onClick={() => router.push("/dashboard/messages")}
-                  className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 px-4 py-3 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
-                >
-                  <MessageSquare size={16} /> Go to Inbox
-                </button>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => router.push("/dashboard/messages")}
+                    className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 px-4 py-3 text-sm font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
+                  >
+                    <MessageSquare size={16} /> Go to Inbox
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    disabled={deleting}
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-red-50 border border-red-200 px-4 py-3 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50"
+                  >
+                    {deleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />} Delete
+                  </button>
+                </div>
               ) : (
                 <button
                   onClick={() => router.push(`/dashboard/messages?userId=${post.user_id}`)}

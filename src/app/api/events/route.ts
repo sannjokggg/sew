@@ -65,3 +65,33 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Failed to create event" }, { status: 500 });
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = (session.user as { id: string }).id;
+    const { id } = await req.json();
+
+    if (!id) {
+      return NextResponse.json({ error: "Event ID required" }, { status: 400 });
+    }
+
+    const existing = await pool.query("SELECT user_id FROM events WHERE id = $1", [id]);
+    if (existing.rows.length === 0) {
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
+    if (String(existing.rows[0].user_id) !== userId) {
+      return NextResponse.json({ error: "Not authorized to delete this event" }, { status: 403 });
+    }
+
+    await pool.query("DELETE FROM events WHERE id = $1", [id]);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    return NextResponse.json({ error: "Failed to delete event" }, { status: 500 });
+  }
+}
