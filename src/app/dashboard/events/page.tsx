@@ -201,18 +201,12 @@ export default function EventsPage() {
                           </div>
                           <span className="text-xs text-[#9A9A9A]">by {event.organizer_name}</span>
                         </div>
-                        <div className="mt-3 flex gap-2">
+                        <div className="mt-3">
                           <button
                             onClick={() => router.push(`/dashboard/events/${event.id}`)}
-                            className="flex-1 rounded-full bg-[#B8F25E] px-4 py-2.5 text-base font-semibold text-[#202124] transition-colors"
+                            className="w-full rounded-full bg-[#B8F25E] px-4 py-2.5 text-base font-semibold text-[#202124] transition-colors"
                           >
                             View Details
-                          </button>
-                          <button
-                            onClick={() => router.push(`/dashboard/messages?userId=${event.user_id}`)}
-                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-base font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
-                          >
-                            Message
                           </button>
                         </div>
                       </div>
@@ -275,18 +269,12 @@ export default function EventsPage() {
                           </div>
                           <span className="text-xs text-[#9A9A9A]">by {event.organizer_name}</span>
                         </div>
-                        <div className="mt-3 flex gap-2">
+                        <div className="mt-3">
                           <button
                             onClick={() => router.push(`/dashboard/events/${event.id}`)}
-                            className="flex-1 rounded-full bg-[#B8F25E] px-4 py-2.5 text-base font-semibold text-[#202124] transition-colors"
+                            className="w-full rounded-full bg-[#B8F25E] px-4 py-2.5 text-base font-semibold text-[#202124] transition-colors"
                           >
                             View Details
-                          </button>
-                          <button
-                            onClick={() => router.push(`/dashboard/messages?userId=${event.user_id}`)}
-                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-base font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
-                          >
-                            Message
                           </button>
                         </div>
                       </div>
