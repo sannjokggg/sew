@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
 import { Nunito, Inter } from "next/font/google";
 import "./globals.css";
-import Logo from "@/components/logo";
-import ThemeToggle from "@/components/theme-toggle";
-import Sidebar from "@/components/sidebar";
-import BottomNav from "@/components/bottom-nav";
-import Navbar from "@/components/navbar";
 import Providers from "@/components/providers";
+import AppShell from "@/components/app-shell";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -35,28 +31,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex bg-gray-100">
         <Providers>
-        <div className="flex flex-col h-screen w-full p-4 gap-5">
-          <div className="flex items-center gap-0">
-            <Logo />
-            <Navbar />
-          </div>
-          <div className="flex flex-1 gap-4 overflow-hidden">
-            <div className="flex flex-col items-start gap-[34px]">
-              <div className="mt-[5px]">
-                <ThemeToggle />
-              </div>
-              <div className="mt-4">
-                <Sidebar />
-              </div>
-              <div className="mt-auto">
-                <BottomNav />
-              </div>
-            </div>
-            <div className="flex flex-col flex-1 gap-4 overflow-auto">
-              {children}
-            </div>
-          </div>
-        </div>
+          <AppShell>{children}</AppShell>
         </Providers>
       </body>
     </html>

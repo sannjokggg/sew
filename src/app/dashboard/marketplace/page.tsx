@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Tag, ArrowLeftRight, Gift, UserPlus, Loader2, MessageSquare, MoreHorizontal, Trash2, Pencil, Flag, EyeOff, Share2 } from "lucide-react";
 import ImageLightbox from "@/components/image-lightbox";
+import LoginPrompt from "@/components/login-prompt";
 
 interface Post {
   id: number;
@@ -48,6 +49,7 @@ export default function Marketplace() {
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
   const [deleting, setDeleting] = useState<number | null>(null);
   const [openMenu, setOpenMenu] = useState<number | null>(null);
+  const [loginPrompt, setLoginPrompt] = useState<{ isOpen: boolean; action: string }>({ isOpen: false, action: "" });
   const categories = ["All", "Sell", "Exchange", "Giveaway", "Request"];
 
   useEffect(() => {
@@ -62,6 +64,14 @@ export default function Marketplace() {
         setLoading(false);
       });
   }, []);
+
+  const handleAction = (action: string) => {
+    if (!session) {
+      setLoginPrompt({ isOpen: true, action });
+      return false;
+    }
+    return true;
+  };
 
   const filtered = filter === "All" ? posts : posts.filter((p) => p.type === filter);
 
