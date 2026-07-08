@@ -48,18 +48,18 @@ export default function Navbar() {
       </div>
 
       <div className="absolute right-8 flex items-center gap-4">
-        <div className="flex items-center gap-3 bg-white px-[21px] py-[13px] rounded-[36px] shadow-sm">
+        <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-[36px] shadow-sm">
           <button
             onClick={() => router.push("/dashboard/messages")}
-            className="flex h-11 w-11 items-center justify-center rounded-full text-[#222222] transition-all duration-200 hover:bg-gray-100 hover:text-[#1D1B17] active:bg-gray-800 active:text-white active:scale-95"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-[#222222] transition-all duration-200 hover:bg-gray-100 hover:text-[#1D1B17] active:bg-gray-800 active:text-white active:scale-95"
           >
-            <Search size={22} strokeWidth={2} />
+            <Search size={20} strokeWidth={2} />
           </button>
-          <button className="flex h-11 w-11 items-center justify-center rounded-full text-[#222222] transition-all duration-200 hover:bg-gray-100 hover:text-[#1D1B17] active:bg-gray-800 active:text-white active:scale-95">
-            <Bell size={22} strokeWidth={2} />
+          <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#222222] transition-all duration-200 hover:bg-gray-100 hover:text-[#1D1B17] active:bg-gray-800 active:text-white active:scale-95">
+            <Bell size={20} strokeWidth={2} />
           </button>
-          <button className="flex h-11 w-11 items-center justify-center rounded-full text-[#222222] transition-all duration-200 hover:bg-gray-100 hover:text-[#1D1B17] active:bg-gray-800 active:text-white active:scale-95">
-            <Info size={22} strokeWidth={2} />
+          <button className="flex h-10 w-10 items-center justify-center rounded-full text-[#222222] transition-all duration-200 hover:bg-gray-100 hover:text-[#1D1B17] active:bg-gray-800 active:text-white active:scale-95">
+            <Info size={20} strokeWidth={2} />
           </button>
         </div>
 
@@ -68,10 +68,10 @@ export default function Navbar() {
             <span className="text-xs font-medium text-white">{initial}</span>
           </div>
           <div className="flex flex-col">
-            <span className="text-[15px] font-semibold text-[#222222] leading-tight">
+            <span className="text-[16px] font-semibold text-[#222222] leading-tight">
               {displayName}
             </span>
-            <span className="text-[13px] font-normal text-[#9A9A9A] leading-tight">
+            <span className="text-[12px] font-normal text-[#9A9A9A] leading-tight">
               {displayEmail}
             </span>
           </div>

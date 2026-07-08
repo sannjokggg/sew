@@ -49,8 +49,8 @@ export default function Home() {
           </div>
 
           {/* Right Side — Card Grid: 2 cols, left=3 rows, right=2 rows */}
-          <div className="flex-1 flex items-start justify-center p-8 pl-0 pt-4">
-            <div className="w-[55%] h-[38%] grid grid-cols-[1fr_1fr] gap-3">
+          <div className="flex-1 flex items-center justify-center p-6 pl-0">
+            <div className="w-full h-full grid grid-cols-[1fr_1fr] gap-3 max-w-[500px] max-h-[440px]">
               {/* LEFT COLUMN — 3 items stacked */}
               <div className="grid grid-rows-[1.6fr_1fr_0.9fr] gap-3">
                 {/* 1. Woman photo */}
