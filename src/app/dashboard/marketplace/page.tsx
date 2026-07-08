@@ -229,8 +229,8 @@ export default function Marketplace() {
                     </span>
                     <span className="text-base text-[#9A9A9A]">{timeAgo(item.created_at)}</span>
                   </div>
-                  <h3 className="mt-3 text-lg font-semibold text-[#202124]">{item.title}</h3>
-                  <p className="mt-1 text-base text-[#6B6B6B] line-clamp-2">{item.description}</p>
+                  <h3 className="mt-3 text-lg font-semibold text-[#202124] line-clamp-1">{item.title}</h3>
+                  <p className="mt-1 text-base text-[#6B6B6B] line-clamp-1">{item.description}</p>
                   <div className="mt-3 flex items-center justify-between">
                     <span className="text-lg font-semibold text-[#202124]">
                       {item.type === "Sell" ? `$${item.price || "0"}` :

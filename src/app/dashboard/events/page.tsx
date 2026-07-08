@@ -157,7 +157,7 @@ export default function EventsPage() {
                   const cfg = categoryConfig[event.category] || categoryConfig.Community;
                   const Icon = cfg.icon;
                   return (
-                    <div key={event.id} className="relative rounded-[24px] bg-white shadow-sm transition-shadow hover:shadow-md overflow-hidden">
+                    <div key={event.id} className="relative rounded-[24px] bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
                       {myId === String(event.user_id) && (
                         <button
                           onClick={() => handleDelete(event.id)}
@@ -167,7 +167,7 @@ export default function EventsPage() {
                           {deleting === event.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                         </button>
                       )}
-                      <div className={`relative flex w-full items-center justify-center overflow-hidden ${event.image_url ? "bg-gray-50" : cfg.bg}`} style={{ aspectRatio: "4 / 3" }}>
+                      <div className={`flex h-[240px] items-center justify-center overflow-hidden rounded-[16px] ${event.image_url ? "bg-gray-50" : cfg.bg}`}>
                         {event.image_url ? (
                           <img
                             src={event.image_url}
@@ -176,39 +176,43 @@ export default function EventsPage() {
                             onClick={() => setLightbox({ src: event.image_url!, alt: event.title })}
                           />
                         ) : (
-                          <Icon size={56} strokeWidth={1.2} className={cfg.color} />
+                          <Icon size={80} strokeWidth={1.2} className={cfg.color} />
                         )}
                       </div>
-                      <div className="p-5">
-                        <div className="flex items-center gap-2">
-                           <span className={`rounded-full px-3 py-1 text-base font-semibold ${cfg.badge}`}>
+                      <div className="mt-4">
+                        <div className="flex items-center justify-between">
+                          <span className={`rounded-full px-3 py-1 text-base font-semibold ${cfg.badge}`}>
                             {event.category}
                           </span>
                           <span className="text-base text-[#9A9A9A]">{formatDate(event.event_date)}</span>
                         </div>
-                         <h3 className="mt-3 text-lg font-semibold text-[#202124] line-clamp-1">{event.title}</h3>
-                        <p className="mt-1 text-base text-[#6B6B6B] line-clamp-2">{event.description}</p>
-                        <div className="mt-3 flex flex-col gap-1.5">
-                           {event.event_time && (
-                            <div className="flex items-center gap-1.5 text-base text-[#9A9A9A]">
-                              <Clock size={12} />
-                              {formatTime(event.event_time)}
-                            </div>
-                          )}
-                          {event.location && (
-                            <div className="flex items-center gap-1.5 text-base text-[#9A9A9A]">
-                              <MapPin size={12} />
-                              {event.location}
-                            </div>
-                          )}
+                        <h3 className="mt-3 text-lg font-semibold text-[#202124] line-clamp-1">{event.title}</h3>
+                        <p className="mt-1 text-base text-[#6B6B6B] line-clamp-1">{event.description}</p>
+                        <div className="mt-3 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 text-sm text-[#9A9A9A]">
+                            {event.location ? (
+                              <>
+                                <MapPin size={12} />
+                                <span className="line-clamp-1">{event.location}</span>
+                              </>
+                            ) : (
+                              <span>by {event.organizer_name}</span>
+                            )}
+                          </div>
+                          <span className="text-xs text-[#9A9A9A]">by {event.organizer_name}</span>
                         </div>
-                        <div className="mt-4 flex items-center justify-between">
-                           <span className="text-base text-[#9A9A9A]">by {event.organizer_name}</span>
-                           <button
+                        <div className="mt-3 flex gap-2">
+                          <button
                             onClick={() => router.push(`/dashboard/events/${event.id}`)}
-                            className="rounded-full bg-[#B8F25E] px-4 py-2 text-base font-semibold text-[#202124] transition-colors "
+                            className="flex-1 rounded-full bg-[#B8F25E] px-4 py-2.5 text-base font-semibold text-[#202124] transition-colors"
                           >
                             View Details
+                          </button>
+                          <button
+                            onClick={() => router.push(`/dashboard/messages?userId=${event.user_id}`)}
+                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-base font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
+                          >
+                            Message
                           </button>
                         </div>
                       </div>
@@ -228,7 +232,7 @@ export default function EventsPage() {
                   const cfg = categoryConfig[event.category] || categoryConfig.Community;
                   const Icon = cfg.icon;
                   return (
-                    <div key={event.id} className="relative rounded-[24px] bg-white shadow-sm overflow-hidden opacity-60">
+                    <div key={event.id} className="relative rounded-[24px] bg-white p-5 shadow-sm opacity-60">
                       {myId === String(event.user_id) && (
                         <button
                           onClick={() => handleDelete(event.id)}
@@ -238,23 +242,53 @@ export default function EventsPage() {
                           {deleting === event.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                         </button>
                       )}
-                      <div className={`relative flex w-full items-center justify-center overflow-hidden ${event.image_url ? "bg-gray-50" : cfg.bg}`} style={{ aspectRatio: "4 / 3" }}>
+                      <div className={`flex h-[240px] items-center justify-center overflow-hidden rounded-[16px] ${event.image_url ? "bg-gray-50" : cfg.bg}`}>
                         {event.image_url ? (
                           <img
                             src={event.image_url}
                             alt={event.title}
-                            className="h-full w-full object-contain"
+                            className="h-full w-full object-cover"
                           />
                         ) : (
-                          <Icon size={48} strokeWidth={1.2} className={cfg.color} />
+                          <Icon size={80} strokeWidth={1.2} className={cfg.color} />
                         )}
                       </div>
-                      <div className="p-5">
-                         <span className={`rounded-full px-3 py-1 text-base font-semibold ${cfg.badge}`}>
+                      <div className="mt-4">
+                        <div className="flex items-center justify-between">
+                          <span className={`rounded-full px-3 py-1 text-base font-semibold ${cfg.badge}`}>
                             {event.category}
                           </span>
-                          <h3 className="mt-2 text-lg font-semibold text-[#202124] line-clamp-1">{event.title}</h3>
-                          <p className="mt-1 text-base text-[#9A9A9A]">{formatDate(event.event_date)}</p>
+                          <span className="text-base text-[#9A9A9A]">{formatDate(event.event_date)}</span>
+                        </div>
+                        <h3 className="mt-3 text-lg font-semibold text-[#202124] line-clamp-1">{event.title}</h3>
+                        <p className="mt-1 text-base text-[#6B6B6B] line-clamp-1">{event.description}</p>
+                        <div className="mt-3 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 text-sm text-[#9A9A9A]">
+                            {event.location ? (
+                              <>
+                                <MapPin size={12} />
+                                <span className="line-clamp-1">{event.location}</span>
+                              </>
+                            ) : (
+                              <span>by {event.organizer_name}</span>
+                            )}
+                          </div>
+                          <span className="text-xs text-[#9A9A9A]">by {event.organizer_name}</span>
+                        </div>
+                        <div className="mt-3 flex gap-2">
+                          <button
+                            onClick={() => router.push(`/dashboard/events/${event.id}`)}
+                            className="flex-1 rounded-full bg-[#B8F25E] px-4 py-2.5 text-base font-semibold text-[#202124] transition-colors"
+                          >
+                            View Details
+                          </button>
+                          <button
+                            onClick={() => router.push(`/dashboard/messages?userId=${event.user_id}`)}
+                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-base font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
+                          >
+                            Message
+                          </button>
+                        </div>
                       </div>
                     </div>
                   );
