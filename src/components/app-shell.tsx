@@ -20,7 +20,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-md py-3 px-4">
           <MarketingNavbar />
         </div>
-        <div className="flex-1 overflow-auto px-2">
+        <div className="flex-1 overflow-auto px-4">
           {children}
         </div>
       </div>
@@ -28,7 +28,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex flex-col h-screen w-full py-4 px-2 gap-5">
+    <div className="flex flex-col h-screen w-full py-4 px-4 gap-5">
       <div className="flex items-center gap-0">
         <Logo />
         <Navbar />

@@ -133,9 +133,9 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Because Section - Full width */}
-      <div className="mt-16 px-8">
-        <div className="grid grid-cols-2 gap-12 items-center max-w-[1400px] mx-auto">
+      {/* Because Section */}
+      <div className="mt-16 max-w-[1400px] mx-auto px-8">
+        <div className="grid grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-[64px] font-bold leading-[1.1] text-[#1a2e1a]">
               Because<br />Sustainability<br />Matters.
