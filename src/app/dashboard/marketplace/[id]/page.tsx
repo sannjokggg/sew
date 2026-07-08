@@ -52,6 +52,7 @@ interface SimilarPost {
   title: string;
   type: string;
   price: string | null;
+  category: string | null;
   image_url: string | null;
   images: string[];
   user_name: string;
