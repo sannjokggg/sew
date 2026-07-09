@@ -231,7 +231,7 @@ export default function PostDetail() {
                 <img
                   src={allImages[selectedImage]}
                   alt={post.title}
-                  className="cursor-pointer transition-transform hover:scale-105"
+                  className="h-full w-full cursor-pointer object-cover transition-transform hover:scale-105"
                   onClick={() => setLightbox({ src: allImages[selectedImage], alt: post.title })}
                 />
                 {allImages.length > 1 && (
