@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ArrowUpRight, ChevronLeft, ChevronRight, ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, ArrowRight, ChevronDown, Loader2 } from "lucide-react";
 
 const heroSlides = [
   {
@@ -36,6 +36,25 @@ const faqs = [
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
+  const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormStatus("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Failed");
+      setFormStatus("success");
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch {
+      setFormStatus("error");
+    }
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -282,23 +301,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Testimonial Section */}
-      <div className="mt-20 bg-[#f8f9fa] rounded-[28px] p-12">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-[80px] text-[#B8F25E] leading-none">"</div>
-          <p className="text-2xl text-gray-700 leading-relaxed mt-4">
-            This platform has changed how our community approaches sustainability. From exchanging items to organizing cleanup drives, we're making a real difference together.
-          </p>
-          <div className="mt-8 flex items-center gap-4">
-            <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-            <div>
-              <div className="font-bold text-[#1a2e1a]">Community Member</div>
-              <div className="text-gray-600">Active Participant</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* FAQ Section */}
       <div className="mt-20">
         <h2 className="text-[48px] font-bold text-[#1a2e1a] mb-12">
@@ -375,7 +377,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-xs text-gray-500">Email us at</p>
-                <p className="text-sm font-semibold text-gray-800">support@sewago.com</p>
+                <p className="text-sm font-semibold text-gray-800">support@sewago.org</p>
               </div>
             </div>
           </div>
@@ -385,83 +387,65 @@ export default function Home() {
             </h2>
             <p className="mt-2 text-gray-600">We're here to listen, support, and collaborate.</p>
             <p className="mt-1 text-gray-600">Donor, partner, or volunteer? Share your message, and we'll reply in 3 days.</p>
-            <form className="mt-6 space-y-4">
+            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               <input
                 type="text"
                 placeholder="Enter your full name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
                 className="w-full px-4 py-3 rounded-[12px] border border-gray-200 focus:outline-none focus:border-green-500 bg-white"
               />
               <div className="grid grid-cols-2 gap-4">
                 <input
                   type="email"
                   placeholder="Enter your email address"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
                   className="w-full px-4 py-3 rounded-[12px] border border-gray-200 focus:outline-none focus:border-green-500 bg-white"
                 />
                 <input
                   type="tel"
                   placeholder="Enter your phone number"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="w-full px-4 py-3 rounded-[12px] border border-gray-200 focus:outline-none focus:border-green-500 bg-white"
                 />
               </div>
               <textarea
                 placeholder="Tell us about your request or idea..."
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                required
                 rows={4}
                 className="w-full px-4 py-3 rounded-[12px] border border-gray-200 focus:outline-none focus:border-green-500 bg-white resize-none"
               />
               <button
                 type="submit"
-                className="bg-green-500 text-white px-8 py-3 rounded-[12px] font-semibold hover:bg-green-600 transition-colors"
+                disabled={formStatus === "sending"}
+                className="bg-green-500 text-white px-8 py-3 rounded-[12px] font-semibold hover:bg-green-600 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
               >
-                Submit
+                {formStatus === "sending" ? (
+                  <><Loader2 size={18} className="animate-spin" /> Sending...</>
+                ) : formStatus === "success" ? (
+                  "✓ Sent Successfully"
+                ) : (
+                  "Submit"
+                )}
               </button>
+              {formStatus === "error" && (
+                <p className="text-red-500 text-sm">Failed to send. Please try again or email us directly.</p>
+              )}
             </form>
           </div>
-        </div>
-      </div>
-
-      {/* Trusted By Section */}
-      <div className="mt-16 text-center">
-        <p className="text-sm text-[#9A9A9A] mb-6">Partnered with organizations across 50+ cities</p>
-        <div className="relative overflow-hidden">
-          <div className="flex animate-marquee whitespace-nowrap">
-            {[...Array(2)].map((_, setIdx) => (
-              <div key={setIdx} className="flex items-center gap-16 mr-16">
-                <span className="text-2xl font-bold text-[#1a2e1a] tracking-tight flex items-center gap-2">
-                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="14" fill="#1a2e1a"/><path d="M8 14l4 4 8-8" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  Sewago
-                </span>
-                <span className="text-2xl font-bold text-[#6B6B6B] tracking-tight flex items-center gap-2">
-                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="14" fill="#6B6B6B"/><path d="M9 14a5 5 0 0110 0" stroke="#fff" strokeWidth="2" strokeLinecap="round"/><circle cx="14" cy="14" r="2" fill="#fff"/></svg>
-                  ServiceHub
-                </span>
-                <span className="text-2xl font-bold text-[#16a34a] tracking-tight flex items-center gap-2">
-                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#16a34a"/><path d="M8 10h12M8 14h8M8 18h10" stroke="#fff" strokeWidth="2" strokeLinecap="round"/></svg>
-                  FixIt Pro
-                </span>
-                <span className="text-2xl font-bold text-[#1a2e1a] tracking-tight flex items-center gap-2">
-                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="14" fill="#1a2e1a"/><path d="M10 18V10l8 4-8 4z" fill="#fff"/></svg>
-                  HomeCare
-                </span>
-                <span className="text-2xl font-bold text-[#6B6B6B] tracking-tight flex items-center gap-2">
-                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="14" fill="#6B6B6B"/><path d="M9 14l3 3 7-7" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  TrustWork
-                </span>
-                <span className="text-2xl font-bold text-[#16a34a] tracking-tight flex items-center gap-2">
-                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="14" fill="#16a34a"/><path d="M10 14a4 4 0 018 0" stroke="#fff" strokeWidth="2" strokeLinecap="round"/><path d="M12 17h4" stroke="#fff" strokeWidth="2" strokeLinecap="round"/></svg>
-                  UrbanEdge
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-gray-100 to-transparent pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-gray-100 to-transparent pointer-events-none" />
         </div>
       </div>
 
       </div>
 
       {/* Footer */}
-      <footer className="mt-16 bg-[#fef9e7] rounded-[28px] p-12 overflow-hidden">
+      <footer className="mt-16 bg-[#B8F25E] rounded-[28px] p-12 overflow-hidden">
         <div className="grid grid-cols-4 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-6">
@@ -498,9 +482,9 @@ export default function Home() {
           <div>
             <h4 className="font-semibold text-[#1a2e1a] mb-4">Contact Us</h4>
             <p className="font-bold text-[#1a2e1a]">Sewago Team</p>
-            <p className="text-gray-600 mt-2">Hyderabad, Telangana, India</p>
-            <p className="text-gray-600">support@sewago.com</p>
-            <p className="text-gray-600">+977 99999 99999</p>
+            <p className="text-gray-600 mt-2">Kathmandu, Tokha</p>
+            <p className="text-gray-600">support@sewago.org</p>
+            <p className="text-gray-600">+9779868597841</p>
           </div>
         </div>
         
@@ -529,7 +513,7 @@ export default function Home() {
         
         <div className="mt-8 pt-8 border-t border-gray-300 flex justify-between items-center text-gray-600 text-sm">
           <p>© 2025 Sewago. All Rights Reserved.</p>
-          <p>Crafted by <span className="font-semibold">aBox Agency</span></p>
+          <p>Crafted by <span className="font-semibold">Solves Lab</span></p>
         </div>
       </footer>
     </div>

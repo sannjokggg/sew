@@ -55,7 +55,7 @@ export default function MarketingNavbar() {
           Sign In
         </Link>
         <Link
-          href="/register"
+          href="/dashboard"
           className="flex items-center gap-2 rounded-full bg-[#B8F25E] px-5 py-3 text-base font-semibold text-[#202124] transition-colors hover:bg-[#a8e04e]"
         >
           Join Now

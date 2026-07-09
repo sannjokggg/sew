@@ -10,6 +10,9 @@ import {
   Calendar,
 } from "lucide-react";
 import IncomeChart from "@/components/income-chart";
+import MonthlySpendingLimit from "@/components/dashboard/monthly-spending-limit";
+import MyCards from "@/components/dashboard/my-cards";
+import RecentActivities from "@/components/dashboard/recent-activities";
 
 export default function Dashboard() {
   const { data: session } = useSession();
@@ -217,6 +220,17 @@ export default function Dashboard() {
         {/* Total Income Chart */}
         <div className="w-[520px] h-full">
           <IncomeChart />
+        </div>
+      </div>
+
+      {/* Row 2 - Monthly Spending Limit / My Cards + Recent Activities */}
+      <div className="flex gap-5">
+        <div className="flex w-[450px] flex-col gap-5">
+          <MonthlySpendingLimit />
+          <MyCards />
+        </div>
+        <div className="flex-1 h-full">
+          <RecentActivities />
         </div>
       </div>
     </div>
