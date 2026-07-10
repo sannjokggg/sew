@@ -7,7 +7,7 @@ const heroSlides = [
   {
     image: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=1400&h=800&fit=crop",
     title: "Together for a Sustainable Future",
-    description: "Join our community to buy, sell, giveaway, and exchange items that help protect our planet.",
+    description: "Join our community to exchange, giveaway, and donate items that help protect our planet.",
   },
   {
     image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1400&h=800&fit=crop",
@@ -27,7 +27,7 @@ const heroSlides = [
 ];
 
 const faqs = [
-  { question: "How does the marketplace work?", answer: "You can list items for sale, giveaway, or exchange. Browse sustainable products and connect with others in your community." },
+  { question: "How does the marketplace work?", answer: "You can list items for exchange, giveaway, or request. Browse sustainable products and connect with others in your community." },
   { question: "How do I find events near me?", answer: "Visit the Events section to discover cleaning campaigns, plantation drives, and community events in your area." },
   { question: "Can I donate to NGOs?", answer: "Yes! We partner with verified NGOs working on climate change, waste management, and social causes." },
   { question: "Is this platform free to use?", answer: "Yes, browsing and joining events is free. Some marketplace transactions may have minimal fees." },
@@ -38,6 +38,7 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -169,7 +170,7 @@ export default function Home() {
               Because<br />Sustainability<br />Matters.
             </h2>
             <p className="mt-8 text-base text-text-secondary leading-relaxed max-w-[500px]">
-              We're building a community-driven platform that empowers people to take action against climate change. Buy, sell, donate, and exchange items that make a difference.
+              We're building a community-driven platform that empowers people to take action against climate change. Exchange, giveaway, and donate items that make a difference.
             </p>
             <p className="mt-4 text-base text-text-secondary leading-relaxed max-w-[500px]">
               From waste management to plantation campaigns, we connect people who care about our planet. Join events, learn about sustainability, and be part of the solution.
@@ -213,7 +214,7 @@ export default function Home() {
                 <h3 className="text-[32px] font-bold text-white">Marketplace</h3>
                 <span className="border-2 border-white/40 text-white text-sm font-semibold w-10 h-10 rounded-full flex items-center justify-center">01</span>
               </div>
-              <p className="mt-2 text-white font-semibold">Buy, Sell & Exchange</p>
+              <p className="mt-2 text-white font-semibold">Exchange, Giveaway & Donate</p>
               <p className="mt-2 text-white/80 text-sm">Find sustainable items, give away what you don't need, or exchange with others.</p>
             </div>
             <div className="mt-auto">
@@ -359,25 +360,59 @@ export default function Home() {
           Impact Stories,<br />Real Change.
         </h2>
         <p className="text-lg text-text-secondary mb-8">
-          See how our community is making a difference.
+          See how climate change is impacting us.
         </p>
         
         <div className="grid grid-cols-3 gap-6">
-          {[1, 2, 3].map((item) => (
-            <div key={item} className="relative rounded-[20px] overflow-hidden h-[250px] bg-gray-200">
+          {[
+            "Agh0hRymp5E",
+            "2rvfYSwQ1vM",
+            "zpdExnNQcWg",
+          ].map((videoId) => (
+            <div
+              key={videoId}
+              className="relative rounded-[20px] overflow-hidden h-[250px] bg-gray-900 cursor-pointer group"
+              onClick={() => setActiveVideo(videoId)}
+            >
               <img
-                src={`https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=250&fit=crop`}
-                alt={`Story ${item}`}
+                src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+                alt="Video thumbnail"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center">
-                  <div className="w-0 h-0 border-t-8 border-b-8 border-l-12 border-t-transparent border-b-transparent border-l-brand-dark ml-1"></div>
+              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center">
+                <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="w-0 h-0 border-t-[10px] border-b-[10px] border-l-[16px] border-t-transparent border-b-transparent border-l-brand-dark ml-1"></div>
                 </div>
               </div>
             </div>
           ))}
         </div>
+
+        {activeVideo && (
+          <div
+            className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-8"
+            onClick={() => setActiveVideo(null)}
+          >
+            <div
+              className="relative w-full max-w-4xl aspect-video rounded-[20px] overflow-hidden bg-black"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setActiveVideo(null)}
+                className="absolute top-3 right-3 z-10 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center text-gray-700 hover:bg-white transition-colors"
+              >
+                ✕
+              </button>
+              <iframe
+                src={`https://www.youtube.com/embed/${activeVideo}?autoplay=1`}
+                title="Climate Impact Video"
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Get in Touch Section */}

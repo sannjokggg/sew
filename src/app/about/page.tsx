@@ -36,7 +36,7 @@ const values = [
 ];
 
 const features = [
-  { icon: Tag, title: "Marketplace", desc: "Buy, sell, exchange, giveaway, or request items from your neighbors." },
+  { icon: Tag, title: "Marketplace", desc: "Exchange, giveaway, or request items from your neighbors." },
   { icon: Calendar, title: "Events", desc: "Discover and organize community events, workshops, and meetups." },
   { icon: MessageSquare, title: "Messaging", desc: "Real-time chat with image sharing to coordinate transactions." },
   { icon: Star, title: "Profiles", desc: "Build trust through verified profiles and community reputation." },
@@ -95,11 +95,11 @@ export default function AboutPage() {
             and build stronger local communities.
           </p>
           <div className="flex gap-3">
-            <Link href="/register" className="flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-text-primary">
-              Get Started <ArrowRight size={16} />
+            <Link href="/services" className="flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-text-primary">
+              Explore Services <ArrowRight size={16} />
             </Link>
             <Link href="/dashboard/marketplace" className="flex items-center gap-2 rounded-full border border-white/15 px-7 py-3.5 text-base font-medium text-white/80 hover:bg-white/5 transition-colors">
-              Explore Marketplace
+              Browse Marketplace
             </Link>
           </div>
         </div>
@@ -206,8 +206,8 @@ export default function AboutPage() {
           <Link href="/dashboard/help" className="flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-text-primary">
             Contact Team <ArrowRight size={16} />
           </Link>
-          <Link href="/register" className="flex items-center gap-2 rounded-full border border-border-default px-7 py-3.5 text-base font-medium text-text-secondary hover:bg-surface-alt transition-colors">
-            Join Us
+          <Link href="/services" className="flex items-center gap-2 rounded-full border border-border-default px-7 py-3.5 text-base font-medium text-text-secondary hover:bg-surface-alt transition-colors">
+            Explore More
           </Link>
         </div>
       </div>
@@ -216,10 +216,10 @@ export default function AboutPage() {
       <div className="rounded-[24px] bg-nav-active p-12 text-center">
         <h2 className="text-[32px] font-normal text-white mb-3">Ready to join your neighborhood?</h2>
         <p className="text-lg text-white/40 mb-8 max-w-lg mx-auto">
-          Start buying, selling, exchanging, and connecting with your community today.
+          Start exchanging, giving away, and connecting with your community today.
         </p>
-        <Link href="/register" className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-lg font-semibold text-text-primary">
-          Get Started Free <ArrowRight size={18} />
+        <Link href="/services" className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-lg font-semibold text-text-primary">
+          Explore Services <ArrowRight size={18} />
         </Link>
       </div>
     </div>

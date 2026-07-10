@@ -225,7 +225,7 @@ export default function Dashboard() {
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-accent mt-0.5">♻</span>
-                    <span><strong>Marketplace:</strong> Exchange, sell, or give away items to reduce waste and promote reuse.</span>
+                    <span><strong>Marketplace:</strong> Exchange, giveaway, or request items to reduce waste and promote reuse.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-accent mt-0.5">📅</span>

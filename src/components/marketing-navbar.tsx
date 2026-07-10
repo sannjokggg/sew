@@ -6,8 +6,8 @@ import { ArrowUpRight } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Marketplace", href: "/marketplace" },
-  { label: "Events", href: "/events" },
+  { label: "Marketplace", href: "/dashboard/marketplace" },
+  { label: "Events", href: "/dashboard/events" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/#contact" },
 ];
@@ -71,7 +71,7 @@ export default function MarketingNavbar() {
           href="/dashboard"
           className="flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-base font-semibold text-text-primary transition-colors hover:bg-accent-hover"
         >
-          Join Now
+          Try Now
           <ArrowUpRight size={18} />
         </Link>
       </div>

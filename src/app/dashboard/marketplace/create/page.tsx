@@ -7,7 +7,6 @@ import Link from "next/link";
 import MultiImageUploader from "@/components/multi-image-uploader";
 
 const postTypes = [
-  { value: "Sell", label: "Sell", icon: Tag, gradient: "from-gray-200 to-gray-300" },
   { value: "Exchange", label: "Exchange", icon: ArrowLeftRight, gradient: "from-gray-200 to-gray-300" },
   { value: "Giveaway", label: "Giveaway", icon: Gift, gradient: "from-gray-200 to-gray-300" },
   { value: "Request", label: "Request", icon: UserPlus, gradient: "from-gray-200 to-gray-300" },
@@ -22,7 +21,7 @@ export default function CreatePostPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("Sell");
+  const [type, setType] = useState("Exchange");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [images, setImages] = useState<string[]>([]);
@@ -131,20 +130,9 @@ export default function CreatePostPage() {
               </div>
               <div>
                 <label className="mb-2 block text-lg font-medium text-text-primary">
-                  {type === "Sell" ? "Price" : type === "Exchange" ? "Want in return" : "Type"}
+                  {type === "Exchange" ? "Want in return" : "Type"}
                 </label>
-                {type === "Sell" ? (
-                  <div className="relative">
-                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-medium text-text-muted">$</span>
-                    <input
-                      type="text"
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                      className="w-full rounded-[14px] border border-border-default bg-surface-alt pl-10 pr-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-surface focus:ring-2 focus:ring-gray-100"
-                      placeholder="0.00"
-                    />
-                  </div>
-                ) : type === "Exchange" ? (
+                {type === "Exchange" ? (
                   <input
                     type="text"
                     value={price}
@@ -259,8 +247,7 @@ export default function CreatePostPage() {
               </p>
               <div className="mt-3 flex items-center justify-between">
                 <span className="text-2xl font-semibold text-text-primary">
-                  {type === "Sell" ? (price ? `$${price}` : "$0") :
-                   type === "Giveaway" ? "Free" :
+                  {type === "Giveaway" ? "Free" :
                    type === "Exchange" ? (price || "Swap") :
                    "Request"}
                 </span>

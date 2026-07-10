@@ -16,7 +16,7 @@ const services = [
   {
     icon: ShoppingBag,
     title: "Marketplace",
-    description: "Buy, sell, exchange, giveaway, or request items from your community.",
+    description: "Exchange, giveaway, or request items from your community.",
     href: "/dashboard/marketplace",
   },
   {

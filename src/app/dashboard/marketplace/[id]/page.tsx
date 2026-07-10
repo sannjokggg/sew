@@ -61,7 +61,6 @@ interface SimilarPost {
 }
 
 const typeConfig: Record<string, { badge: string; icon: typeof Tag }> = {
-  Sell: { badge: "border border-gray-300 text-text-secondary", icon: Tag },
   Exchange: { badge: "border border-gray-300 text-text-secondary", icon: ArrowLeftRight },
   Giveaway: { badge: "border border-gray-300 text-text-secondary", icon: Gift },
   Request: { badge: "border border-gray-300 text-text-secondary", icon: UserPlus },
@@ -94,7 +93,7 @@ export default function PostDetail() {
   const [editPost, setEditPost] = useState<PostDetail | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editDesc, setEditDesc] = useState("");
-  const [editType, setEditType] = useState("Sell");
+  const [editType, setEditType] = useState("Exchange");
   const [editPrice, setEditPrice] = useState("");
   const [editCategory, setEditCategory] = useState("");
   const [editImages, setEditImages] = useState<string[]>([]);
@@ -189,7 +188,7 @@ export default function PostDetail() {
 
   if (!post) return null;
 
-  const cfg = typeConfig[post.type] || typeConfig.Sell;
+  const cfg = typeConfig[post.type] || typeConfig.Exchange;
   const Icon = cfg.icon;
   const allImages = post.images?.length > 0 ? post.images : post.image_url ? [post.image_url] : [];
 
@@ -223,11 +222,6 @@ export default function PostDetail() {
           </button>
 
           {/* Price Badge */}
-          {post.type === "Sell" && post.price && (
-            <div className="absolute bottom-4 left-4 z-10 rounded-full bg-surface px-4 py-2 shadow-sm">
-              <span className="text-lg font-bold text-text-primary">${post.price}</span>
-            </div>
-          )}
           {post.type === "Giveaway" && (
             <div className="absolute bottom-4 left-4 z-10 rounded-full bg-accent px-4 py-2 shadow-sm">
               <span className="text-lg font-bold text-text-primary">Free</span>
@@ -379,9 +373,6 @@ export default function PostDetail() {
               <h1 className="mt-4 text-2xl font-semibold text-text-primary">{post.title}</h1>
               <p className="mt-2 text-sm leading-relaxed text-text-secondary">{post.description}</p>
               <div className="mt-4">
-                {post.type === "Sell" && post.price && (
-                  <p className="text-3xl font-bold text-text-primary">${post.price}</p>
-                )}
                 {post.type === "Exchange" && post.price && (
                   <p className="text-xl font-semibold text-text-primary">{post.price}</p>
                 )}
@@ -484,7 +475,7 @@ export default function PostDetail() {
                 <h2 className="text-lg font-semibold text-text-primary mb-4">Similar Items</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {similarPosts.map((item) => {
-                    const itemCfg = typeConfig[item.type] || typeConfig.Sell;
+                    const itemCfg = typeConfig[item.type] || typeConfig.Exchange;
                     const ItemIcon = itemCfg.icon;
                     const itemImages = item.images?.length > 0 ? item.images : item.image_url ? [item.image_url] : [];
                     return (
@@ -503,8 +494,7 @@ export default function PostDetail() {
                         <div className="mt-2">
                           <h3 className="text-sm font-semibold text-text-primary line-clamp-1">{item.title}</h3>
                           <p className="mt-0.5 text-sm font-semibold text-text-primary">
-                            {item.type === "Sell" ? `$${item.price || "0"}` :
-                             item.type === "Giveaway" ? "Free" :
+                            {item.type === "Giveaway" ? "Free" :
                              item.type === "Exchange" ? (item.price || "Swap") : "Request"}
                           </p>
                         </div>
@@ -569,9 +559,6 @@ export default function PostDetail() {
           <p className="mt-1.5 text-sm leading-relaxed text-text-secondary">{post.description}</p>
 
           <div className="mt-3">
-            {post.type === "Sell" && post.price && (
-              <p className="text-2xl font-bold text-text-primary">${post.price}</p>
-            )}
             {post.type === "Exchange" && post.price && (
               <p className="text-lg font-semibold text-text-primary">{post.price}</p>
             )}
@@ -680,7 +667,7 @@ export default function PostDetail() {
                 <h2 className="text-base font-semibold text-text-primary mb-3">Similar Items</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {similarPosts.map((item) => {
-                    const itemCfg = typeConfig[item.type] || typeConfig.Sell;
+                    const itemCfg = typeConfig[item.type] || typeConfig.Exchange;
                     const ItemIcon = itemCfg.icon;
                     const itemImages = item.images?.length > 0 ? item.images : item.image_url ? [item.image_url] : [];
                     return (
@@ -699,8 +686,7 @@ export default function PostDetail() {
                         <div className="mt-2">
                           <h3 className="text-sm font-semibold text-text-primary line-clamp-1">{item.title}</h3>
                           <p className="mt-0.5 text-sm font-semibold text-text-primary">
-                            {item.type === "Sell" ? `$${item.price || "0"}` :
-                             item.type === "Giveaway" ? "Free" :
+                            {item.type === "Giveaway" ? "Free" :
                              item.type === "Exchange" ? (item.price || "Swap") : "Request"}
                           </p>
                         </div>
@@ -738,7 +724,6 @@ export default function PostDetail() {
                   <label className="mb-1 block text-sm font-semibold text-gray-800">Type</label>
                   <div className="flex gap-2">
                     {[
-                      { value: "Sell", label: "Sell", icon: Tag },
                       { value: "Exchange", label: "Exchange", icon: ArrowLeftRight },
                       { value: "Giveaway", label: "Giveaway", icon: Gift },
                       { value: "Request", label: "Request", icon: UserPlus },
@@ -773,18 +758,16 @@ export default function PostDetail() {
                   </div>
                   <div>
                     <label className="mb-1 block text-sm font-semibold text-gray-800">
-                      {editType === "Sell" ? "Price" : editType === "Exchange" ? "Want in return" : "Type"}
+                      {editType === "Exchange" ? "Want in return" : "Type"}
                     </label>
-                    {editType === "Sell" ? (
-                      <div className="relative">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">$</span>
-                        <input
-                          type="text"
-                          value={editPrice}
-                          onChange={(e) => setEditPrice(e.target.value)}
-                          className="w-full rounded-[14px] border border-gray-200 bg-gray-50 pl-8 pr-4 py-3 text-sm outline-none focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
-                        />
-                      </div>
+                    {editType === "Exchange" ? (
+                      <input
+                        type="text"
+                        value={editPrice}
+                        onChange={(e) => setEditPrice(e.target.value)}
+                        className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                        placeholder="e.g. Samsung case"
+                      />
                     ) : (
                       <input
                         type="text"
@@ -859,7 +842,7 @@ export default function PostDetail() {
                     <h4 className="mt-1 text-sm font-semibold text-gray-800 line-clamp-1">{editTitle || "Title"}</h4>
                     <p className="text-[11px] text-gray-500 line-clamp-1">{editDesc || "Description..."}</p>
                     <p className="mt-1 text-sm font-semibold text-gray-800">
-                      {editType === "Sell" ? `$${editPrice || "0"}` : editType === "Giveaway" ? "Free" : editType === "Exchange" ? (editPrice || "Swap") : "Request"}
+                      {editType === "Giveaway" ? "Free" : editType === "Exchange" ? (editPrice || "Swap") : "Request"}
                     </p>
                   </div>
                 </div>

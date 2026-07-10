@@ -23,7 +23,6 @@ interface Post {
 }
 
 const typeConfig: Record<string, { gradient: string; badge: string; icon: typeof Tag }> = {
-  Sell: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-text-secondary", icon: Tag },
   Exchange: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-text-secondary", icon: ArrowLeftRight },
   Giveaway: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-text-secondary", icon: Gift },
   Request: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-text-secondary", icon: UserPlus },
@@ -35,7 +34,6 @@ const categories = [
 ];
 
 const postTypes = [
-  { value: "Sell", label: "Sell", icon: Tag },
   { value: "Exchange", label: "Exchange", icon: ArrowLeftRight },
   { value: "Giveaway", label: "Giveaway", icon: Gift },
   { value: "Request", label: "Request", icon: UserPlus },
@@ -61,14 +59,14 @@ export default function Marketplace() {
   const [editPost, setEditPost] = useState<Post | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editDesc, setEditDesc] = useState("");
-  const [editType, setEditType] = useState("Sell");
+  const [editType, setEditType] = useState("Exchange");
   const [editPrice, setEditPrice] = useState("");
   const [editCategory, setEditCategory] = useState("");
   const [editImages, setEditImages] = useState<string[]>([]);
   const [editPreviewIdx, setEditPreviewIdx] = useState(0);
   const [editSaving, setEditSaving] = useState(false);
   const [editError, setEditError] = useState("");
-  const categoriesList = ["All", "Sell", "Exchange", "Giveaway", "Request"];
+  const categoriesList = ["All", "Exchange", "Giveaway", "Request"];
 
   useEffect(() => {
     fetch("/api/posts")
@@ -197,7 +195,7 @@ export default function Marketplace() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {filtered.map((item) => {
-            const cfg = typeConfig[item.type] || typeConfig.Sell;
+            const cfg = typeConfig[item.type] || typeConfig.Exchange;
             const Icon = cfg.icon;
             const isOwner = session?.user && String(item.user_id) === String((session.user as { id: string }).id);
             return (
@@ -242,8 +240,7 @@ export default function Marketplace() {
                   <p className="mt-1 text-base text-text-secondary line-clamp-1">{item.description}</p>
                   <div className="mt-3 flex items-center justify-between">
                     <span className="text-lg font-semibold text-text-primary">
-                      {item.type === "Sell" ? `$${item.price || "0"}` :
-                       item.type === "Giveaway" ? "Free" :
+                      {item.type === "Giveaway" ? "Free" :
                        item.type === "Exchange" ? (item.price || "Swap") :
                        "Request"}
                     </span>
@@ -310,18 +307,16 @@ export default function Marketplace() {
                   </div>
                   <div>
                     <label className="mb-1 block text-sm font-semibold text-gray-800">
-                      {editType === "Sell" ? "Price" : editType === "Exchange" ? "Want in return" : "Type"}
+                      {editType === "Exchange" ? "Want in return" : "Type"}
                     </label>
-                    {editType === "Sell" ? (
-                      <div className="relative">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">$</span>
-                        <input
-                          type="text"
-                          value={editPrice}
-                          onChange={(e) => setEditPrice(e.target.value)}
-                          className="w-full rounded-[14px] border border-gray-200 bg-gray-50 pl-8 pr-4 py-3 text-sm outline-none focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
-                        />
-                      </div>
+                    {editType === "Exchange" ? (
+                      <input
+                        type="text"
+                        value={editPrice}
+                        onChange={(e) => setEditPrice(e.target.value)}
+                        className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                        placeholder="e.g. Samsung case"
+                      />
                     ) : (
                       <input
                         type="text"
@@ -397,7 +392,7 @@ export default function Marketplace() {
                     <h4 className="mt-1 text-sm font-semibold text-gray-800 line-clamp-1">{editTitle || "Title"}</h4>
                     <p className="text-[11px] text-gray-500 line-clamp-1">{editDesc || "Description..."}</p>
                     <p className="mt-1 text-sm font-semibold text-gray-800">
-                      {editType === "Sell" ? `$${editPrice || "0"}` : editType === "Giveaway" ? "Free" : editType === "Exchange" ? (editPrice || "Swap") : "Request"}
+                      {editType === "Giveaway" ? "Free" : editType === "Exchange" ? (editPrice || "Swap") : "Request"}
                     </p>
                   </div>
                 </div>
