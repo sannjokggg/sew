@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 
 const navLinks = [
@@ -14,7 +14,6 @@ const navLinks = [
 
 export default function MarketingNavbar() {
   const pathname = usePathname();
-  const router = useRouter();
 
   const isActive = (href: string) => {
     if (href === "/#contact") return pathname === "/contact";
@@ -61,19 +60,19 @@ export default function MarketingNavbar() {
       </div>
 
       <div className="flex items-center gap-3">
-        <Link
-          href="/login"
+        <button
+          onClick={() => window.dispatchEvent(new Event("open-auth-popup"))}
           className="rounded-full border border-border-default px-5 py-3 text-base font-medium text-text-secondary transition-colors hover:bg-border-light"
         >
           Sign In
-        </Link>
-        <Link
-          href="/dashboard"
+        </button>
+        <button
+          onClick={() => window.dispatchEvent(new Event("open-auth-popup"))}
           className="flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-base font-semibold text-text-primary transition-colors hover:bg-accent-hover"
         >
           Try Now
           <ArrowUpRight size={18} />
-        </Link>
+        </button>
       </div>
     </div>
   );

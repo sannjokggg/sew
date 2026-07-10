@@ -1,11 +1,16 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import pool from "@/lib/db";
 import { initializeAuthTables } from "@/lib/db-init";
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+    }),
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -106,6 +111,25 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        await initializeAuthTables();
+        const email = user.email;
+        if (email) {
+          const existing = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
+          if (existing.rows.length === 0) {
+            const result = await pool.query(
+              `INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id`,
+              [user.name || "User", email]
+            );
+            user.id = result.rows[0].id.toString();
+          } else {
+            user.id = existing.rows[0].id.toString();
+          }
+        }
+      }
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;

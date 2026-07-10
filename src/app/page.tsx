@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, ArrowRight, ChevronDown, Loader2 } from "lucide-react";
+import AuthPopup from "@/components/AuthPopup";
 
 const heroSlides = [
   {
@@ -39,6 +40,13 @@ export default function Home() {
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+
+  useEffect(() => {
+    const handleOpenAuth = () => setShowAuthPopup(true);
+    window.addEventListener("open-auth-popup", handleOpenAuth);
+    return () => window.removeEventListener("open-auth-popup", handleOpenAuth);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -568,6 +576,8 @@ export default function Home() {
           <p>Crafted by <span className="font-semibold">Solves Lab</span></p>
         </div>
       </footer>
+
+      <AuthPopup isOpen={showAuthPopup} onClose={() => setShowAuthPopup(false)} />
     </div>
   );
 }
