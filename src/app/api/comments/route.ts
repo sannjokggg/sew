@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import pool from "@/lib/db";
+import { createNotification } from "@/lib/notifications";
 
 export async function POST(req: Request) {
   try {
@@ -31,6 +32,21 @@ export async function POST(req: Request) {
        WHERE comments.id = $1`,
       [result.rows[0].id]
     );
+
+    // Notify post owner
+    const postResult = await pool.query("SELECT user_id, title FROM posts WHERE id = $1", [post_id]);
+    if (postResult.rows.length > 0) {
+      const postOwnerId = postResult.rows[0].user_id;
+      if (String(postOwnerId) !== userId) {
+        await createNotification(
+          postOwnerId,
+          "new_comment",
+          `${session.user.name || "Someone"} commented on "${postResult.rows[0].title}"`,
+          Number(post_id),
+          `/dashboard/marketplace/${post_id}`
+        );
+      }
+    }
 
     return NextResponse.json(commentWithUser.rows[0], { status: 201 });
   } catch (error) {

@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 const categories = [
-  { icon: BookOpen, title: "Getting Started", desc: "Learn the basics of Sewago", count: 12, color: "from-blue-50 to-blue-100", keywords: ["getting started", "setup", "begin", "new", "account", "register", "signup"] },
+  { icon: BookOpen, title: "Getting Started", desc: "Learn the basics of SewaGo", count: 12, color: "from-blue-50 to-blue-100", keywords: ["getting started", "setup", "begin", "new", "account", "register", "signup"] },
   { icon: CreditCard, title: "Payments & Billing", desc: "Manage transactions and wallets", count: 8, color: "from-green-50 to-green-100", keywords: ["payment", "wallet", "money", "transfer", "billing", "usd", "eur", "gbp", "balance"] },
   { icon: Shield, title: "Safety & Privacy", desc: "Keep your account secure", count: 10, color: "from-purple-50 to-purple-100", keywords: ["safety", "privacy", "security", "password", "secure", "data"] },
   { icon: Users, title: "Community", desc: "Marketplace, events, and more", count: 15, color: "from-orange-50 to-orange-100", keywords: ["community", "marketplace", "event", "listing", "exchange", "giveaway", "request", "sell", "buy", "rsvp"] },
@@ -20,7 +20,7 @@ const categories = [
 
 const allArticles = [
   { title: "How to create your first listing", category: "Community", time: "3 min read", content: "Navigate to Marketplace and click '+ Post Listing'. Choose your listing type: Sell, Exchange, Giveaway, or Request. Fill in the title, description, price, and category. Add up to 4 photos to make your listing stand out. Preview your listing before publishing, then hit 'Post' to make it live. Your listing will appear in the marketplace instantly for others to browse." },
-  { title: "Setting up your payment wallet", category: "Payments & Billing", time: "5 min read", content: "Go to your Dashboard to see your current wallet balances. Sewago supports USD, EUR, and GBP wallets. To add funds, click 'Transfer' on your balance card. You can move money between wallets using the 'Request' feature. All transactions are secure and processed instantly. Track your spending and income from the dashboard charts." },
+  { title: "Setting up your payment wallet", category: "Payments & Billing", time: "5 min read", content: "Go to your Dashboard to see your current wallet balances. SewaGo supports USD, EUR, and GBP wallets. To add funds, click 'Transfer' on your balance card. You can move money between wallets using the 'Request' feature. All transactions are secure and processed instantly. Track your spending and income from the dashboard charts." },
   { title: "Understanding item exchange process", category: "Community", time: "4 min read", content: "Browse the Marketplace and find an item you'd like to exchange. Click 'Swap' on the listing to make an offer. Describe what you're offering in return and add photos if possible. The other party will receive a notification and can accept or decline. Once both agree, coordinate the exchange details through the messaging system. Meet safely and complete the swap!" },
   { title: "How to RSVP for events", category: "Community", time: "2 min read", content: "Visit the Events page to browse upcoming events. Filter by category: Education, Technology, Health, Community, Sports, Arts, Business, or Social. Click on an event to see full details including date, time, location, and description. Hit the RSVP button to confirm your attendance. You'll receive reminders before the event. Share events with friends using the share button." },
   { title: "Privacy settings explained", category: "Safety & Privacy", time: "6 min read", content: "Go to Settings > Privacy to control your visibility. Toggle 'Public profile' to decide if others can find you. Control whether your email and phone are visible. Enable or disable 'Online status' so others know when you're active. Turn 'Read receipts' on or off for messages. Your data is encrypted and never shared with third parties. You can deactivate or delete your account anytime from the Danger Zone." },
@@ -36,7 +36,7 @@ const allFaqs = [
   { q: "How do I add images to my messages?", a: "In the chat window, click the attachment icon (paperclip or image icon) next to the message input. Select an image from your device, preview it, and send. Images display inline in the conversation.", category: "Messaging" },
   { q: "Can I edit or delete my listing after posting?", a: "Yes. On your listing, click the three-dot menu (owner only). You can Edit to modify details or Delete to remove it permanently. Only the original poster can manage their listings.", category: "Community" },
   { q: "How do event RSVPs work?", a: "Browse events on the Events page, filter by category, and click into one you like. Hit RSVP to confirm attendance. You'll receive reminders before the event. You can also share events with others.", category: "Community" },
-  { q: "What payment methods are supported?", a: "Sewago supports multiple wallets including USD, EUR, and GBP. You can transfer funds between wallets and use them for marketplace transactions. All payments are processed securely.", category: "Payments & Billing" },
+  { q: "What payment methods are supported?", a: "SewaGo supports multiple wallets including USD, EUR, and GBP. You can transfer funds between wallets and use them for marketplace transactions. All payments are processed securely.", category: "Payments & Billing" },
   { q: "How do I change my theme or appearance?", a: "Go to Settings > Appearance. Choose between Light and Dark themes, select an accent color, and adjust font size. Changes apply instantly and persist across sessions.", category: "Account Settings" },
   { q: "How do I reset my password?", a: "On the login page, click 'Forgot Password'. Enter your email address and we'll send you an OTP code. Enter the code on the verification page and create a new password. You'll be logged in automatically after resetting.", category: "Getting Started" },
   { q: "Can I have multiple listings at once?", a: "Yes! There's no limit to how many listings you can create. Each listing can have a different type (Sell, Exchange, Giveaway, Request) and category. Manage all your listings from your profile or the Marketplace page.", category: "Community" },
@@ -122,24 +122,24 @@ export default function HelpPage() {
       <div className="rounded-[24px] bg-gradient-to-br from-[#1D1B17] to-[#2a2824] p-10 text-white">
         <div className="mx-auto max-w-2xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium">
-            <Zap size={14} className="text-[#B8F25E]" />
+            <Zap size={14} className="text-accent" />
             Help Center
           </div>
-          <h1 className="text-4xl font-normal mb-3">How can we help you?</h1>
+          <h1 className="text-2xl lg:text-4xl font-normal mb-3">How can we help you?</h1>
           <p className="text-lg text-white/60 mb-8">Search our guides, FAQs, and tutorials to find what you need.</p>
           <div className="relative mx-auto max-w-xl">
-            <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-[#9A9A9A]" />
+            <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search for help..."
-              className="w-full rounded-full bg-white py-4 pl-14 pr-12 text-lg text-[#202124] outline-none placeholder:text-[#9A9A9A]"
+              className="w-full rounded-full bg-white py-4 pl-14 pr-12 text-lg text-text-primary outline-none placeholder:text-text-muted"
             />
             {search && (
               <button
                 onClick={() => { setSearch(""); setActiveCategory(null); }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9A9A9A] hover:text-[#202124] transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary transition-colors"
               >
                 <X size={20} />
               </button>
@@ -154,7 +154,7 @@ export default function HelpPage() {
               </span>
               <button
                 onClick={() => { setSearch(""); setActiveCategory(null); }}
-                className="text-[#B8F25E] hover:underline"
+                className="text-accent hover:underline"
               >
                 Clear all
               </button>
@@ -167,13 +167,13 @@ export default function HelpPage() {
       {!search && !activeCategory && (
         <div className="grid grid-cols-3 gap-5">
           {steps.map((step, i) => (
-            <div key={i} className="flex items-center gap-4 rounded-[24px] bg-white p-6 shadow-sm">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#B8F25E]/20">
-                <step.icon size={22} className="text-[#202124]" />
+            <div key={i} className="flex items-center gap-4 rounded-[24px] bg-surface p-6 shadow-sm">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/20">
+                <step.icon size={22} className="text-text-primary" />
               </div>
               <div>
-                <p className="text-lg font-semibold text-[#202124]">{step.title}</p>
-                <p className="text-base text-[#9A9A9A]">{step.desc}</p>
+                <p className="text-lg font-semibold text-text-primary">{step.title}</p>
+                <p className="text-base text-text-muted">{step.desc}</p>
               </div>
             </div>
           ))}
@@ -184,11 +184,11 @@ export default function HelpPage() {
       {filteredCategories.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-2xl font-normal text-[#202124]">Browse by Topic</h2>
+            <h2 className="text-2xl font-normal text-text-primary">Browse by Topic</h2>
             {activeCategory && (
               <button
                 onClick={() => setActiveCategory(null)}
-                className="text-base font-medium text-[#6B6B6B] hover:text-[#202124] transition-colors"
+                className="text-base font-medium text-text-secondary hover:text-text-primary transition-colors"
               >
                 Show all topics
               </button>
@@ -202,22 +202,22 @@ export default function HelpPage() {
                 className={`flex items-center gap-4 rounded-[24px] p-6 text-left transition-all shadow-sm ${
                   activeCategory === cat.title
                     ? "bg-white/70 backdrop-blur-md border border-white/50 shadow-lg"
-                    : "bg-white hover:shadow-md"
+                    : "bg-surface hover:shadow-md"
                 }`}
               >
                 <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${
-                  activeCategory === cat.title ? "bg-[#B8F25E]/30" : `bg-gradient-to-br ${cat.color}`
+                  activeCategory === cat.title ? "bg-accent/30" : `bg-gradient-to-br ${cat.color}`
                 }`}>
-                  <cat.icon size={24} className="text-[#202124]" />
+                  <cat.icon size={24} className="text-text-primary" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-lg font-semibold text-[#202124]">{cat.title}</p>
-                  <p className="text-base text-[#9A9A9A]">{cat.desc}</p>
+                  <p className="text-lg font-semibold text-text-primary">{cat.title}</p>
+                  <p className="text-base text-text-muted">{cat.desc}</p>
                 </div>
                 <span className={`rounded-full px-3 py-1 text-sm font-medium ${
                   activeCategory === cat.title
-                    ? "bg-[#1D1B17] text-white"
-                    : "bg-gray-100 text-[#6B6B6B]"
+                    ? "bg-nav-active text-white"
+                    : "bg-border-light text-text-secondary"
                 }`}>
                   {cat.count}
                 </span>
@@ -229,40 +229,40 @@ export default function HelpPage() {
 
       {/* Popular Articles */}
       <div>
-        <h2 className="text-2xl font-normal text-[#202124] mb-5">
+        <h2 className="text-2xl font-normal text-text-primary mb-5">
           {activeCategory ? `${activeCategory} Articles` : "Popular Articles"}
         </h2>
         <div className="grid grid-cols-2 gap-4">
           {filteredArticles.length === 0 ? (
-            <div className="col-span-2 rounded-[24px] bg-white py-12 text-center shadow-sm">
-              <HelpCircle size={48} strokeWidth={1} className="mx-auto text-[#9A9A9A]" />
-              <p className="mt-4 text-lg font-medium text-[#9A9A9A]">No articles found</p>
-              <p className="text-base text-[#9A9A9A]">Try a different search term</p>
+            <div className="col-span-2 rounded-[24px] bg-surface py-12 text-center shadow-sm">
+              <HelpCircle size={48} strokeWidth={1} className="mx-auto text-text-muted" />
+              <p className="mt-4 text-lg font-medium text-text-muted">No articles found</p>
+              <p className="text-base text-text-muted">Try a different search term</p>
             </div>
           ) : (
             filteredArticles.map((article, i) => (
               <div
                 key={i}
                 onClick={() => setSelectedArticle(article)}
-                className="group flex items-center justify-between rounded-[20px] bg-white p-5 shadow-sm transition-all hover:shadow-md cursor-pointer"
+                className="group flex items-center justify-between rounded-[20px] bg-surface p-5 shadow-sm transition-all hover:shadow-md cursor-pointer"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100">
-                    <FileText size={18} className="text-[#6B6B6B]" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-border-light">
+                    <FileText size={18} className="text-text-secondary" />
                   </div>
                   <div>
-                    <p className="text-lg font-medium text-[#202124] group-hover:text-[#1D1B17]">{article.title}</p>
+                    <p className="text-lg font-medium text-text-primary group-hover:text-nav-active">{article.title}</p>
                     <div className="flex items-center gap-3 mt-1">
-                      <span className="text-sm text-[#9A9A9A]">{article.category}</span>
+                      <span className="text-sm text-text-muted">{article.category}</span>
                       <span className="text-[#D0D0D0]">·</span>
-                      <span className="flex items-center gap-1 text-sm text-[#9A9A9A]">
+                      <span className="flex items-center gap-1 text-sm text-text-muted">
                         <Clock size={12} />
                         {article.time}
                       </span>
                     </div>
                   </div>
                 </div>
-                <ArrowRight size={18} className="text-[#9A9A9A] group-hover:text-[#202124] transition-colors" />
+                <ArrowRight size={18} className="text-text-muted group-hover:text-text-primary transition-colors" />
               </div>
             ))
           )}
@@ -271,31 +271,31 @@ export default function HelpPage() {
 
       {/* FAQ */}
       <div>
-        <h2 className="text-2xl font-normal text-[#202124] mb-5">Frequently Asked Questions</h2>
-        <div className="rounded-[24px] bg-white shadow-sm overflow-hidden">
+        <h2 className="text-2xl font-normal text-text-primary mb-5">Frequently Asked Questions</h2>
+        <div className="rounded-[24px] bg-surface shadow-sm overflow-hidden">
           {filteredFaqs.length === 0 ? (
             <div className="py-12 text-center">
-              <HelpCircle size={48} strokeWidth={1} className="mx-auto text-[#9A9A9A]" />
-              <p className="mt-4 text-lg font-medium text-[#9A9A9A]">No results found</p>
-              <p className="text-base text-[#9A9A9A]">Try a different search term</p>
+              <HelpCircle size={48} strokeWidth={1} className="mx-auto text-text-muted" />
+              <p className="mt-4 text-lg font-medium text-text-muted">No results found</p>
+              <p className="text-base text-text-muted">Try a different search term</p>
             </div>
           ) : (
             filteredFaqs.map((faq, i) => (
-              <div key={i} className="border-b border-gray-100 last:border-0">
+              <div key={i} className="border-b border-border-light last:border-0">
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="flex w-full items-center justify-between px-6 py-5 text-left transition-colors hover:bg-gray-50"
+                  className="flex w-full items-center justify-between px-6 py-5 text-left transition-colors hover:bg-surface-alt"
                 >
-                  <span className="text-lg font-medium text-[#202124] pr-4">{faq.q}</span>
+                  <span className="text-lg font-medium text-text-primary pr-4">{faq.q}</span>
                   {openFaq === i ? (
-                    <ChevronUp size={20} className="flex-shrink-0 text-[#9A9A9A]" />
+                    <ChevronUp size={20} className="flex-shrink-0 text-text-muted" />
                   ) : (
-                    <ChevronDown size={20} className="flex-shrink-0 text-[#9A9A9A]" />
+                    <ChevronDown size={20} className="flex-shrink-0 text-text-muted" />
                   )}
                 </button>
                 {openFaq === i && (
                   <div className="px-6 pb-5">
-                    <p className="text-base leading-relaxed text-[#6B6B6B]">{faq.a}</p>
+                    <p className="text-base leading-relaxed text-text-secondary">{faq.a}</p>
                   </div>
                 )}
               </div>
@@ -305,71 +305,71 @@ export default function HelpPage() {
       </div>
 
       {/* Contact Support */}
-      <div className="rounded-[24px] bg-white p-8 shadow-sm">
+      <div className="rounded-[24px] bg-surface p-8 shadow-sm">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-normal text-[#202124] mb-2">Still need help?</h2>
-          <p className="text-lg text-[#9A9A9A]">Our support team is here for you. Reach out anytime.</p>
+          <h2 className="text-2xl font-normal text-text-primary mb-2">Still need help?</h2>
+          <p className="text-lg text-text-muted">Our support team is here for you. Reach out anytime.</p>
         </div>
         <div className="grid grid-cols-3 gap-5">
           <button
             onClick={() => setShowContactForm(true)}
-            className="flex flex-col items-center gap-4 rounded-[20px] border border-gray-200 p-6 transition-all hover:border-gray-300 hover:shadow-sm cursor-pointer text-left"
+            className="flex flex-col items-center gap-4 rounded-[20px] border border-border-default p-6 transition-all hover:border-gray-300 hover:shadow-sm cursor-pointer text-left"
           >
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#B8F25E]/20">
-              <Mail size={24} className="text-[#202124]" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent/20">
+              <Mail size={24} className="text-text-primary" />
             </div>
             <div className="text-center">
-              <p className="text-lg font-semibold text-[#202124]">Email Us</p>
-              <p className="text-base text-[#9A9A9A] mt-1">support@sewago.com</p>
-              <p className="text-sm text-[#9A9A9A] mt-1">Reply within 24 hours</p>
+              <p className="text-lg font-semibold text-text-primary">Email Us</p>
+              <p className="text-base text-text-muted mt-1">support@sewago.com</p>
+              <p className="text-sm text-text-muted mt-1">Reply within 24 hours</p>
             </div>
           </button>
           <Link
             href="/dashboard/messages"
-            className="flex flex-col items-center gap-4 rounded-[20px] border border-gray-200 p-6 transition-all hover:border-gray-300 hover:shadow-sm cursor-pointer text-left"
+            className="flex flex-col items-center gap-4 rounded-[20px] border border-border-default p-6 transition-all hover:border-gray-300 hover:shadow-sm cursor-pointer text-left"
           >
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#B8F25E]/20">
-              <MessageSquare size={24} className="text-[#202124]" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent/20">
+              <MessageSquare size={24} className="text-text-primary" />
             </div>
             <div className="text-center">
-              <p className="text-lg font-semibold text-[#202124]">Live Chat</p>
-              <p className="text-base text-[#9A9A9A] mt-1">Chat with our team</p>
-              <p className="text-sm text-[#9A9A9A] mt-1 flex items-center justify-center gap-1">
+              <p className="text-lg font-semibold text-text-primary">Live Chat</p>
+              <p className="text-base text-text-muted mt-1">Chat with our team</p>
+              <p className="text-sm text-text-muted mt-1 flex items-center justify-center gap-1">
                 Go to Messages <ExternalLink size={12} />
               </p>
             </div>
           </Link>
           <a
             href="tel:+97714000000"
-            className="flex flex-col items-center gap-4 rounded-[20px] border border-gray-200 p-6 transition-all hover:border-gray-300 hover:shadow-sm cursor-pointer text-left"
+            className="flex flex-col items-center gap-4 rounded-[20px] border border-border-default p-6 transition-all hover:border-gray-300 hover:shadow-sm cursor-pointer text-left"
           >
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#B8F25E]/20">
-              <Phone size={24} className="text-[#202124]" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent/20">
+              <Phone size={24} className="text-text-primary" />
             </div>
             <div className="text-center">
-              <p className="text-lg font-semibold text-[#202124]">Call Us</p>
-              <p className="text-base text-[#9A9A9A] mt-1">+977-1-4XXXXXX</p>
-              <p className="text-sm text-[#9A9A9A] mt-1">Mon - Fri, 9am - 5pm</p>
+              <p className="text-lg font-semibold text-text-primary">Call Us</p>
+              <p className="text-base text-text-muted mt-1">+977-1-4XXXXXX</p>
+              <p className="text-sm text-text-muted mt-1">Mon - Fri, 9am - 5pm</p>
             </div>
           </a>
         </div>
       </div>
 
       {/* Feedback */}
-      <div className="rounded-[24px] bg-gradient-to-r from-[#B8F25E]/20 to-[#B8F25E]/5 p-8">
+      <div className="rounded-[24px] bg-gradient-to-r from-accent/20 to-accent/5 p-8">
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Lightbulb size={22} className="text-[#202124]" />
-              <h3 className="text-xl font-semibold text-[#202124]">Was this helpful?</h3>
+              <Lightbulb size={22} className="text-text-primary" />
+              <h3 className="text-xl font-semibold text-text-primary">Was this helpful?</h3>
             </div>
-            <p className="text-lg text-[#6B6B6B]">
+            <p className="text-lg text-text-secondary">
               {feedback ? "Thanks for your feedback!" : "Let us know how we can improve the Help Center."}
             </p>
           </div>
           <div className="flex gap-3">
             {feedback ? (
-              <div className="flex items-center gap-2 rounded-full bg-white px-6 py-3 text-lg font-medium text-[#202124]">
+              <div className="flex items-center gap-2 rounded-full bg-surface px-6 py-3 text-lg font-medium text-text-primary">
                 <CheckCircle2 size={18} className="text-green-500" />
                 {feedback === "yes" ? "Glad it helped!" : "We'll improve this"}
               </div>
@@ -377,14 +377,14 @@ export default function HelpPage() {
               <>
                 <button
                   onClick={() => setFeedback("yes")}
-                  className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-6 py-3 text-lg font-medium text-[#202124] transition-colors hover:bg-gray-50"
+                  className="flex items-center gap-2 rounded-full border border-gray-300 bg-surface px-6 py-3 text-lg font-medium text-text-primary transition-colors hover:bg-surface-alt"
                 >
                   <Star size={18} />
                   Yes
                 </button>
                 <button
                   onClick={() => setFeedback("no")}
-                  className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-6 py-3 text-lg font-medium text-[#202124] transition-colors hover:bg-gray-50"
+                  className="flex items-center gap-2 rounded-full border border-gray-300 bg-surface px-6 py-3 text-lg font-medium text-text-primary transition-colors hover:bg-surface-alt"
                 >
                   <Star size={18} />
                   No
@@ -399,29 +399,29 @@ export default function HelpPage() {
       {selectedArticle && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setSelectedArticle(null)} />
-          <div className="relative mx-4 w-full max-w-2xl rounded-[24px] bg-white p-8 shadow-2xl">
+          <div className="relative mx-4 w-full max-w-2xl rounded-[24px] bg-surface p-8 shadow-2xl">
             <button
               onClick={() => setSelectedArticle(null)}
-              className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-[#6B6B6B] hover:bg-gray-200 transition-colors"
+              className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-border-light text-text-secondary hover:bg-gray-200 transition-colors"
             >
               <X size={16} />
             </button>
             <div className="flex items-center gap-3 mb-4">
-              <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-[#6B6B6B]">
+              <span className="rounded-full bg-border-light px-3 py-1 text-sm font-medium text-text-secondary">
                 {selectedArticle.category}
               </span>
-              <span className="flex items-center gap-1 text-sm text-[#9A9A9A]">
+              <span className="flex items-center gap-1 text-sm text-text-muted">
                 <Clock size={12} />
                 {selectedArticle.time}
               </span>
             </div>
-            <h2 className="text-2xl font-semibold text-[#202124] mb-4">{selectedArticle.title}</h2>
-            <p className="text-base leading-relaxed text-[#6B6B6B] mb-6">{selectedArticle.content}</p>
-            <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-              <span className="text-sm text-[#9A9A9A]">Was this article helpful?</span>
+            <h2 className="text-2xl font-semibold text-text-primary mb-4">{selectedArticle.title}</h2>
+            <p className="text-base leading-relaxed text-text-secondary mb-6">{selectedArticle.content}</p>
+            <div className="flex items-center gap-3 pt-4 border-t border-border-light">
+              <span className="text-sm text-text-muted">Was this article helpful?</span>
               <button
                 onClick={() => setSelectedArticle(null)}
-                className="rounded-full bg-[#B8F25E] px-4 py-1.5 text-sm font-semibold text-[#202124]"
+                className="rounded-full bg-accent px-4 py-1.5 text-sm font-semibold text-text-primary"
               >
                 Yes, thanks!
               </button>
@@ -434,10 +434,10 @@ export default function HelpPage() {
       {showContactForm && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => { setShowContactForm(false); setContactSent(false); }} />
-          <div className="relative mx-4 w-full max-w-lg rounded-[24px] bg-white p-8 shadow-2xl">
+          <div className="relative mx-4 w-full max-w-lg rounded-[24px] bg-surface p-8 shadow-2xl">
             <button
               onClick={() => { setShowContactForm(false); setContactSent(false); }}
-              className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-[#6B6B6B] hover:bg-gray-200 transition-colors"
+              className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-border-light text-text-secondary hover:bg-gray-200 transition-colors"
             >
               <X size={16} />
             </button>
@@ -446,48 +446,48 @@ export default function HelpPage() {
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
                   <CheckCircle2 size={32} className="text-green-500" />
                 </div>
-                <h3 className="text-xl font-semibold text-[#202124] mb-2">Message Sent!</h3>
-                <p className="text-base text-[#9A9A9A]">We&apos;ll get back to you within 24 hours.</p>
+                <h3 className="text-xl font-semibold text-text-primary mb-2">Message Sent!</h3>
+                <p className="text-base text-text-muted">We&apos;ll get back to you within 24 hours.</p>
               </div>
             ) : (
               <>
-                <h3 className="text-xl font-semibold text-[#202124] mb-1">Contact Support</h3>
-                <p className="text-base text-[#9A9A9A] mb-6">Send us a message and we&apos;ll respond as soon as possible.</p>
+                <h3 className="text-xl font-semibold text-text-primary mb-1">Contact Support</h3>
+                <p className="text-base text-text-muted mb-6">Send us a message and we&apos;ll respond as soon as possible.</p>
                 <div className="space-y-4">
                   <div>
-                    <label className="mb-1.5 block text-base font-medium text-[#9A9A9A]">Name</label>
+                    <label className="mb-1.5 block text-base font-medium text-text-muted">Name</label>
                     <input
                       type="text"
                       value={contactName}
                       onChange={(e) => setContactName(e.target.value)}
                       placeholder="Your name"
-                      className="w-full rounded-full border border-gray-200 px-5 py-3 text-base text-[#202124] outline-none placeholder:text-[#B0B0B0] hover:border-gray-300 focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                      className="w-full rounded-full border border-border-default px-5 py-3 text-base text-text-primary outline-none placeholder:text-[#B0B0B0] hover:border-gray-300 focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
                     />
                   </div>
                   <div>
-                    <label className="mb-1.5 block text-base font-medium text-[#9A9A9A]">Email</label>
+                    <label className="mb-1.5 block text-base font-medium text-text-muted">Email</label>
                     <input
                       type="email"
                       value={contactEmail}
                       onChange={(e) => setContactEmail(e.target.value)}
                       placeholder="you@example.com"
-                      className="w-full rounded-full border border-gray-200 px-5 py-3 text-base text-[#202124] outline-none placeholder:text-[#B0B0B0] hover:border-gray-300 focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                      className="w-full rounded-full border border-border-default px-5 py-3 text-base text-text-primary outline-none placeholder:text-[#B0B0B0] hover:border-gray-300 focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
                     />
                   </div>
                   <div>
-                    <label className="mb-1.5 block text-base font-medium text-[#9A9A9A]">Message</label>
+                    <label className="mb-1.5 block text-base font-medium text-text-muted">Message</label>
                     <textarea
                       value={contactMsg}
                       onChange={(e) => setContactMsg(e.target.value)}
                       placeholder="Describe your issue or question..."
                       rows={4}
-                      className="w-full rounded-2xl border border-gray-200 px-5 py-3 text-base text-[#202124] outline-none resize-none placeholder:text-[#B0B0B0] hover:border-gray-300 focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                      className="w-full rounded-2xl border border-border-default px-5 py-3 text-base text-text-primary outline-none resize-none placeholder:text-[#B0B0B0] hover:border-gray-300 focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
                     />
                   </div>
                   <button
                     onClick={handleContact}
                     disabled={!contactName || !contactEmail || !contactMsg}
-                    className="w-full rounded-full bg-[#B8F25E] px-6 py-3 text-base font-semibold text-[#202124] disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="w-full rounded-full bg-accent px-6 py-3 text-base font-semibold text-text-primary disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     <Send size={16} />
                     Send Message

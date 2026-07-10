@@ -1,31 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
 
 export default function ThemeToggle() {
-  const [dark, setDark] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   return (
-    <div className="flex w-[70px] flex-col items-center justify-center gap-1 rounded-[36px] bg-white py-2 shadow-sm">
+    <div className="flex w-[70px] flex-col items-center justify-center gap-1 rounded-[36px] bg-surface py-2 shadow-sm">
       <button
         className={`flex h-12 w-12 items-center justify-center rounded-full transition-colors ${
-          !dark
-            ? "bg-gray-100 text-gray-800"
-            : "text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+          theme === "light"
+            ? "bg-border-light text-text-primary"
+            : "text-text-muted hover:bg-border-light hover:text-text-secondary"
         }`}
-        onClick={() => setDark(false)}
+        onClick={() => setTheme("light")}
         title="Light mode"
       >
         <Sun size={22} />
       </button>
       <button
         className={`flex h-12 w-12 items-center justify-center rounded-full transition-colors ${
-          dark
-            ? "bg-gray-100 text-gray-800"
-            : "text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+          theme === "dark"
+            ? "bg-border-light text-text-primary"
+            : "text-text-muted hover:bg-border-light hover:text-text-secondary"
         }`}
-        onClick={() => setDark(true)}
+        onClick={() => setTheme("dark")}
         title="Dark mode"
       >
         <Moon size={22} />

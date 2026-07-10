@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     });
 
     await transporter.sendMail({
-      from: `"Sewago Contact" <${process.env.SMTP_USER || "noreply@sewago.org"}>`,
+      from: `"SewaGo Contact" <${process.env.SMTP_USER || "noreply@sewago.org"}>`,
       to: "support@sewago.org",
       subject: `New Contact Message from ${name}`,
       html: `

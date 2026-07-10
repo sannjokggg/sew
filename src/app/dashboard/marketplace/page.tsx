@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Tag, ArrowLeftRight, Gift, UserPlus, Loader2, MessageSquare, MoreHorizontal, Trash2, Pencil, Flag, EyeOff, Share2 } from "lucide-react";
+import { Tag, ArrowLeftRight, Gift, UserPlus, Loader2, Search, X, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import ImageLightbox from "@/components/image-lightbox";
-import LoginPrompt from "@/components/login-prompt";
+import ThreeDotMenu from "@/components/three-dot-menu";
+import MultiImageUploader from "@/components/multi-image-uploader";
 
 interface Post {
   id: number;
@@ -23,11 +23,23 @@ interface Post {
 }
 
 const typeConfig: Record<string, { gradient: string; badge: string; icon: typeof Tag }> = {
-  Sell: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-[#6B6B6B]", icon: Tag },
-  Exchange: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-[#6B6B6B]", icon: ArrowLeftRight },
-  Giveaway: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-[#6B6B6B]", icon: Gift },
-  Request: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-[#6B6B6B]", icon: UserPlus },
+  Sell: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-text-secondary", icon: Tag },
+  Exchange: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-text-secondary", icon: ArrowLeftRight },
+  Giveaway: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-text-secondary", icon: Gift },
+  Request: { gradient: "from-gray-50 to-gray-100", badge: "border border-gray-300 text-text-secondary", icon: UserPlus },
 };
+
+const categories = [
+  "Electronics", "Furniture", "Clothing", "Books", "Sports",
+  "Home & Garden", "Vehicles", "Toys", "Other",
+];
+
+const postTypes = [
+  { value: "Sell", label: "Sell", icon: Tag },
+  { value: "Exchange", label: "Exchange", icon: ArrowLeftRight },
+  { value: "Giveaway", label: "Giveaway", icon: Gift },
+  { value: "Request", label: "Request", icon: UserPlus },
+];
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -40,17 +52,23 @@ function timeAgo(dateStr: string) {
 }
 
 export default function Marketplace() {
-  const router = useRouter();
   const { data: session } = useSession();
-  const myId = Number((session?.user as { id?: string })?.id || 0);
   const [posts, setPosts] = useState<Post[]>([]);
   const [filter, setFilter] = useState("All");
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
-  const [deleting, setDeleting] = useState<number | null>(null);
-  const [openMenu, setOpenMenu] = useState<number | null>(null);
-  const [loginPrompt, setLoginPrompt] = useState<{ isOpen: boolean; action: string }>({ isOpen: false, action: "" });
-  const categories = ["All", "Sell", "Exchange", "Giveaway", "Request"];
+  const [editPost, setEditPost] = useState<Post | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDesc, setEditDesc] = useState("");
+  const [editType, setEditType] = useState("Sell");
+  const [editPrice, setEditPrice] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [editImages, setEditImages] = useState<string[]>([]);
+  const [editPreviewIdx, setEditPreviewIdx] = useState(0);
+  const [editSaving, setEditSaving] = useState(false);
+  const [editError, setEditError] = useState("");
+  const categoriesList = ["All", "Sell", "Exchange", "Giveaway", "Request"];
 
   useEffect(() => {
     fetch("/api/posts")
@@ -65,148 +83,139 @@ export default function Marketplace() {
       });
   }, []);
 
-  const handleAction = (action: string) => {
-    if (!session) {
-      setLoginPrompt({ isOpen: true, action });
-      return false;
-    }
-    return true;
-  };
+  const filtered = posts.filter((p) => {
+    const matchFilter = filter === "All" || p.type === filter;
+    const matchSearch = search === "" || p.title.toLowerCase().includes(search.toLowerCase()) || p.description.toLowerCase().includes(search.toLowerCase());
+    return matchFilter && matchSearch;
+  });
 
-  const filtered = filter === "All" ? posts : posts.filter((p) => p.type === filter);
-
-  const handleDelete = async (e: React.MouseEvent, id: number) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setOpenMenu(null);
-    if (!confirm("Are you sure you want to delete this listing?")) return;
-    setDeleting(id);
+  const handleDelete = async (id: number) => {
     try {
       const res = await fetch("/api/posts", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
-      if (res.ok) setPosts((prev) => prev.filter((p) => p.id !== id));
-    } finally { setDeleting(null); }
+      if (res.ok) {
+        setPosts((prev) => prev.filter((p) => p.id !== id));
+      }
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
+  };
+
+  const openEditModal = (post: Post) => {
+    setEditPost(post);
+    setEditTitle(post.title);
+    setEditDesc(post.description);
+    setEditType(post.type);
+    setEditPrice(post.price || "");
+    setEditCategory(post.category || "");
+    setEditImages(post.images || []);
+    setEditPreviewIdx(0);
+    setEditError("");
+    setEditSaving(false);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editPost) return;
+    setEditError("");
+    setEditSaving(true);
+    try {
+      const res = await fetch(`/api/posts/${editPost.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: editTitle,
+          description: editDesc,
+          type: editType,
+          price: editPrice,
+          category: editCategory,
+          images: editImages,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setEditError(data.error || "Failed to update");
+        setEditSaving(false);
+        return;
+      }
+      const updated = await res.json();
+      setPosts((prev) => prev.map((p) => (p.id === updated.id ? { ...p, ...updated } : p)));
+      setEditPost(null);
+    } catch {
+      setEditError("Something went wrong");
+      setEditSaving(false);
+    }
   };
 
   return (
     <div className="flex flex-col gap-6 p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
+      <div>
+        <h1 className="text-3xl lg:text-5xl font-normal text-text-primary">Marketplace</h1>
+      </div>
+
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-5xl font-normal text-[#202124]">Marketplace</h1>
-          <p className="text-lg text-[#6B6B6B]">Buy, sell, exchange, giveaway, or ask for what you need.</p>
+        <div className="flex gap-2">
+          {categoriesList.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className={`rounded-full px-5 py-2.5 text-base font-medium transition-all duration-200 cursor-pointer ${
+                filter === cat
+                  ? "bg-[#1D1B17] text-white shadow-sm"
+                  : "bg-surface text-[#666666] hover:bg-gray-100 hover:text-[#222222]"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
-        <Link
-          href="/dashboard/marketplace/create"
-          className="rounded-full bg-[#B8F25E] px-6 py-3 text-base font-semibold text-[#202124] shadow-sm transition-colors "
-        >
-          + Post Listing
-        </Link>
+        <div className="flex items-center gap-2 rounded-full border border-border-default bg-surface px-4 py-2">
+          <Search size={18} className="text-text-muted" />
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-40 bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted"
+          />
+        </div>
       </div>
 
-      {/* Category Filters */}
-      <div className="flex gap-2">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setFilter(cat)}
-            className={`rounded-full px-5 py-2.5 text-base font-medium transition-all duration-200 cursor-pointer ${
-              filter === cat
-                ? "bg-[#1D1B17] text-white shadow-sm"
-                : "bg-white text-[#666666] hover:bg-gray-100 hover:text-[#222222]"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      {/* Listings Grid */}
       {loading ? (
-        <div className="flex flex-col items-center justify-center rounded-[24px] bg-white py-16 shadow-sm">
-          <Loader2 size={32} className="animate-spin text-[#9A9A9A]" />
-          <p className="mt-3 text-sm text-[#9A9A9A]">Loading listings...</p>
+        <div className="flex flex-col items-center justify-center rounded-[24px] bg-surface py-16 shadow-sm">
+          <Loader2 size={32} className="animate-spin text-text-muted" />
+          <p className="mt-3 text-sm text-text-muted">Loading listings...</p>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-[24px] bg-white py-16 shadow-sm">
-          <Tag size={48} strokeWidth={1} className="text-[#9A9A9A]" />
-          <p className="mt-4 text-lg font-medium text-[#9A9A9A]">No listings yet</p>
-          <p className="mt-1 text-base text-[#9A9A9A]">Be the first to post something!</p>
-          <Link
-            href="/dashboard/marketplace/create"
-            className="mt-4 rounded-full bg-[#B8F25E] px-6 py-3 text-base font-semibold text-[#202124] shadow-sm transition-colors "
-          >
-            + Post Listing
-          </Link>
+        <div className="flex flex-col items-center justify-center rounded-[24px] bg-surface py-16 shadow-sm">
+          <Tag size={48} strokeWidth={1} className="text-text-muted" />
+          <p className="mt-4 text-lg font-medium text-text-muted">No listings yet</p>
+          <p className="mt-1 text-base text-text-muted">Check back later!</p>
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {filtered.map((item) => {
             const cfg = typeConfig[item.type] || typeConfig.Sell;
             const Icon = cfg.icon;
+            const isOwner = session?.user && String(item.user_id) === String((session.user as { id: string }).id);
             return (
               <Link
                 key={item.id}
                 href={`/dashboard/marketplace/${item.id}`}
-                className="relative rounded-[24px] bg-white p-5 shadow-sm transition-all hover:shadow-md"
+                className="relative rounded-[24px] bg-surface p-3 shadow-sm transition-all hover:shadow-md"
               >
-                {myId === item.user_id && (
-                  <div className="absolute right-4 top-4 z-10">
-                    <button
-                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(openMenu === item.id ? null : item.id); }}
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-[#6B6B6B] shadow-sm transition-colors hover:bg-gray-100"
-                    >
-                      <MoreHorizontal size={16} />
-                    </button>
-                    {openMenu === item.id && (
-                      <>
-                        <div className="fixed inset-0 z-40" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(null); }} />
-                        <div className="absolute right-0 top-full z-50 mt-1 w-44 rounded-[16px] border border-gray-100 bg-white py-2 shadow-lg">
-                          <button
-                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(null); router.push(`/dashboard/marketplace/${item.id}`); }}
-                            className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
-                          >
-                            <EyeOff size={16} className="text-[#9A9A9A]" />
-                            View
-                          </button>
-                          <button
-                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(null); router.push(`/dashboard/marketplace/create?edit=${item.id}`); }}
-                            className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
-                          >
-                            <Pencil size={16} className="text-[#9A9A9A]" />
-                            Edit
-                          </button>
-                          <button
-                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(null); }}
-                            className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
-                          >
-                            <Share2 size={16} className="text-[#9A9A9A]" />
-                            Share
-                          </button>
-                          <button
-                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenMenu(null); }}
-                            className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
-                          >
-                            <Flag size={16} className="text-[#9A9A9A]" />
-                            Report
-                          </button>
-                          <div className="my-1 border-t border-gray-100" />
-                          <button
-                            onClick={(e) => handleDelete(e, item.id)}
-                            disabled={deleting === item.id}
-                            className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-red-500 hover:bg-red-50 disabled:opacity-50"
-                          >
-                            {deleting === item.id ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
-                            Delete
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )}
-                <div className={`flex h-[240px] items-center justify-center overflow-hidden rounded-[16px] ${(item.images && item.images.length > 0) || item.image_url ? "bg-gray-50" : "border border-gray-200 bg-white"}`}>
+                <div className="absolute right-5 top-5 z-20">
+                  <ThreeDotMenu
+                    id={item.id}
+                    isOwner={!!isOwner}
+                    shareUrl={`${window.location.origin}/dashboard/marketplace/${item.id}`}
+                    onDelete={handleDelete}
+                    onEdit={() => openEditModal(item)}
+                  />
+                </div>
+                <div className={`flex h-[240px] items-center justify-center overflow-hidden rounded-[16px] ${(item.images && item.images.length > 0) || item.image_url ? "bg-surface-alt" : "border border-border-default bg-surface"}`}>
                   {(item.images && item.images.length > 0) || item.image_url ? (
                     <img
                       src={(item.images && item.images[0]) || item.image_url || ""}
@@ -223,59 +232,26 @@ export default function Marketplace() {
                   )}
                 </div>
                 <div className="mt-4">
-                   <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between">
                     <span className={`rounded-full px-3 py-1 text-base font-semibold ${cfg.badge}`}>
                       {item.type}
                     </span>
-                    <span className="text-base text-[#9A9A9A]">{timeAgo(item.created_at)}</span>
+                    <span className="text-base text-text-muted">{timeAgo(item.created_at)}</span>
                   </div>
-                  <h3 className="mt-3 text-lg font-semibold text-[#202124] line-clamp-1">{item.title}</h3>
-                  <p className="mt-1 text-base text-[#6B6B6B] line-clamp-1">{item.description}</p>
+                  <h3 className="mt-3 text-lg font-semibold text-text-primary line-clamp-1">{item.title}</h3>
+                  <p className="mt-1 text-base text-text-secondary line-clamp-1">{item.description}</p>
                   <div className="mt-3 flex items-center justify-between">
-                    <span className="text-lg font-semibold text-[#202124]">
+                    <span className="text-lg font-semibold text-text-primary">
                       {item.type === "Sell" ? `$${item.price || "0"}` :
                        item.type === "Giveaway" ? "Free" :
                        item.type === "Exchange" ? (item.price || "Swap") :
                        "Request"}
                     </span>
-                    <span className="text-xs text-[#9A9A9A]">by {item.user_name}</span>
                   </div>
-                  <div className="mt-3 flex gap-2">
-                    {item.type === "Request" ? (
-                      myId === item.user_id ? (
-                         <button
-                          onClick={(e) => { e.stopPropagation(); router.push("/dashboard/messages"); }}
-                          className="w-full rounded-full border border-gray-200 px-4 py-2.5 text-base font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
-                        >
-                          <MessageSquare size={14} className="inline mr-1.5" />Inbox
-                        </button>
-                      ) : (
-                        <button onClick={(e) => e.stopPropagation()} className="w-full rounded-full bg-[#B8F25E] px-4 py-2.5 text-base font-semibold text-[#202124] transition-colors ">
-                          I Have This
-                        </button>
-                      )
-                    ) : (
-                      <>
-                        <button onClick={(e) => e.stopPropagation()} className="flex-1 rounded-full bg-[#B8F25E] px-4 py-2.5 text-base font-semibold text-[#202124] transition-colors ">
-                          {item.type === "Sell" ? "Buy" : item.type === "Exchange" ? "Swap" : "Claim"}
-                        </button>
-                        {myId === item.user_id ? (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); router.push("/dashboard/messages"); }}
-                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-base font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
-                          >
-                            <MessageSquare size={14} className="inline mr-1.5" />Inbox
-                          </button>
-                        ) : (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); router.push(`/dashboard/messages?userId=${item.user_id}`); }}
-                            className="flex-1 rounded-full border border-gray-200 px-4 py-2.5 text-base font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
-                          >
-                            Message
-                          </button>
-                        )}
-                      </>
-                    )}
+                  <div className="mt-3">
+                    <button className="w-full rounded-full bg-accent px-4 py-2.5 text-base font-semibold text-text-primary transition-colors">
+                      View Details
+                    </button>
                   </div>
                 </div>
               </Link>
@@ -283,6 +259,170 @@ export default function Marketplace() {
           })}
         </div>
       )}
+
+      {/* Edit Modal */}
+      {editPost && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setEditPost(null)}>
+          <div className="relative w-full max-w-3xl rounded-[24px] bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => setEditPost(null)}
+              className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 transition-colors hover:bg-gray-200"
+            >
+              <X size={18} />
+            </button>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Edit Listing</h2>
+            {editError && (
+              <div className="mb-4 rounded-[16px] border border-red-200 bg-red-50 px-5 py-3 text-sm text-red-600">{editError}</div>
+            )}
+            <div className="flex gap-6">
+              <div className="flex-1 space-y-5">
+                <div>
+                  <label className="mb-1 block text-sm font-semibold text-gray-800">Type</label>
+                  <div className="flex gap-2">
+                    {postTypes.map((t) => {
+                      const Icon = t.icon;
+                      const isSelected = editType === t.value;
+                      return (
+                        <button
+                          key={t.value}
+                          type="button"
+                          onClick={() => setEditType(t.value)}
+                          className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                            isSelected ? "bg-gray-900 text-white shadow-sm" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          }`}
+                        >
+                          <Icon size={14} /> {t.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="grid grid-cols-[1fr_1fr] gap-4">
+                  <div>
+                    <label className="mb-1 block text-sm font-semibold text-gray-800">Title</label>
+                    <input
+                      type="text"
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-sm font-semibold text-gray-800">
+                      {editType === "Sell" ? "Price" : editType === "Exchange" ? "Want in return" : "Type"}
+                    </label>
+                    {editType === "Sell" ? (
+                      <div className="relative">
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">$</span>
+                        <input
+                          type="text"
+                          value={editPrice}
+                          onChange={(e) => setEditPrice(e.target.value)}
+                          className="w-full rounded-[14px] border border-gray-200 bg-gray-50 pl-8 pr-4 py-3 text-sm outline-none focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                        />
+                      </div>
+                    ) : (
+                      <input
+                        type="text"
+                        value={editPrice}
+                        onChange={(e) => setEditPrice(e.target.value)}
+                        className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                        placeholder={editType === "Giveaway" ? "Free" : "e.g. Samsung case"}
+                        disabled={editType === "Giveaway"}
+                      />
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-semibold text-gray-800">Category</label>
+                  <div className="relative">
+                    <select
+                      value={editCategory}
+                      onChange={(e) => setEditCategory(e.target.value)}
+                      className="w-full appearance-none rounded-[14px] border border-gray-200 bg-gray-50 px-4 py-3 pr-10 text-sm outline-none focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                    >
+                      <option value="">Select</option>
+                      {categories.map((cat) => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                    </select>
+                    <ChevronDown size={16} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  </div>
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-semibold text-gray-800">Description</label>
+                  <textarea
+                    value={editDesc}
+                    onChange={(e) => setEditDesc(e.target.value)}
+                    rows={3}
+                    className="w-full resize-none rounded-[14px] border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-semibold text-gray-800">Photos</label>
+                  <MultiImageUploader onUpload={setEditImages} currentImages={editImages} maxImages={4} />
+                </div>
+              </div>
+              <div className="w-[260px] flex-shrink-0">
+                <span className="text-xs font-medium text-gray-400">Preview</span>
+                <div className="mt-2 rounded-[16px] bg-gray-50 p-4">
+                  <div className={`flex h-[180px] items-center justify-center overflow-hidden rounded-[12px] ${editImages.length > 0 ? "bg-gray-100" : "border border-gray-200 bg-white"}`}>
+                    {editImages.length > 0 ? (
+                      <img src={editImages[Math.min(editPreviewIdx, editImages.length - 1)]} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <Tag size={48} strokeWidth={1.5} className="text-gray-300" />
+                    )}
+                  </div>
+                  {editImages.length > 1 && (
+                    <div className="mt-2 flex items-center justify-center gap-2">
+                      <button
+                        onClick={() => setEditPreviewIdx((editPreviewIdx - 1 + editImages.length) % editImages.length)}
+                        className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300"
+                      >
+                        <ChevronLeft size={14} />
+                      </button>
+                      <span className="text-[10px] text-gray-500">{editPreviewIdx + 1}/{editImages.length}</span>
+                      <button
+                        onClick={() => setEditPreviewIdx((editPreviewIdx + 1) % editImages.length)}
+                        className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300"
+                      >
+                        <ChevronRight size={14} />
+                      </button>
+                    </div>
+                  )}
+                  <div className="mt-3">
+                    <span className="rounded-full border border-gray-300 px-2 py-0.5 text-[10px] font-semibold text-gray-500">{editType}</span>
+                    <h4 className="mt-1 text-sm font-semibold text-gray-800 line-clamp-1">{editTitle || "Title"}</h4>
+                    <p className="text-[11px] text-gray-500 line-clamp-1">{editDesc || "Description..."}</p>
+                    <p className="mt-1 text-sm font-semibold text-gray-800">
+                      {editType === "Sell" ? `$${editPrice || "0"}` : editType === "Giveaway" ? "Free" : editType === "Exchange" ? (editPrice || "Swap") : "Request"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 flex items-center justify-end gap-3 border-t border-gray-100 pt-4">
+              <button
+                onClick={() => setEditPost(null)}
+                className="rounded-full border border-gray-200 bg-white px-8 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveEdit}
+                disabled={editSaving}
+                className="flex items-center gap-2 rounded-full bg-accent px-8 py-2.5 text-sm font-semibold text-gray-900 transition-colors disabled:opacity-50"
+              >
+                {editSaving ? <Loader2 size={16} className="animate-spin" /> : null}
+                {editSaving ? "Saving..." : "Save Changes"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {lightbox && (
         <ImageLightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />
       )}

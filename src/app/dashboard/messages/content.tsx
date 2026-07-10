@@ -39,12 +39,12 @@ interface Conversation {
 }
 
 const avatarColors = [
-  "bg-[#B8F25E] text-[#202124]",
+  "bg-accent text-text-primary",
   "bg-[#60A5FA] text-white",
   "bg-[#A78BFA] text-white",
   "bg-[#F472B6] text-white",
   "bg-[#34D399] text-white",
-  "bg-[#FBBF24] text-[#202124]",
+  "bg-[#FBBF24] text-text-primary",
   "bg-[#F87171] text-white",
   "bg-[#818CF8] text-white",
 ];
@@ -87,9 +87,11 @@ export default function MessagesContent() {
   const [showMenu, setShowMenu] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const dragCounter = useRef(0);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const messagesLenRef = useRef(0);
   const selectedIdRef = useRef<number | null>(null);
@@ -218,6 +220,42 @@ export default function MessagesContent() {
     }
   };
 
+  function handleDragEnter(e: React.DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current++;
+    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+      setIsDragOver(true);
+    }
+  }
+
+  function handleDragOver(e: React.DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  function handleDragLeave(e: React.DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current--;
+    if (dragCounter.current === 0) {
+      setIsDragOver(false);
+    }
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+    dragCounter.current = 0;
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) return;
+      if (file.size > 5 * 1024 * 1024) return;
+      handleImageUpload(file);
+    }
+  }
+
   const filteredConvos = conversations.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase()) ||
     c.lastMessage.toLowerCase().includes(search.toLowerCase())
@@ -257,14 +295,14 @@ export default function MessagesContent() {
   };
 
   return (
-    <div className="flex h-full gap-0 rounded-[24px] bg-white shadow-sm overflow-hidden" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
+    <div className="flex h-full gap-0 rounded-[24px] bg-surface shadow-sm overflow-hidden" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       {/* Conversations List */}
-      <div className={`w-[360px] flex flex-col border-r border-gray-100 ${showMobileList ? "flex" : "hidden md:flex"}`}>
+      <div className={`w-[360px] flex flex-col border-r border-border-light ${showMobileList ? "flex" : "hidden md:flex"}`}>
         <div className="flex items-center justify-between px-6 py-5">
-          <h2 className="text-3xl font-semibold text-[#202124]">Messages</h2>
+          <h2 className="text-3xl font-semibold text-text-primary">Messages</h2>
           <button
             onClick={() => router.push("/dashboard/marketplace")}
-            className="text-xs text-[#9A9A9A] hover:text-[#202124] transition-colors"
+            className="text-xs text-text-muted hover:text-text-primary transition-colors"
           >
             Browse listings
           </button>
@@ -272,13 +310,13 @@ export default function MessagesContent() {
 
         <div className="px-5 pb-4">
           <div className="relative">
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9A9A9A]" />
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search conversations..."
-              className="w-full rounded-full bg-gray-50 py-3 pl-11 pr-4 text-base text-[#202124] outline-none transition-all placeholder:text-[#B0B0B0] focus:bg-gray-100 focus:ring-1 focus:ring-gray-100"
+              className="w-full rounded-full bg-surface-alt py-3 pl-11 pr-4 text-base text-text-primary outline-none transition-all placeholder:text-[#B0B0B0] focus:bg-border-light focus:ring-1 focus:ring-gray-100"
             />
           </div>
         </div>
@@ -286,11 +324,11 @@ export default function MessagesContent() {
         <div className="flex-1 overflow-y-auto px-3">
           {loadingConvos ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 size={24} className="animate-spin text-[#9A9A9A]" />
+              <Loader2 size={24} className="animate-spin text-text-muted" />
             </div>
           ) : filteredConvos.length === 0 ? (
             <div className="px-4 py-8 text-center">
-              <p className="text-sm text-[#9A9A9A]">No conversations yet</p>
+              <p className="text-sm text-text-muted">No conversations yet</p>
               <p className="mt-1 text-xs text-[#B0B0B0]">Click Message on any listing to start chatting</p>
             </div>
           ) : (
@@ -304,7 +342,7 @@ export default function MessagesContent() {
                     setShowMobileList(false);
                   }}
                   className={`flex w-full items-center gap-3 rounded-[16px] px-4 py-3.5 text-left transition-all ${
-                    isActive ? "bg-[#202124]/5" : "hover:bg-gray-50"
+                    isActive ? "bg-text-primary/5" : "hover:bg-surface-alt"
                   }`}
                 >
                   <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold ${getColor(convo.name)}`}>
@@ -312,15 +350,15 @@ export default function MessagesContent() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <span className="text-base font-semibold text-[#202124]">{convo.name}</span>
-                      <span className="text-xs text-[#9A9A9A]">{convo.lastTime}</span>
+                      <span className="text-base font-semibold text-text-primary">{convo.name}</span>
+                      <span className="text-xs text-text-muted">{convo.lastTime}</span>
                     </div>
                     <div className="flex items-center justify-between mt-0.5">
-                      <span className={`text-sm truncate ${convo.unread > 0 ? "font-semibold text-[#202124]" : "text-[#9A9A9A]"}`}>
+                      <span className={`text-sm truncate ${convo.unread > 0 ? "font-semibold text-text-primary" : "text-text-muted"}`}>
                         {convo.lastMessage}
                       </span>
                       {convo.unread > 0 && (
-                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#B8F25E] px-1.5 text-[10px] font-bold text-[#202124]">
+                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[10px] font-bold text-text-primary">
                           {convo.unread}
                         </span>
                       )}
@@ -335,13 +373,27 @@ export default function MessagesContent() {
 
       {/* Chat Area */}
       {selectedConvo ? (
-        <div className={`flex flex-1 flex-col ${!showMobileList ? "flex" : "hidden md:flex"}`}>
+        <div
+          className={`relative flex flex-1 flex-col ${!showMobileList ? "flex" : "hidden md:flex"}`}
+          onDragEnter={handleDragEnter}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          {isDragOver && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center rounded-[24px] bg-accent/10 backdrop-blur-sm border-2 border-dashed border-accent m-2">
+              <div className="flex flex-col items-center gap-2">
+                <ImageIcon size={40} className="text-accent" />
+                <p className="text-lg font-semibold text-text-primary">Drop images here</p>
+              </div>
+            </div>
+          )}
           {/* Chat Header */}
-          <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+          <div className="flex items-center justify-between border-b border-border-light px-6 py-4">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowMobileList(true)}
-                className="flex h-9 w-9 items-center justify-center rounded-full text-[#6B6B6B] hover:bg-gray-100 md:hidden"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-text-secondary hover:bg-border-light md:hidden"
               >
                 <ArrowLeft size={20} />
               </button>
@@ -349,36 +401,36 @@ export default function MessagesContent() {
                 {getInitials(selectedConvo.name)}
               </div>
               <div>
-                <h3 className="text-base font-semibold text-[#202124]">{selectedConvo.name}</h3>
-                <p className="text-xs text-[#9A9A9A]">{selectedConvo.email}</p>
+                <h3 className="text-base font-semibold text-text-primary">{selectedConvo.name}</h3>
+                <p className="text-xs text-text-muted">{selectedConvo.email}</p>
               </div>
             </div>
             <div className="flex items-center gap-2 relative">
               <button
                 onClick={() => setShowMenu(!showMenu)}
-                className="flex h-9 w-9 items-center justify-center rounded-full text-[#6B6B6B] transition-colors hover:bg-gray-100 hover:text-[#202124]"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-border-light hover:text-text-primary"
               >
                 <MoreHorizontal size={18} />
               </button>
               {showMenu && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
-                  <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-[16px] border border-gray-100 bg-white py-2 shadow-lg">
+                  <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-[16px] border border-border-light bg-surface py-2 shadow-lg">
                     <button
                       onClick={() => { setShowMenu(false); }}
-                      className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-text-primary hover:bg-surface-alt"
                     >
-                      <BellOff size={16} className="text-[#9A9A9A]" />
+                      <BellOff size={16} className="text-text-muted" />
                       Mute notifications
                     </button>
                     <button
                       onClick={() => { setShowMenu(false); }}
-                      className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-[#202124] hover:bg-gray-50"
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-text-primary hover:bg-surface-alt"
                     >
-                      <UserX size={16} className="text-[#9A9A9A]" />
+                      <UserX size={16} className="text-text-muted" />
                       Block user
                     </button>
-                    <div className="my-1 border-t border-gray-100" />
+                    <div className="my-1 border-t border-border-light" />
                     <button
                       onClick={() => { setShowMenu(false); }}
                       className="flex w-full items-center gap-3 px-4 py-2.5 text-base text-red-500 hover:bg-red-50"
@@ -396,11 +448,11 @@ export default function MessagesContent() {
           <div className="flex-1 overflow-y-auto px-6 py-5">
             {loadingMsgs ? (
               <div className="flex items-center justify-center py-12">
-                <Loader2 size={24} className="animate-spin text-[#9A9A9A]" />
+                <Loader2 size={24} className="animate-spin text-text-muted" />
               </div>
             ) : messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full">
-                <p className="text-sm text-[#9A9A9A]">No messages yet</p>
+                <p className="text-sm text-text-muted">No messages yet</p>
                 <p className="text-xs text-[#B0B0B0]">Send a message to start chatting</p>
               </div>
             ) : (
@@ -429,8 +481,8 @@ export default function MessagesContent() {
                         {msg.text && (
                           <div className={`rounded-2xl px-4 py-2.5 text-base leading-relaxed ${
                             isMe
-                              ? "bg-[#202124] text-white rounded-br-md"
-                              : "bg-gray-100 text-[#202124] rounded-bl-md"
+                              ? "bg-text-primary text-white rounded-br-md"
+                              : "bg-border-light text-text-primary rounded-bl-md"
                           }`}>
                             {msg.text}
                           </div>
@@ -439,7 +491,7 @@ export default function MessagesContent() {
                           <span className="text-xs text-[#B0B0B0]">{timeAgo(msg.created_at)}</span>
                           {isMe && (
                             msg.read ? (
-                              <CheckCheck size={12} className="text-[#B8F25E]" />
+                              <CheckCheck size={12} className="text-accent" />
                             ) : (
                               <Check size={12} className="text-[#B0B0B0]" />
                             )
@@ -448,7 +500,7 @@ export default function MessagesContent() {
                       </div>
 
                       {isMe && showAvatar && (
-                        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#202124] text-[9px] font-semibold text-white">
+                        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-text-primary text-[9px] font-semibold text-white">
                           {session?.user?.name?.charAt(0)?.toUpperCase() || "Y"}
                         </div>
                       )}
@@ -462,19 +514,19 @@ export default function MessagesContent() {
           </div>
 
           {/* Input */}
-          <div className="border-t border-gray-100 px-6 py-4">
+          <div className="border-t border-border-light px-6 py-4">
             {previewImage && (
               <div className="mb-3 flex items-center gap-3">
                 <div className="relative">
                   <img src={previewImage} alt="Preview" className="h-20 w-20 rounded-xl object-cover" />
                   <button
                     onClick={() => setPreviewImage(null)}
-                    className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-gray-800 text-white text-xs"
+                    className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-nav-active text-white text-xs"
                   >
                     ✕
                   </button>
                 </div>
-                <span className="text-sm text-[#9A9A9A]">Image ready to send</span>
+                <span className="text-sm text-text-muted">Image ready to send</span>
               </div>
             )}
             <div className="flex items-end gap-3">
@@ -482,14 +534,14 @@ export default function MessagesContent() {
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploadingImage}
-                  className="flex h-9 w-9 items-center justify-center rounded-full text-[#9A9A9A] transition-colors hover:bg-gray-100 hover:text-[#202124] disabled:opacity-50"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-border-light hover:text-text-primary disabled:opacity-50"
                 >
                   {uploadingImage ? <Loader2 size={18} className="animate-spin" /> : <Paperclip size={18} />}
                 </button>
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploadingImage}
-                  className="flex h-9 w-9 items-center justify-center rounded-full text-[#9A9A9A] transition-colors hover:bg-gray-100 hover:text-[#202124] disabled:opacity-50"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-border-light hover:text-text-primary disabled:opacity-50"
                 >
                   {uploadingImage ? <Loader2 size={18} className="animate-spin" /> : <ImageIcon size={18} />}
                 </button>
@@ -505,7 +557,7 @@ export default function MessagesContent() {
                   }}
                 />
               </div>
-              <div className="flex flex-1 items-end rounded-2xl bg-gray-50 px-4 py-2.5 transition-all focus-within:bg-gray-100 focus-within:ring-1 focus-within:ring-gray-100">
+              <div className="flex flex-1 items-end rounded-2xl bg-surface-alt px-4 py-2.5 transition-all focus-within:bg-border-light focus-within:ring-1 focus-within:ring-gray-100">
                 <textarea
                   ref={textareaRef}
                   value={newMessage}
@@ -518,16 +570,16 @@ export default function MessagesContent() {
                   }}
                   placeholder="Type a message..."
                   rows={1}
-                  className="flex-1 resize-none bg-transparent text-base text-[#202124] outline-none placeholder:text-[#B0B0B0]"
+                  className="flex-1 resize-none bg-transparent text-base text-text-primary outline-none placeholder:text-[#B0B0B0]"
                 />
               </div>
               <button
                 onClick={handleSend}
-                disabled={!newMessage.trim() || sending}
+                disabled={(!newMessage.trim() && !previewImage) || sending}
                 className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full transition-all ${
-                  newMessage.trim() && !sending
-                    ? "bg-[#B8F25E] text-[#202124] shadow-sm  hover:shadow-md"
-                    : "bg-gray-100 text-[#B0B0B0]"
+                  (newMessage.trim() || previewImage) && !sending
+                    ? "bg-accent text-text-primary shadow-sm  hover:shadow-md"
+                    : "bg-border-light text-[#B0B0B0]"
                 }`}
               >
                 {sending ? (
@@ -541,10 +593,10 @@ export default function MessagesContent() {
         </div>
       ) : (
         <div className="hidden flex-1 flex-col items-center justify-center md:flex">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
-            <Send size={32} className="text-[#9A9A9A]" />
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-border-light">
+            <Send size={32} className="text-text-muted" />
           </div>
-          <p className="mt-4 text-xl font-medium text-[#9A9A9A]">Select a conversation</p>
+          <p className="mt-4 text-xl font-medium text-text-muted">Select a conversation</p>
           <p className="mt-1 text-base text-[#B0B0B0]">Click Message on any listing to start chatting</p>
         </div>
       )}

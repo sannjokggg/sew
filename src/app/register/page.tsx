@@ -58,11 +58,11 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f3f4f6]">
-      <div className="w-full max-w-md rounded-[24px] bg-white p-8 shadow-sm">
+    <div className="flex min-h-screen items-center justify-center bg-surface-alt">
+      <div className="w-full max-w-md rounded-[24px] bg-surface p-8 shadow-sm">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-semibold text-[#202124]">Create Account</h1>
-          <p className="mt-2 text-base text-[#9A9A9A]">Join the Sewago community</p>
+          <h1 className="text-3xl font-semibold text-text-primary">Create Account</h1>
+          <p className="mt-2 text-base text-text-muted">Join the SewaGo community</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -73,46 +73,46 @@ export default function RegisterPage() {
           )}
 
           <div>
-            <label className="mb-1 block text-base font-medium text-[#202124]">Name</label>
+            <label className="mb-1 block text-base font-medium text-text-primary">Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-full border border-gray-200 px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+              className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               placeholder="Your name"
               required
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-base font-medium text-[#202124]">Phone Number</label>
+            <label className="mb-1 block text-base font-medium text-text-primary">Phone Number</label>
             <input
               type="tel"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              className="w-full rounded-full border border-gray-200 px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+              className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               placeholder="+91 98765 43210"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-base font-medium text-[#202124]">Email</label>
+            <label className="mb-1 block text-base font-medium text-text-primary">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-full border border-gray-200 px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+              className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-base font-medium text-[#202124]">Password</label>
+            <label className="mb-1 block text-base font-medium text-text-primary">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-full border border-gray-200 px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+              className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
               placeholder="••••••••"
               minLength={6}
             />
@@ -121,15 +121,15 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-full bg-[#B8F25E] px-4 py-3 text-base font-semibold text-[#202124] transition-colors  disabled:opacity-50"
+            className="w-full rounded-full bg-accent px-4 py-3 text-base font-semibold text-text-primary transition-colors  disabled:opacity-50"
           >
             {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-base text-[#9A9A9A]">
+        <p className="mt-6 text-center text-base text-text-muted">
           Already have an account?{" "}
-          <Link href="/login" className="font-medium text-[#202124] hover:underline">
+          <Link href="/login" className="font-medium text-text-primary hover:underline">
             Sign In
           </Link>
         </p>

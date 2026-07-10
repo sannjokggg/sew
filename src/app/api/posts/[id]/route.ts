@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import pool from "@/lib/db";
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -71,5 +73,46 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   } catch (error) {
     console.error("Error fetching post:", error);
     return NextResponse.json({ error: "Failed to fetch post" }, { status: 500 });
+  }
+}
+
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = (session.user as { id: string }).id;
+    const { id } = await params;
+
+    const existing = await pool.query("SELECT user_id FROM posts WHERE id = $1", [id]);
+    if (existing.rows.length === 0) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+    if (String(existing.rows[0].user_id) !== userId) {
+      return NextResponse.json({ error: "Not authorized" }, { status: 403 });
+    }
+
+    const { title, description, type, price, category, images } = await req.json();
+    const imagesJson = images && images.length > 0 ? JSON.stringify(images) : null;
+    const fallbackImage = images && images.length > 0 ? images[0] : null;
+
+    const result = await pool.query(
+      `UPDATE posts SET title = $1, description = $2, type = $3, price = $4, category = $5, image_url = $6, images = $7
+       WHERE id = $8 RETURNING *`,
+      [title, description, type, price || null, category || null, fallbackImage, imagesJson, id]
+    );
+
+    const row = result.rows[0];
+    if (row.images) {
+      try { row.images = JSON.parse(row.images); } catch { row.images = row.image_url ? [row.image_url] : []; }
+    } else {
+      row.images = row.image_url ? [row.image_url] : [];
+    }
+
+    return NextResponse.json(row);
+  } catch (error) {
+    console.error("Error updating post:", error);
+    return NextResponse.json({ error: "Failed to update post" }, { status: 500 });
   }
 }

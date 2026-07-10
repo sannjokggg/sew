@@ -70,19 +70,19 @@ export default function CreatePostPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/dashboard/marketplace"
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm transition-all hover:bg-gray-100 hover:shadow-md"
+          className="flex h-11 w-11 items-center justify-center rounded-full bg-surface shadow-sm transition-all hover:bg-gray-100 hover:shadow-md"
         >
           <ArrowLeft size={22} strokeWidth={2} />
         </Link>
         <div>
-          <h1 className="text-4xl font-normal text-[#202124]">Create Listing</h1>
-          <p className="text-lg text-[#6B6B6B]">Post something to the community</p>
+          <h1 className="text-2xl lg:text-4xl font-normal text-text-primary">Create Listing</h1>
+          <p className="text-lg text-text-secondary">Post something to the community</p>
         </div>
       </div>
 
       <div className="flex gap-6 items-stretch">
         <form onSubmit={handleSubmit} className="flex-1">
-          <div className="rounded-[24px] bg-white p-6 shadow-sm h-full flex flex-col">
+          <div className="rounded-[24px] bg-surface p-6 shadow-sm h-full flex flex-col">
             {error && (
               <div className="mb-6 rounded-[16px] border border-red-200 bg-red-50 px-5 py-4 text-base text-red-600">
                 {error}
@@ -90,8 +90,8 @@ export default function CreatePostPage() {
             )}
 
             <div className="mb-6">
-              <label className="mb-1 block text-lg font-semibold text-[#202124]">What are you posting?</label>
-              <p className="text-base text-[#9A9A9A]">Select the type of listing</p>
+              <label className="mb-1 block text-lg font-semibold text-text-primary">What are you posting?</label>
+              <p className="text-base text-text-muted">Select the type of listing</p>
               <div className="mt-4 flex gap-3">
                 {postTypes.map((t) => {
                   const Icon = t.icon;
@@ -103,12 +103,12 @@ export default function CreatePostPage() {
                       onClick={() => setType(t.value)}
                       className={`flex items-center gap-3 rounded-full px-6 py-3.5 text-lg font-medium transition-all duration-200 ${
                         isSelected
-                          ? "bg-white text-[#202124] shadow-md ring-2 ring-gray-300"
-                          : "bg-gray-50 text-[#6B6B6B] hover:bg-gray-100 hover:text-[#202124]"
+                          ? "bg-surface text-text-primary shadow-md ring-2 ring-gray-300"
+                          : "bg-surface-alt text-text-secondary hover:bg-gray-100 hover:text-text-primary"
                       }`}
                     >
                       <div className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br ${t.gradient}`}>
-                        <Icon size={16} strokeWidth={2.5} className="text-[#6B6B6B]" />
+                        <Icon size={16} strokeWidth={2.5} className="text-text-secondary" />
                       </div>
                       {t.label}
                     </button>
@@ -119,28 +119,28 @@ export default function CreatePostPage() {
 
             <div className="mb-6 grid grid-cols-[1fr_240px_260px] gap-5">
               <div>
-                <label className="mb-2 block text-lg font-medium text-[#202124]">Title</label>
+                <label className="mb-2 block text-lg font-medium text-text-primary">Title</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                  className="w-full rounded-[14px] border border-border-default bg-surface-alt px-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-surface focus:ring-2 focus:ring-gray-100"
                   placeholder="e.g. MacBook Pro 2021"
                   required
                 />
               </div>
               <div>
-                <label className="mb-2 block text-lg font-medium text-[#202124]">
+                <label className="mb-2 block text-lg font-medium text-text-primary">
                   {type === "Sell" ? "Price" : type === "Exchange" ? "Want in return" : "Type"}
                 </label>
                 {type === "Sell" ? (
                   <div className="relative">
-                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-medium text-[#9A9A9A]">$</span>
+                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-medium text-text-muted">$</span>
                     <input
                       type="text"
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
-                      className="w-full rounded-[14px] border border-gray-200 bg-gray-50 pl-10 pr-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                      className="w-full rounded-[14px] border border-border-default bg-surface-alt pl-10 pr-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-surface focus:ring-2 focus:ring-gray-100"
                       placeholder="0.00"
                     />
                   </div>
@@ -149,62 +149,62 @@ export default function CreatePostPage() {
                     type="text"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
-                    className="w-full rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                    className="w-full rounded-[14px] border border-border-default bg-surface-alt px-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-surface focus:ring-2 focus:ring-gray-100"
                     placeholder="e.g. Samsung case"
                   />
                 ) : (
-                  <div className="flex items-center rounded-[14px] border border-gray-100 bg-gray-50 px-5 py-3.5 text-lg text-[#9A9A9A]">
+                  <div className="flex items-center rounded-[14px] border border-border-light bg-surface-alt px-5 py-3.5 text-lg text-text-muted">
                     {type === "Giveaway" ? "Free" : "Looking for this"}
                   </div>
                 )}
               </div>
               <div>
-                <label className="mb-2 block text-lg font-medium text-[#202124]">Category</label>
+                <label className="mb-2 block text-lg font-medium text-text-primary">Category</label>
                 <div className="relative">
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full appearance-none rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 pr-10 text-lg outline-none transition-all focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                    className="w-full appearance-none rounded-[14px] border border-border-default bg-surface-alt px-5 py-3.5 pr-10 text-lg outline-none transition-all focus:border-gray-300 focus:bg-surface focus:ring-2 focus:ring-gray-100"
                   >
                     <option value="">Select</option>
                     {categories.map((cat) => (
                       <option key={cat} value={cat}>{cat}</option>
                     ))}
                   </select>
-                  <ChevronDown size={18} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#9A9A9A]" />
+                  <ChevronDown size={18} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-text-muted" />
                 </div>
               </div>
             </div>
 
             <div className="mb-6">
-              <label className="mb-2 block text-lg font-medium text-[#202124]">Description</label>
+              <label className="mb-2 block text-lg font-medium text-text-primary">Description</label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={2}
-                className="w-full resize-none rounded-[14px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                className="w-full resize-none rounded-[14px] border border-border-default bg-surface-alt px-5 py-3.5 text-lg outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-surface focus:ring-2 focus:ring-gray-100"
                 placeholder="Describe your item, condition, any details buyers should know..."
                 required
               />
             </div>
 
             <div className="mb-6">
-              <label className="mb-2 block text-lg font-medium text-[#202124]">Photos</label>
-              <p className="mb-2 text-sm text-[#9A9A9A]">Up to 4 photos</p>
+              <label className="mb-2 block text-lg font-medium text-text-primary">Photos</label>
+              <p className="mb-2 text-sm text-text-muted">Up to 4 photos</p>
               <MultiImageUploader onUpload={setImages} currentImages={images} maxImages={4} />
             </div>
 
             <div className="flex items-center gap-4 mt-auto pt-2">
               <Link
                 href="/dashboard/marketplace"
-                className="rounded-full border border-gray-200 bg-white px-10 py-3.5 text-lg font-medium text-[#6B6B6B] transition-all hover:bg-gray-50"
+                className="rounded-full border border-border-default bg-surface px-10 py-3.5 text-lg font-medium text-text-secondary transition-all hover:bg-surface-alt"
               >
                 Cancel
               </Link>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex items-center gap-2.5 rounded-full bg-[#B8F25E] px-12 py-3.5 text-lg font-semibold text-[#202124] transition-all  disabled:opacity-50"
+                className="flex items-center gap-2.5 rounded-full bg-accent px-12 py-3.5 text-lg font-semibold text-text-primary transition-all  disabled:opacity-50"
               >
                 {loading ? <Loader2 size={18} className="animate-spin" /> : null}
                 {loading ? "Posting..." : "Post Listing"}
@@ -214,9 +214,9 @@ export default function CreatePostPage() {
         </form>
 
         <div className="w-[440px] flex-shrink-0 relative">
-          <span className="absolute -top-7 left-0 text-base font-medium text-[#9A9A9A]">Live Preview</span>
-          <div className="rounded-[24px] bg-white p-6 shadow-sm h-full flex flex-col">
-            <div className={`max-h-[540px] min-h-[540px] relative flex items-center justify-center overflow-hidden rounded-[16px] ${images.length > 0 ? "bg-gray-50" : "border border-gray-200 bg-white"}`}>
+          <span className="absolute -top-7 left-0 text-base font-medium text-text-muted">Live Preview</span>
+          <div className="rounded-[24px] bg-surface p-6 shadow-sm h-full flex flex-col">
+            <div className={`max-h-[540px] min-h-[540px] relative flex items-center justify-center overflow-hidden rounded-[16px] ${images.length > 0 ? "bg-surface-alt" : "border border-border-default bg-surface"}`}>
               {images.length > 0 ? (
                 <>
                   <img src={images[Math.min(previewIdx, images.length - 1)]} alt="Preview" className="h-full w-full object-cover" />
@@ -246,25 +246,25 @@ export default function CreatePostPage() {
             </div>
             <div className="mt-auto pt-12">
               <div className="flex items-center justify-between">
-                <span className={`rounded-full px-3 py-1 text-xs font-semibold border border-gray-300 text-[#6B6B6B]`}>
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold border border-gray-300 text-text-secondary`}>
                   {type}
                 </span>
-                <span className="text-xs text-[#9A9A9A]">Just now</span>
+                <span className="text-xs text-text-muted">Just now</span>
               </div>
-              <h3 className="mt-3 text-lg font-semibold text-[#202124]">
+              <h3 className="mt-3 text-lg font-semibold text-text-primary">
                 {title || "Your title here"}
               </h3>
-              <p className="mt-1 text-sm text-[#6B6B6B] line-clamp-2">
+              <p className="mt-1 text-sm text-text-secondary line-clamp-2">
                 {description || "Your description will appear here..."}
               </p>
               <div className="mt-3 flex items-center justify-between">
-                <span className="text-2xl font-semibold text-[#202124]">
+                <span className="text-2xl font-semibold text-text-primary">
                   {type === "Sell" ? (price ? `$${price}` : "$0") :
                    type === "Giveaway" ? "Free" :
                    type === "Exchange" ? (price || "Swap") :
                    "Request"}
                 </span>
-                <span className="text-sm text-[#9A9A9A]">by you</span>
+                <span className="text-sm text-text-muted">by you</span>
               </div>
             </div>
           </div>

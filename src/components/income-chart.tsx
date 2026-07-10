@@ -8,39 +8,61 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Cell,
 } from "recharts";
+import { useState, useEffect } from "react";
 
-const data = [
-  { month: "Jan", profit: 15, loss: 22 },
-  { month: "Feb", profit: 25, loss: 17 },
-  { month: "Mar", profit: 20, loss: 14 },
-  { month: "Apr", profit: 18, loss: 20 },
-  { month: "May", profit: 27, loss: 17 },
-  { month: "Jun", profit: 19, loss: 29 },
-  { month: "Jul", profit: 20, loss: 21 },
-  { month: "Aug", profit: 18, loss: 15 },
-];
+const GlobalBarShape = (props: any) => {
+  const { x, y, width, height } = props;
+  const gap = 5;
+  const h = Math.max(0, height - gap);
+  return (
+    <rect
+      x={x}
+      y={y - gap}
+      width={width}
+      height={h}
+      fill="#B8F25E"
+      rx={6}
+      ry={6}
+    />
+  );
+};
+
+const NepalBarShape = (props: any) => {
+  const { x, y, width, height } = props;
+  const gap = 5;
+  const h = Math.max(0, height - gap);
+  return (
+    <rect
+      x={x}
+      y={y}
+      width={width}
+      height={h}
+      fill="#111111"
+      rx={6}
+      ry={6}
+    />
+  );
+};
 
 const formatYAxis = (value: number) => {
-  if (value === 0) return "00";
-  return `${value}k`;
+  return `${value}`;
 };
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-lg">
-        <p className="mb-2 text-sm font-semibold text-[#202124]">{label}</p>
+      <div className="rounded-xl border border-border-light bg-surface p-4 shadow-lg">
+        <p className="mb-2 text-sm font-semibold text-text-primary">{label}</p>
         {payload.map((entry: any, index: number) => (
           <div key={index} className="flex items-center gap-2 text-sm">
             <div
               className="h-3 w-3 rounded-full"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-[#6B6B6B]">
+            <span className="text-text-secondary">
               {entry.name}:{" "}
-              <span className="font-semibold text-[#202124]">{entry.value}k</span>
+              <span className="font-semibold text-text-primary">{entry.value}</span>
             </span>
           </div>
         ))}
@@ -50,90 +72,108 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const globalBase = [2.6, 2.5, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6];
+const nepalBase = [0.8, 0.7, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8];
+const now = new Date();
+const defaultData = Array.from({ length: 8 }, (_, i) => {
+  const d = new Date(now.getFullYear(), now.getMonth() - 8 + i, 1);
+  const idx = d.getMonth();
+  return { month: months[idx], global: globalBase[idx], nepal: nepalBase[idx] };
+});
+
 export default function IncomeChart() {
+  const [co2Data, setCo2Data] = useState(defaultData);
+
+  useEffect(() => {
+    fetch("/api/co2")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.monthly) setCo2Data(data.monthly);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div
-      className="rounded-[24px] bg-white p-6 shadow-sm h-full flex flex-col"
+      className="rounded-[24px] bg-surface p-4 shadow-sm h-full flex flex-col"
       style={{
         boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
         fontFamily: "var(--font-inter), Inter, sans-serif",
       }}
     >
-      {/* Header */}
       <div className="mb-4">
-        <h2 className="text-2xl font-bold text-[#202124]">Total Income</h2>
-        <p className="mt-1 text-base text-[#9A9A9A]">
-          View your income in a certain period of time
+        <h2 className="text-2xl font-bold text-text-primary">Monthly CO₂ Emissions</h2>
+        <p className="mt-1 text-base text-text-muted">
+          Global CO₂ · Nepal CO₂
         </p>
       </div>
 
-      {/* Chart Container */}
-      <div className="rounded-[16px] bg-[#F8F8F8] p-4 flex-1 flex flex-col">
-        {/* Chart Header */}
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-[#202124]">
-            Profit and Loss
+      <div className="rounded-[16px] bg-surface-alt p-2 flex-1 flex flex-col">
+        <div className="mb-2 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-text-primary">
+            Monthly trend
           </h3>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <div className="h-3.5 w-3.5 rounded-full bg-[#B8F25E]" />
-              <span className="text-base text-[#6B6B6B]">Profit</span>
+              <span className="text-base text-text-secondary">Global CO₂</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="h-3.5 w-3.5 rounded-full bg-[#111111]" />
-              <span className="text-base text-[#6B6B6B]">Loss</span>
+              <span className="text-base text-text-secondary">Nepal CO₂</span>
             </div>
           </div>
         </div>
 
-        {/* Chart */}
         <div className="flex-1 min-h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
-              data={data}
-              margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
-              barCategoryGap="25%"
-              barGap={4}
+              data={co2Data}
+              margin={{ top: 4, right: 4, left: 0, bottom: 0 }}
+              barCategoryGap="8%"
+              barGap={0}
             >
               <CartesianGrid
                 strokeDasharray="3 3"
-                stroke="#E5E7EB"
+                stroke="var(--border-default)"
                 vertical={false}
               />
               <XAxis
                 dataKey="month"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#9A9A9A", fontSize: 14 }}
+                tick={{ fill: "var(--text-muted)", fontSize: 14 }}
                 dy={10}
               />
               <YAxis
+                width={14}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#9A9A9A", fontSize: 14 }}
+                tick={{ fill: "var(--text-muted)", fontSize: 12, textAnchor: "start" }}
                 tickFormatter={formatYAxis}
-                domain={[0, 50]}
-                ticks={[0, 10, 20, 30, 40, 50]}
+                domain={[0, 6]}
+                ticks={[0, 1, 2, 3, 4, 5, 6]}
               />
               <Tooltip
                 content={<CustomTooltip />}
                 cursor={{ fill: "rgba(0,0,0,0.02)" }}
               />
               <Bar
-                dataKey="loss"
+                dataKey="nepal"
                 stackId="stack"
                 fill="#111111"
-                radius={[0, 0, 6, 6]}
-                barSize={28}
+                shape={<NepalBarShape />}
+                barSize={38}
                 animationDuration={1000}
                 animationEasing="ease-out"
               />
               <Bar
-                dataKey="profit"
+                dataKey="global"
                 stackId="stack"
                 fill="#B8F25E"
-                radius={[6, 6, 0, 0]}
-                barSize={28}
+                shape={<GlobalBarShape />}
+                barSize={38}
                 animationDuration={1000}
                 animationEasing="ease-out"
               />

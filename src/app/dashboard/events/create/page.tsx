@@ -81,13 +81,13 @@ export default function CreateEventPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/dashboard/events"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm transition-all hover:bg-gray-100 hover:shadow-md"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-surface shadow-sm transition-all hover:bg-border-light hover:shadow-md"
         >
           <ArrowLeft size={20} strokeWidth={2} />
         </Link>
         <div>
-          <h1 className="text-4xl font-normal text-[#202124]">Create Event</h1>
-          <p className="text-base text-[#6B6B6B]">Share an event with your community</p>
+          <h1 className="text-2xl lg:text-4xl font-normal text-text-primary">Create Event</h1>
+          <p className="text-base text-text-secondary">Share an event with your community</p>
         </div>
       </div>
 
@@ -100,27 +100,27 @@ export default function CreateEventPage() {
           )}
 
           {/* Details */}
-          <div className="rounded-[24px] bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-[#202124]">Event Details</h2>
+          <div className="rounded-[24px] bg-surface p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-text-primary">Event Details</h2>
             <div className="mt-5 flex flex-col gap-5">
               <div>
-                <label className="mb-2 block text-sm font-medium text-[#202124]">Title</label>
+                <label className="mb-2 block text-sm font-medium text-text-primary">Title</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full rounded-[16px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-sm outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                  className="w-full rounded-[16px] border border-border-default bg-surface-alt px-5 py-3.5 text-sm outline-none transition-all placeholder:text-[#B0B0B0] focus:border-border-default focus:bg-surface focus:ring-2 focus:ring-border-light"
                   placeholder="e.g. Community Yoga Workshop"
                   required
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-[#202124]">Description</label>
+                <label className="mb-2 block text-sm font-medium text-text-primary">Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={4}
-                  className="w-full rounded-[16px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-sm outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100 resize-none"
+                  className="w-full rounded-[16px] border border-border-default bg-surface-alt px-5 py-3.5 text-sm outline-none transition-all placeholder:text-[#B0B0B0] focus:border-border-default focus:bg-surface focus:ring-2 focus:ring-border-light resize-none"
                   placeholder="Describe the event, what to expect, who should attend..."
                   required
                 />
@@ -129,9 +129,9 @@ export default function CreateEventPage() {
           </div>
 
           {/* Category */}
-          <div className="rounded-[24px] bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-[#202124]">Category</h2>
-            <p className="mt-1 text-sm text-[#9A9A9A]">Choose a category for your event</p>
+          <div className="rounded-[24px] bg-surface p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-text-primary">Category</h2>
+            <p className="mt-1 text-sm text-text-muted">Choose a category for your event</p>
             <div className="mt-5 flex flex-wrap gap-2">
               {categories.map((cat) => (
                 <button
@@ -141,7 +141,7 @@ export default function CreateEventPage() {
                   className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all duration-200 ${
                     category === cat
                       ? "bg-[#1D1B17] text-white shadow-sm"
-                      : "bg-white text-[#6B6B6B] border border-gray-200 hover:bg-gray-50 hover:text-[#202124]"
+                      : "bg-surface text-text-secondary border border-border-default hover:bg-surface-alt hover:text-text-primary"
                   }`}
                 >
                   {cat}
@@ -151,11 +151,11 @@ export default function CreateEventPage() {
           </div>
 
           {/* Date & Time */}
-          <div className="rounded-[24px] bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-[#202124]">Date & Time</h2>
+          <div className="rounded-[24px] bg-surface p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-text-primary">Date & Time</h2>
             <div className="mt-5 grid grid-cols-2 gap-5">
               <div>
-                <label className="mb-2 block text-sm font-medium text-[#202124]">
+                <label className="mb-2 block text-sm font-medium text-text-primary">
                   <CalendarDays size={14} className="mr-1.5 inline" />
                   Date
                 </label>
@@ -163,12 +163,12 @@ export default function CreateEventPage() {
                   type="date"
                   value={eventDate}
                   onChange={(e) => setEventDate(e.target.value)}
-                  className="w-full rounded-[16px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-sm outline-none transition-all focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                  className="w-full rounded-[16px] border border-border-default bg-surface-alt px-5 py-3.5 text-sm outline-none transition-all focus:border-border-default focus:bg-surface focus:ring-2 focus:ring-border-light"
                   required
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-[#202124]">
+                <label className="mb-2 block text-sm font-medium text-text-primary">
                   <Clock size={14} className="mr-1.5 inline" />
                   Time (optional)
                 </label>
@@ -176,17 +176,17 @@ export default function CreateEventPage() {
                   type="time"
                   value={eventTime}
                   onChange={(e) => setEventTime(e.target.value)}
-                  className="w-full rounded-[16px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-sm outline-none transition-all focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                  className="w-full rounded-[16px] border border-border-default bg-surface-alt px-5 py-3.5 text-sm outline-none transition-all focus:border-border-default focus:bg-surface focus:ring-2 focus:ring-border-light"
                 />
               </div>
             </div>
           </div>
 
           {/* Location */}
-          <div className="rounded-[24px] bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-[#202124]">Location</h2>
+          <div className="rounded-[24px] bg-surface p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-text-primary">Location</h2>
             <div className="mt-5">
-              <label className="mb-2 block text-sm font-medium text-[#202124]">
+              <label className="mb-2 block text-sm font-medium text-text-primary">
                 <MapPin size={14} className="mr-1.5 inline" />
                 Where is it happening?
               </label>
@@ -194,16 +194,16 @@ export default function CreateEventPage() {
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className="w-full rounded-[16px] border border-gray-200 bg-gray-50 px-5 py-3.5 text-sm outline-none transition-all placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-white focus:ring-2 focus:ring-gray-100"
+                className="w-full rounded-[16px] border border-border-default bg-surface-alt px-5 py-3.5 text-sm outline-none transition-all placeholder:text-[#B0B0B0] focus:border-border-default focus:bg-surface focus:ring-2 focus:ring-border-light"
                 placeholder="e.g. Kathmandu Community Center"
               />
             </div>
           </div>
 
           {/* Photo */}
-          <div className="rounded-[24px] bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-[#202124]">Photo</h2>
-            <p className="mt-1 text-sm text-[#9A9A9A]">Add a cover photo for your event</p>
+          <div className="rounded-[24px] bg-surface p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-text-primary">Photo</h2>
+            <p className="mt-1 text-sm text-text-muted">Add a cover photo for your event</p>
             <div className="mt-5">
               <MultiImageUploader onUpload={setImages} currentImages={images} maxImages={1} />
             </div>
@@ -213,14 +213,14 @@ export default function CreateEventPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/dashboard/events"
-              className="rounded-full border border-gray-200 bg-white px-8 py-3.5 text-sm font-medium text-[#6B6B6B] shadow-sm transition-all hover:bg-gray-50 hover:shadow-md"
+              className="rounded-full border border-border-default bg-surface px-8 py-3.5 text-sm font-medium text-text-secondary shadow-sm transition-all hover:bg-surface-alt hover:shadow-md"
             >
               Cancel
             </Link>
             <button
               type="submit"
               disabled={loading || !category}
-              className="rounded-full bg-[#B8F25E] px-10 py-3.5 text-sm font-semibold text-[#202124] shadow-sm transition-all  hover:shadow-md disabled:opacity-50"
+              className="rounded-full bg-accent px-10 py-3.5 text-sm font-semibold text-text-primary shadow-sm transition-all  hover:shadow-md disabled:opacity-50"
             >
               {loading ? "Creating..." : "Create Event"}
             </button>
@@ -229,15 +229,15 @@ export default function CreateEventPage() {
 
         {/* Preview */}
         <div className="w-[320px] flex flex-col gap-3">
-          <span className="text-sm font-medium text-[#9A9A9A]">Live Preview</span>
-          <div className="rounded-[24px] bg-white p-5 shadow-sm">
+          <span className="text-sm font-medium text-text-muted">Live Preview</span>
+          <div className="rounded-[24px] bg-surface p-5 shadow-sm">
             <div className={`flex h-[180px] items-center justify-center rounded-[16px] ${
-              category ? "bg-gray-50" : "bg-gradient-to-br from-gray-100 to-gray-200"
+              category ? "bg-surface-alt" : "bg-gradient-to-br from-gray-100 to-gray-200"
             }`}>
               {images.length > 0 ? (
                 <img src={images[0]} alt="Preview" className="h-full w-full rounded-[16px] object-contain" />
               ) : category ? (
-                <CalendarDays size={56} strokeWidth={1.2} className="text-[#9A9A9A]" />
+                <CalendarDays size={56} strokeWidth={1.2} className="text-text-muted" />
               ) : (
                 <CalendarDays size={56} strokeWidth={1.2} className="text-[#D1D5DB]" />
               )}
@@ -248,22 +248,22 @@ export default function CreateEventPage() {
                   {category}
                 </span>
               )}
-              <h3 className="mt-2 text-base font-semibold text-[#202124]">
+              <h3 className="mt-2 text-base font-semibold text-text-primary">
                 {title || "Event title"}
               </h3>
-              <p className="mt-1 text-xs text-[#6B6B6B] line-clamp-2">
+              <p className="mt-1 text-xs text-text-secondary line-clamp-2">
                 {description || "Event description..."}
               </p>
               <div className="mt-3 flex flex-col gap-1">
                 {eventDate && (
-                  <span className="flex items-center gap-1.5 text-[11px] text-[#9A9A9A]">
+                  <span className="flex items-center gap-1.5 text-[11px] text-text-muted">
                     <CalendarDays size={11} />
                     {new Date(eventDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                     {eventTime && ` at ${eventTime}`}
                   </span>
                 )}
                 {location && (
-                  <span className="flex items-center gap-1.5 text-[11px] text-[#9A9A9A]">
+                  <span className="flex items-center gap-1.5 text-[11px] text-text-muted">
                     <MapPin size={11} />
                     {location}
                   </span>

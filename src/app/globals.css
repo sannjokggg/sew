@@ -3,11 +3,52 @@
 :root {
   --background: #f3f4f6;
   --foreground: #171717;
+  --surface: #ffffff;
+  --surface-alt: #F8F8F8;
+  --text-primary: #202124;
+  --text-secondary: #6B6B6B;
+  --text-muted: #9A9A9A;
+  --accent: #B8F25E;
+  --accent-hover: #a8e04e;
+  --brand-dark: #1a2e1a;
+  --nav-active: #1D1B17;
+  --border-light: #f3f4f6;
+  --border-default: #e5e7eb;
+  --border-card: #f0f0f0;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #e5e5e5;
+  --surface: #171717;
+  --surface-alt: #1f1f1f;
+  --text-primary: #f5f5f5;
+  --text-secondary: #a3a3a3;
+  --text-muted: #737373;
+  --accent: #B8F25E;
+  --accent-hover: #c8ff6e;
+  --brand-dark: #B8F25E;
+  --nav-active: #B8F25E;
+  --border-light: #262626;
+  --border-default: #404040;
+  --border-card: #2a2a2a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-brand-dark: var(--brand-dark);
+  --color-nav-active: var(--nav-active);
+  --color-border-light: var(--border-light);
+  --color-border-default: var(--border-default);
+  --color-border-card: var(--border-card);
   --font-sans: var(--font-nunito);
   --font-mono: var(--font-geist-mono);
 }

@@ -92,6 +92,37 @@ export async function GET() {
     const eventsLastCount = eventsLast.rows[0].count;
     const eventsChange = eventsLastCount > 0 ? Math.round(((eventsJoined - eventsLastCount) / eventsLastCount) * 100) : 0;
 
+    // Total Contributions (posts + offers + event_registrations)
+    const totalThis = await pool.query(
+      `SELECT
+        (SELECT COUNT(*)::int FROM posts WHERE created_at >= $1 AND created_at < $2) +
+        (SELECT COUNT(*)::int FROM offers WHERE created_at >= $1 AND created_at < $2) +
+        (SELECT COUNT(*)::int FROM event_registrations WHERE created_at >= $1 AND created_at < $2) AS count`,
+      [fmt(firstOfMonth), fmt(firstOfNextMonth)]
+    );
+    const totalLast = await pool.query(
+      `SELECT
+        (SELECT COUNT(*)::int FROM posts WHERE created_at >= $1 AND created_at < $2) +
+        (SELECT COUNT(*)::int FROM offers WHERE created_at >= $1 AND created_at < $2) +
+        (SELECT COUNT(*)::int FROM event_registrations WHERE created_at >= $1 AND created_at < $2) AS count`,
+      [fmt(firstOfLastMonth), fmt(firstOfMonth)]
+    );
+    const totalContributions = totalThis.rows[0].count;
+    const totalLastCount = totalLast.rows[0].count;
+    const totalContributionsChange = totalLastCount > 0 ? Math.round(((totalContributions - totalLastCount) / totalLastCount) * 100) : 0;
+
+    // Donations Sum (total amount)
+    const donationsSumThis = await pool.query(
+      `SELECT COALESCE(SUM(amount), 0)::int AS total FROM donations WHERE created_at >= $1 AND created_at < $2`,
+      [fmt(firstOfMonth), fmt(firstOfNextMonth)]
+    );
+    const donationsSumLast = await pool.query(
+      `SELECT COALESCE(SUM(amount), 0)::int AS total FROM donations WHERE created_at >= $1 AND created_at < $2`,
+      [fmt(firstOfLastMonth), fmt(firstOfMonth)]
+    );
+    const donationsSum = donationsSumThis.rows[0].total;
+    const donationsSumLastVal = donationsSumLast.rows[0].total;
+
     return NextResponse.json({
       itemsReused,
       itemsChange,
@@ -101,6 +132,9 @@ export async function GET() {
       peopleChange,
       eventsJoined,
       eventsChange,
+      totalContributions,
+      totalContributionsChange,
+      donationsSum,
     });
   } catch (error) {
     console.error("Error fetching dashboard stats:", error);

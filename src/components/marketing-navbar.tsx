@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 
 const navLinks = [
@@ -9,40 +9,53 @@ const navLinks = [
   { label: "Marketplace", href: "/marketplace" },
   { label: "Events", href: "/events" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function MarketingNavbar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const isActive = (href: string) => {
+    if (href === "/#contact") return pathname === "/contact";
+    return pathname === href;
+  };
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href === "/#contact") {
+      if (pathname === "/") {
+        e.preventDefault();
+        const el = document.getElementById("contact");
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
 
   return (
     <div className="flex items-center justify-between w-full rounded-[28px] px-6 py-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       <Link href="/" className="flex items-center gap-2">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 3h6v6" />
-            <path d="M10 14L21 3" />
-            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
-          </svg>
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
+          <img src="/uploads/logo.png" alt="SewaGo" className="h-10 w-10 object-contain" />
         </div>
-        <span className="text-[22px] font-semibold text-gray-800">Sewago</span>
+        <span className="text-[22px] font-semibold text-text-primary">SewaGo</span>
       </Link>
 
-      <div className="flex items-center gap-1">
+      <div className="hidden lg:flex items-center gap-1">
         {navLinks.map(({ label, href }) => {
-          const active = pathname === href;
+          const active = isActive(href);
           return (
-            <Link
+            <a
               key={href}
               href={href}
+              onClick={(e) => handleNavClick(e, href)}
               className={`px-[28px] py-2 rounded-[36px] text-[18px] font-medium transition-all duration-200 ${
                 active
-                  ? "bg-[#1D1B17] text-white shadow-md"
-                  : "text-[#666666] hover:bg-gray-100 hover:text-[#1D1B17]"
+                  ? "bg-nav-active text-white shadow-md"
+                  : "text-text-muted hover:bg-border-light hover:text-text-primary"
               }`}
             >
               {label}
-            </Link>
+            </a>
           );
         })}
       </div>
@@ -50,13 +63,13 @@ export default function MarketingNavbar() {
       <div className="flex items-center gap-3">
         <Link
           href="/login"
-          className="rounded-full border border-gray-200 px-5 py-3 text-base font-medium text-[#6B6B6B] transition-colors hover:bg-gray-50"
+          className="rounded-full border border-border-default px-5 py-3 text-base font-medium text-text-secondary transition-colors hover:bg-border-light"
         >
           Sign In
         </Link>
         <Link
           href="/dashboard"
-          className="flex items-center gap-2 rounded-full bg-[#B8F25E] px-5 py-3 text-base font-semibold text-[#202124] transition-colors hover:bg-[#a8e04e]"
+          className="flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-base font-semibold text-text-primary transition-colors hover:bg-accent-hover"
         >
           Join Now
           <ArrowUpRight size={18} />

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import pool from "@/lib/db";
+import { createNotification } from "@/lib/notifications";
 
 async function ensureOffersTable() {
   await pool.query(`
@@ -81,6 +82,21 @@ export async function POST(req: Request) {
     offer.user_name = session.user.name || "Anonymous";
     offer.user_email = session.user.email || "";
 
+    // Notify post owner
+    const postResult = await pool.query("SELECT user_id, title FROM posts WHERE id = $1", [post_id]);
+    if (postResult.rows.length > 0) {
+      const postOwnerId = postResult.rows[0].user_id;
+      if (String(postOwnerId) !== userId) {
+        await createNotification(
+          postOwnerId,
+          "new_offer",
+          `${session.user.name || "Someone"} made an offer on "${postResult.rows[0].title}"`,
+          Number(post_id),
+          `/dashboard/marketplace/${post_id}`
+        );
+      }
+    }
+
     return NextResponse.json(offer, { status: 201 });
   } catch (error) {
     console.error("Error creating offer:", error);
@@ -106,6 +122,24 @@ export async function PATCH(req: Request) {
       `UPDATE offers SET status = $1 WHERE id = $2`,
       [status, id]
     );
+
+    // Notify offer submitter
+    const offerResult = await pool.query(
+      `SELECT offers.user_id, posts.title, posts.id AS post_id FROM offers
+       LEFT JOIN posts ON offers.post_id = posts.id
+       WHERE offers.id = $1`,
+      [id]
+    );
+    if (offerResult.rows.length > 0) {
+      const offerData = offerResult.rows[0];
+      await createNotification(
+        offerData.user_id,
+        "offer_status",
+        `Your offer on "${offerData.title}" was ${status}`,
+        offerData.post_id,
+        `/dashboard/marketplace/${offerData.post_id}`
+      );
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
