@@ -107,8 +107,8 @@ export default function Dashboard() {
         </div>
 
         {/* Middle Section - Impact Stats */}
-        <div className="flex flex-1 flex-col h-full">
-          <div className="rounded-[24px] bg-surface p-6 shadow-sm h-full flex flex-col">
+        <div className="flex flex-1 flex-col">
+          <div className="rounded-[24px] bg-surface p-6 shadow-sm flex flex-col">
             <div className="flex flex-col gap-4 flex-1">
               {/* Top Row */}
               <div className="flex gap-4 flex-1">
@@ -186,7 +186,7 @@ export default function Dashboard() {
         </div>
 
         {/* Total Income Chart */}
-        <div className="w-[520px] h-full">
+        <div className="w-[520px]">
           <IncomeChart />
         </div>
       </div>

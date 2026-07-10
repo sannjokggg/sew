@@ -7,7 +7,6 @@ import {
   CalendarDays,
   MessageSquare,
   Globe,
-  HelpCircle,
   Settings,
 } from "lucide-react";
 
@@ -16,7 +15,6 @@ const navItems = [
   { icon: CalendarDays, href: "/dashboard/events", label: "Events" },
   { icon: MessageSquare, href: "/dashboard/messages", label: "Messages" },
   { icon: Globe, href: "/dashboard/marketplace", label: "Marketplace" },
-  { icon: HelpCircle, href: "/dashboard/help", label: "Help" },
   { icon: Settings, href: "/dashboard/settings", label: "Settings" },
 ];
 

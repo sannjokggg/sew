@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, ArrowRight, ChevronDown, Loader2 } from "lucide-react";
-import AuthPopup from "@/components/AuthPopup";
 
 const heroSlides = [
   {
@@ -40,13 +39,6 @@ export default function Home() {
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
-  const [showAuthPopup, setShowAuthPopup] = useState(false);
-
-  useEffect(() => {
-    const handleOpenAuth = () => setShowAuthPopup(true);
-    window.addEventListener("open-auth-popup", handleOpenAuth);
-    return () => window.removeEventListener("open-auth-popup", handleOpenAuth);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,6 +118,10 @@ export default function Home() {
           <div className="mt-7 flex items-center gap-3">
             <a
               href="/dashboard/donations"
+              onClick={(e) => {
+                e.preventDefault();
+                window.dispatchEvent(new CustomEvent("open-auth-popup", { detail: { redirectTo: "/dashboard/donations" } }));
+              }}
               className="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-lg font-semibold text-text-primary transition-colors hover:bg-accent-hover"
             >
               Donate Now
@@ -514,7 +510,7 @@ export default function Home() {
           <div>
             <div className="flex items-center gap-2 mb-6">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
-                <img src="/uploads/logo.png" alt="SewaGo" className="h-10 w-10 object-contain" />
+                <img src="/logo.png" alt="SewaGo" className="h-10 w-10 object-contain" />
               </div>
               <div>
                 <h3 className="text-xl font-bold text-brand-dark">SewaGo</h3>
@@ -577,7 +573,6 @@ export default function Home() {
         </div>
       </footer>
 
-      <AuthPopup isOpen={showAuthPopup} onClose={() => setShowAuthPopup(false)} />
     </div>
   );
 }

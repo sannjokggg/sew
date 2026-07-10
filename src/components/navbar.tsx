@@ -112,8 +112,7 @@ export default function Navbar() {
   return (
     <div className="relative flex flex-1 items-center" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       <div
-        className="hidden lg:flex absolute left-[42%] -translate-x-1/2 items-center gap-[6px] bg-surface px-4 py-2 rounded-[36px]"
-        style={{ boxShadow: "0 -4px 20px rgba(184, 242, 94, 0.35), 0 4px 12px rgba(0,0,0,0.06)" }}
+        className="hidden lg:flex absolute left-[42%] -translate-x-1/2 items-center gap-[6px] bg-surface px-4 h-14 rounded-[36px]"
       >
         {navLinks.map(({ label, href }) => {
           const active = pathname === href;
@@ -134,7 +133,7 @@ export default function Navbar() {
       </div>
 
       <div className="absolute right-0 flex items-center gap-2 lg:gap-4">
-        <div className="flex items-center gap-1 lg:gap-3 bg-surface px-2 lg:px-4 py-2 rounded-[36px] shadow-sm">
+        <div className="flex items-center gap-1 lg:gap-3 bg-surface px-2 lg:px-4 h-14 rounded-[36px]">
           <button
             onClick={() => router.push("/dashboard/messages")}
             className="flex h-9 w-9 lg:h-10 lg:w-10 items-center justify-center rounded-full text-text-secondary transition-all duration-200 hover:bg-border-light hover:text-text-primary active:bg-nav-active active:text-white active:scale-95"
@@ -211,7 +210,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        <div className="flex items-center gap-2 lg:gap-3 bg-surface px-2 lg:px-4 py-2 rounded-[36px] shadow-sm">
+        <div className="flex items-center gap-2 lg:gap-3 bg-surface px-2 lg:px-4 h-14 rounded-[36px]">
           <div className="flex h-7 w-7 lg:h-8 lg:w-8 items-center justify-center rounded-full bg-gray-300">
             <span className="text-xs font-medium text-white">{initial}</span>
           </div>

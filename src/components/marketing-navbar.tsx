@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 
 const navLinks = [
@@ -14,6 +14,7 @@ const navLinks = [
 
 export default function MarketingNavbar() {
   const pathname = usePathname();
+  const router = useRouter();
 
   const isActive = (href: string) => {
     if (href === "/#contact") return pathname === "/contact";
@@ -34,7 +35,7 @@ export default function MarketingNavbar() {
     <div className="flex items-center justify-between w-full rounded-[28px] px-6 py-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       <Link href="/" className="flex items-center gap-2">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
-          <img src="/uploads/logo.png" alt="SewaGo" className="h-10 w-10 object-contain" />
+          <img src="/logo.png" alt="SewaGo" className="h-10 w-10 object-contain" />
         </div>
         <span className="text-[22px] font-semibold text-text-primary">SewaGo</span>
       </Link>
@@ -42,11 +43,18 @@ export default function MarketingNavbar() {
       <div className="hidden lg:flex items-center gap-1">
         {navLinks.map(({ label, href }) => {
           const active = isActive(href);
+          const isProtected = href.startsWith("/dashboard");
           return (
             <a
               key={href}
               href={href}
-              onClick={(e) => handleNavClick(e, href)}
+              onClick={(e) => {
+                handleNavClick(e, href);
+                if (isProtected) {
+                  e.preventDefault();
+                  window.dispatchEvent(new CustomEvent("open-auth-popup", { detail: { redirectTo: href } }));
+                }
+              }}
               className={`px-[28px] py-2 rounded-[36px] text-[18px] font-medium transition-all duration-200 ${
                 active
                   ? "bg-nav-active text-white shadow-md"
@@ -61,13 +69,13 @@ export default function MarketingNavbar() {
 
       <div className="flex items-center gap-3">
         <button
-          onClick={() => window.dispatchEvent(new Event("open-auth-popup"))}
+          onClick={() => router.push("/dashboard")}
           className="rounded-full border border-border-default px-5 py-3 text-base font-medium text-text-secondary transition-colors hover:bg-border-light"
         >
           Sign In
         </button>
         <button
-          onClick={() => window.dispatchEvent(new Event("open-auth-popup"))}
+          onClick={() => router.push("/dashboard")}
           className="flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-base font-semibold text-text-primary transition-colors hover:bg-accent-hover"
         >
           Try Now

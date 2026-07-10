@@ -5,19 +5,24 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import OtpInput from "@/components/OtpInput";
 
-type Step = "welcome" | "phone" | "otp" | "details";
+type Step = "welcome" | "phone" | "otp" | "details" | "email";
 
 interface AuthPopupProps {
   isOpen: boolean;
   onClose: () => void;
+  redirectTo?: string;
 }
 
-export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
+export default function AuthPopup({ isOpen, onClose, redirectTo }: AuthPopupProps) {
   const router = useRouter();
+  const targetUrl = redirectTo || "/dashboard";
   const [step, setStep] = useState<Step>("welcome");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailMode, setEmailMode] = useState<"signin" | "signup">("signin");
   const [otpSent, setOtpSent] = useState(false);
   const [otpExpiresAt, setOtpExpiresAt] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(0);
@@ -48,6 +53,9 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
       setPhoneNumber("");
       setOtp("");
       setName("");
+      setEmail("");
+      setPassword("");
+      setEmailMode("signin");
       setOtpSent(false);
       setOtpExpiresAt(null);
       setError("");
@@ -56,13 +64,20 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
     }
   }, [isOpen]);
 
+  const handleClose = () => {
+    if (redirectTo) {
+      router.push(redirectTo);
+    }
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   const handleGoogleLogin = async () => {
     setError("");
     setLoading(true);
     try {
-      await signIn("google", { callbackUrl: "/dashboard" });
+      await signIn("google", { callbackUrl: targetUrl });
     } catch {
       setError("Google sign-in failed");
       setLoading(false);
@@ -117,8 +132,9 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
 
       setNewUserId(data.user.id);
       setName(data.user.name === "User" ? "" : data.user.name);
+      setEmail(data.user.email || "");
 
-      if (data.user.name && data.user.name !== "User") {
+      if (data.user.name && data.user.name !== "User" && data.user.email) {
         const result = await signIn("credentials", {
           phone: fullPhone,
           otp,
@@ -128,9 +144,9 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
           setError(result.error);
           setLoading(false);
         } else {
-          router.push("/dashboard");
+          router.push(targetUrl);
           router.refresh();
-          onClose();
+          handleClose();
         }
       } else {
         setStep("details");
@@ -153,7 +169,7 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
         await fetch("/api/auth/update-profile", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId: newUserId, name }),
+          body: JSON.stringify({ userId: newUserId, name, email }),
         });
       }
 
@@ -166,9 +182,55 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
         setError(result.error);
         setLoading(false);
       } else {
-        router.push("/dashboard");
+        router.push(targetUrl);
         router.refresh();
-        onClose();
+        handleClose();
+      }
+    } catch {
+      setError("Something went wrong");
+      setLoading(false);
+    }
+  };
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      if (emailMode === "signup") {
+        const res = await fetch("/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            phoneNumber: phoneNumber ? `+977${phoneNumber}` : undefined,
+          }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data.error || "Registration failed");
+          setLoading(false);
+          return;
+        }
+      }
+
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+        setLoading(false);
+      } else {
+        router.push(targetUrl);
+        router.refresh();
+        handleClose();
       }
     } catch {
       setError("Something went wrong");
@@ -186,17 +248,17 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
-        className="relative w-full max-w-md rounded-[28px] bg-surface p-8 shadow-2xl"
+        className="relative w-full max-w-md rounded-[28px] bg-surface p-8 shadow-2xl text-text-primary"
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          onClick={onClose}
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-surface-alt flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-border-light transition-colors"
+          onClick={handleClose}
+          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-surface-alt flex items-center justify-center text-black hover:bg-border-light transition-colors"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
@@ -210,9 +272,11 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
 
         {step === "welcome" && (
           <div className="text-center">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent/20">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#B8F25E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            {/* Outlined Icon Black */}
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-black bg-transparent">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
               </svg>
             </div>
 
@@ -227,10 +291,11 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
             </p>
 
             <div className="space-y-3">
+              {/* Outlined Icon Continue buttons matching website theme */}
               <button
                 onClick={handleGoogleLogin}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-3 rounded-full border border-border-default bg-surface px-4 py-3.5 text-base font-medium text-text-primary transition-colors hover:bg-surface-alt disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-3 rounded-full border border-black bg-surface px-4 py-3.5 text-base font-semibold text-black transition-colors hover:bg-surface-alt disabled:opacity-50"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -241,19 +306,24 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
                 Continue with Google
               </button>
 
-              <div className="relative flex items-center justify-center">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-border-default"></div>
-                </div>
-                <span className="relative bg-surface px-4 text-sm text-text-muted">or</span>
-              </div>
+              <button
+                onClick={() => setStep("email")}
+                className="w-full flex items-center justify-center gap-3 rounded-full border border-black bg-surface px-4 py-3.5 text-base font-semibold text-black transition-colors hover:bg-surface-alt disabled:opacity-50"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+                Continue with Email
+              </button>
 
               <button
                 onClick={() => setStep("phone")}
-                className="w-full flex items-center justify-center gap-3 rounded-full bg-accent px-4 py-3.5 text-base font-semibold text-text-primary transition-colors hover:bg-accent-hover disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-3 rounded-full border border-black bg-surface px-4 py-3.5 text-base font-semibold text-black transition-colors hover:bg-surface-alt disabled:opacity-50"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                  <line x1="12" y1="18" x2="12.01" y2="18" />
                 </svg>
                 Continue with Phone
               </button>
@@ -268,13 +338,132 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
           </div>
         )}
 
+        {step === "email" && (
+          <div>
+            <button
+              onClick={() => { setStep("welcome"); setError(""); }}
+              className="mb-6 flex items-center gap-1 text-sm text-black hover:opacity-80 transition-colors font-medium"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+              Back
+            </button>
+
+            {/* Mode Switcher */}
+            <div className="flex border border-black rounded-full overflow-hidden mb-6 p-0.5">
+              <button
+                type="button"
+                onClick={() => { setEmailMode("signin"); setError(""); }}
+                className={`flex-1 py-2 text-sm font-semibold rounded-full transition-colors ${
+                  emailMode === "signin"
+                    ? "bg-black text-white"
+                    : "text-black hover:bg-surface-alt"
+                }`}
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={() => { setEmailMode("signup"); setError(""); }}
+                className={`flex-1 py-2 text-sm font-semibold rounded-full transition-colors ${
+                  emailMode === "signup"
+                    ? "bg-black text-white"
+                    : "text-black hover:bg-surface-alt"
+                }`}
+              >
+                Sign Up
+              </button>
+            </div>
+
+            <h2 className="text-2xl font-bold text-text-primary mb-1">
+              {emailMode === "signin" ? "Welcome Back" : "Create Account"}
+            </h2>
+            <p className="text-sm text-text-muted mb-6">
+              {emailMode === "signin"
+                ? "Sign in with your email and password"
+                : "Enter your details below to create an account"}
+            </p>
+
+            <form onSubmit={handleEmailSubmit} className="space-y-4">
+              {emailMode === "signup" && (
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-text-primary">Your Full Name</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-black focus:ring-1 focus:ring-gray-100 text-text-primary bg-surface"
+                    placeholder="John Doe"
+                    required
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-text-primary">Email Address</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-black focus:ring-1 focus:ring-gray-100 text-text-primary bg-surface"
+                  placeholder="name@example.com"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-text-primary">Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-black focus:ring-1 focus:ring-gray-100 text-text-primary bg-surface"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+
+              {emailMode === "signup" && (
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-text-primary">Phone Number (Optional)</label>
+                  <div className="flex">
+                    <div className="flex items-center rounded-l-full border border-r-0 border-border-default bg-surface-alt px-4 py-3 text-base font-medium text-text-primary">
+                      <span className="mr-1">🇳🇵</span> +977
+                    </div>
+                    <input
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                      className="w-full rounded-r-full border border-border-default px-4 py-3 text-base outline-none focus:border-black focus:ring-1 focus:ring-gray-100 text-text-primary bg-surface"
+                      placeholder="98XXXXXXXX"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-full bg-accent px-4 py-3.5 text-base font-semibold text-text-primary transition-colors disabled:opacity-50"
+              >
+                {loading
+                  ? "Processing..."
+                  : emailMode === "signin"
+                  ? "Sign In"
+                  : "Sign Up & Continue"}
+              </button>
+            </form>
+          </div>
+        )}
+
         {step === "phone" && (
           <div>
             <button
               onClick={() => { setStep("welcome"); setError(""); }}
-              className="mb-6 flex items-center gap-1 text-sm text-text-muted hover:text-text-primary transition-colors"
+              className="mb-6 flex items-center gap-1 text-sm text-black hover:opacity-80 transition-colors font-medium"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="15 18 9 12 15 6" />
               </svg>
               Back
@@ -296,7 +485,7 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
                     type="tel"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                    className="w-full rounded-r-full border border-border-default px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                    className="w-full rounded-r-full border border-border-default px-4 py-3 text-base outline-none focus:border-black focus:ring-1 focus:ring-gray-100 text-text-primary bg-surface"
                     placeholder="98XXXXXXXX"
                     required
                     autoFocus
@@ -320,9 +509,9 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
           <div>
             <button
               onClick={() => { setStep("phone"); setOtp(""); setOtpSent(false); setOtpExpiresAt(null); setError(""); }}
-              className="mb-6 flex items-center gap-1 text-sm text-text-muted hover:text-text-primary transition-colors"
+              className="mb-6 flex items-center gap-1 text-sm text-black hover:opacity-80 transition-colors font-medium"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="15 18 9 12 15 6" />
               </svg>
               Back
@@ -367,9 +556,9 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
           <div>
             <button
               onClick={() => { setStep("otp"); setError(""); }}
-              className="mb-6 flex items-center gap-1 text-sm text-text-muted hover:text-text-primary transition-colors"
+              className="mb-6 flex items-center gap-1 text-sm text-black hover:opacity-80 transition-colors font-medium"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="15 18 9 12 15 6" />
               </svg>
               Back
@@ -377,26 +566,38 @@ export default function AuthPopup({ isOpen, onClose }: AuthPopupProps) {
 
             <h2 className="text-2xl font-bold text-text-primary mb-1">Almost there!</h2>
             <p className="text-sm text-text-muted mb-6">
-              Tell us your name to complete your profile
+              Tell us your name and email to complete your profile
             </p>
 
             <form onSubmit={handleCompleteDetails} className="space-y-4">
               <div>
-                <label className="mb-1 block text-sm font-medium text-text-primary">Your Name</label>
+                <label className="mb-1 block text-sm font-medium text-text-primary">Your Full Name</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
-                  placeholder="Enter your name"
+                  className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-black focus:ring-1 focus:ring-gray-100 text-text-primary bg-surface"
+                  placeholder="John Doe"
                   required
                   autoFocus
                 />
               </div>
 
+              <div>
+                <label className="mb-1 block text-sm font-medium text-text-primary">Your Email Address</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-black focus:ring-1 focus:ring-gray-100 text-text-primary bg-surface"
+                  placeholder="name@example.com"
+                  required
+                />
+              </div>
+
               <button
                 type="submit"
-                disabled={loading || !name.trim()}
+                disabled={loading || !name.trim() || !email.trim()}
                 className="w-full rounded-full bg-accent px-4 py-3.5 text-base font-semibold text-text-primary transition-colors disabled:opacity-50"
               >
                 {loading ? "Setting up..." : "Start My Journey"}

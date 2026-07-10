@@ -25,7 +25,6 @@ export default function DonationsPage() {
   const [filter, setFilter] = useState("pending");
 
   useEffect(() => {
-    if (status === "unauthenticated") { router.push("/login"); return; }
   }, [status, router]);
 
   useEffect(() => {

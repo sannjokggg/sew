@@ -34,7 +34,6 @@ export default function NotificationsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (status === "unauthenticated") router.push("/login");
   }, [status, router]);
 
   useEffect(() => {

@@ -96,7 +96,7 @@ export default function IncomeChart() {
 
   return (
     <div
-      className="rounded-[24px] bg-surface p-4 shadow-sm h-full flex flex-col"
+      className="rounded-[24px] bg-surface p-4 shadow-sm flex flex-col"
       style={{
         boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
         fontFamily: "var(--font-inter), Inter, sans-serif",
@@ -127,8 +127,9 @@ export default function IncomeChart() {
         </div>
 
         <div className="flex-1 min-h-[200px]">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height={300}>
             <BarChart
+
               data={co2Data}
               margin={{ top: 4, right: 4, left: 0, bottom: 0 }}
               barCategoryGap="8%"
