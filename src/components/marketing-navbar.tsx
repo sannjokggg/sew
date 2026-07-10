@@ -69,7 +69,7 @@ export default function MarketingNavbar() {
 
       <div className="flex items-center gap-3">
         <button
-          onClick={() => router.push("/dashboard")}
+          onClick={() => window.dispatchEvent(new CustomEvent("open-auth-popup", { detail: { redirectTo: "/dashboard" } }))}
           className="rounded-full border border-border-default px-5 py-3 text-base font-medium text-text-secondary transition-colors hover:bg-border-light"
         >
           Sign In

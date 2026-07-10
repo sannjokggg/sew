@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Tag, ArrowLeftRight, Gift, UserPlus, Loader2, Search, X, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import ImageLightbox from "@/components/image-lightbox";
@@ -50,6 +51,7 @@ function timeAgo(dateStr: string) {
 }
 
 export default function Marketplace() {
+  const router = useRouter();
   const { data: session } = useSession();
   const [posts, setPosts] = useState<Post[]>([]);
   const [filter, setFilter] = useState("All");
@@ -149,8 +151,22 @@ export default function Marketplace() {
 
   return (
     <div className="flex flex-col gap-6 p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
-      <div>
-        <h1 className="text-3xl lg:text-5xl font-normal text-text-primary">Marketplace</h1>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-3xl lg:text-5xl font-normal text-text-primary">Marketplace</h1>
+        </div>
+        <button
+          onClick={() => {
+            if (session?.user) {
+              router.push("/dashboard/marketplace/create");
+            } else {
+              window.dispatchEvent(new CustomEvent("open-auth-popup", { detail: { redirectTo: "/dashboard/marketplace/create" } }));
+            }
+          }}
+          className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-3 text-base font-semibold text-text-primary transition-colors hover:bg-accent-hover"
+        >
+          Add Post
+        </button>
       </div>
 
       <div className="flex items-center justify-between">

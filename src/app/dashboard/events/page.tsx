@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
   CalendarDays, Loader2, GraduationCap, Cpu, Heart,
@@ -50,6 +51,7 @@ function timeAgo(dateStr: string) {
 }
 
 export default function EventsPage() {
+  const router = useRouter();
   const { data: session } = useSession();
   const [events, setEvents] = useState<Event[]>([]);
   const [filter, setFilter] = useState("All");
@@ -149,8 +151,22 @@ export default function EventsPage() {
 
   return (
     <div className="flex flex-col gap-6 p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
-      <div>
-        <h1 className="text-3xl lg:text-5xl font-normal text-text-primary">Events</h1>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-3xl lg:text-5xl font-normal text-text-primary">Events</h1>
+        </div>
+        <button
+          onClick={() => {
+            if (session?.user) {
+              router.push("/dashboard/events/create");
+            } else {
+              window.dispatchEvent(new CustomEvent("open-auth-popup", { detail: { redirectTo: "/dashboard/events/create" } }));
+            }
+          }}
+          className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-3 text-base font-semibold text-text-primary transition-colors hover:bg-accent-hover"
+        >
+          Add Post
+        </button>
       </div>
 
       <div className="flex items-center justify-between">
