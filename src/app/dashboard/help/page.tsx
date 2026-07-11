@@ -165,7 +165,7 @@ export default function HelpPage() {
 
       {/* How it works */}
       {!search && !activeCategory && (
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {steps.map((step, i) => (
             <div key={i} className="flex items-center gap-4 rounded-[24px] bg-surface p-6 shadow-sm">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/20">
@@ -194,7 +194,7 @@ export default function HelpPage() {
               </button>
             )}
           </div>
-          <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {filteredCategories.map((cat) => (
               <button
                 key={cat.title}
@@ -310,7 +310,7 @@ export default function HelpPage() {
           <h2 className="text-2xl font-normal text-text-primary mb-2">Still need help?</h2>
           <p className="text-lg text-text-muted">Our support team is here for you. Reach out anytime.</p>
         </div>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           <button
             onClick={() => setShowContactForm(true)}
             className="flex flex-col items-center gap-4 rounded-[20px] border border-border-default p-6 transition-all hover:border-gray-300 hover:shadow-sm cursor-pointer text-left"

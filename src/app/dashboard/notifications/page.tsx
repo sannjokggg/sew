@@ -70,7 +70,7 @@ export default function NotificationsPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex h-full items-center justify-center">
         <Loader2 size={32} className="animate-spin text-accent" />
       </div>
     );

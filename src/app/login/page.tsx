@@ -97,7 +97,6 @@ export default function LoginPage() {
 
     const result = await signIn("credentials", {
       phone: fullPhone,
-      otp,
       redirect: false,
     });
 
@@ -118,17 +117,24 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-surface-alt">
-      <div className="w-full max-w-md rounded-[24px] bg-surface p-8 shadow-sm">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10 overflow-y-auto thin-scrollbar">
+      <div className="w-full max-w-2xl rounded-[28px] bg-surface p-10 shadow-sm">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-semibold text-text-primary">Welcome Back</h1>
-          <p className="mt-2 text-base text-text-muted">Sign in to your SewaGo account</p>
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-brand-dark">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+          </div>
+          <h1 className="text-3xl font-bold text-brand-dark">Welcome Back</h1>
+          <p className="mt-2 text-base text-text-secondary">Sign in to your SewaGo account</p>
         </div>
 
         <button
           onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-3 rounded-full border border-border-default bg-surface px-4 py-3.5 text-base font-medium text-text-primary transition-colors hover:bg-surface-alt disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-3 rounded-full border border-border-default bg-surface px-4 py-3.5 text-base font-semibold text-text-primary transition-all hover:bg-surface-alt disabled:opacity-50"
         >
           <svg width="20" height="20" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -143,17 +149,17 @@ export default function LoginPage() {
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-border-default"></div>
           </div>
-          <span className="relative bg-surface-alt px-4 text-sm text-text-muted">or</span>
+          <span className="relative bg-surface px-4 text-sm text-text-muted">or</span>
         </div>
 
-        <div className="mb-6 flex rounded-full bg-surface-alt p-1">
+        <div className="mb-6 flex rounded-full bg-surface-alt p-1 border border-border-default">
           <button
             type="button"
             onClick={() => { setTab("email"); setError(""); setOtp(""); setOtpSent(false); }}
-            className={`flex-1 rounded-full py-2.5 text-base font-medium transition-colors ${
+            className={`flex-1 rounded-full py-2.5 text-sm font-semibold transition-all ${
               tab === "email"
-                ? "bg-surface text-text-primary shadow-sm"
-                : "text-text-muted hover:text-text-primary"
+                ? "bg-nav-active text-white shadow-sm"
+                : "text-text-secondary hover:text-text-primary"
             }`}
           >
             Email
@@ -161,10 +167,10 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => { setTab("phone"); setError(""); setOtp(""); setOtpSent(false); }}
-            className={`flex-1 rounded-full py-2.5 text-base font-medium transition-colors ${
+            className={`flex-1 rounded-full py-2.5 text-sm font-semibold transition-all ${
               tab === "phone"
-                ? "bg-surface text-text-primary shadow-sm"
-                : "text-text-muted hover:text-text-primary"
+                ? "bg-nav-active text-white shadow-sm"
+                : "text-text-secondary hover:text-text-primary"
             }`}
           >
             Phone
@@ -172,7 +178,7 @@ export default function LoginPage() {
         </div>
 
         {error && (
-          <div className="mb-4 rounded-full bg-red-50 px-4 py-2 text-sm text-red-500">
+          <div className="mb-4 rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-600 border border-red-100">
             {error}
           </div>
         )}
@@ -180,24 +186,24 @@ export default function LoginPage() {
         {tab === "email" && (
           <form onSubmit={handleEmailLogin} className="space-y-4">
             <div>
-              <label className="mb-1 block text-base font-medium text-text-primary">Email</label>
+              <label className="mb-1.5 block text-sm font-semibold text-brand-dark">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                className="w-full rounded-[12px] border border-border-default px-4 py-3 text-base outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500/20 bg-surface text-text-primary"
                 placeholder="you@example.com"
                 required
               />
             </div>
 
             <div>
-              <label className="mb-1 block text-base font-medium text-text-primary">Password</label>
+              <label className="mb-1.5 block text-sm font-semibold text-brand-dark">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-full border border-border-default px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                className="w-full rounded-[12px] border border-border-default px-4 py-3 text-base outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500/20 bg-surface text-text-primary"
                 placeholder="••••••••"
                 required
               />
@@ -206,7 +212,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-full bg-accent px-4 py-3 text-base font-semibold text-text-primary transition-colors  disabled:opacity-50"
+              className="w-full rounded-full bg-accent px-4 py-3.5 text-base font-semibold text-brand-dark transition-all hover:bg-accent-hover hover:shadow-md disabled:opacity-50"
             >
               {loading ? "Signing in..." : "Sign In"}
             </button>
@@ -214,70 +220,37 @@ export default function LoginPage() {
         )}
 
         {tab === "phone" && (
-          <form onSubmit={otpSent ? handleOtpLogin : (e) => { e.preventDefault(); handleSendOtp(); }} className="space-y-4">
+          <form onSubmit={handleOtpLogin} className="space-y-4">
             <div>
-              <label className="mb-1 block text-base font-medium text-text-primary">Phone Number</label>
+              <label className="mb-1.5 block text-sm font-semibold text-brand-dark">Phone Number</label>
               <div className="flex">
-                <div className="flex items-center rounded-l-full border border-r-0 border-border-default bg-surface-alt px-4 py-3 text-base font-medium text-text-primary">
+                <div className="flex items-center rounded-l-[12px] border border-r-0 border-border-default bg-surface-alt px-4 py-3 text-base font-medium text-text-primary">
                   <span className="mr-1">🇳🇵</span> +977
                 </div>
                 <input
                   type="tel"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                  className="w-full rounded-r-full border border-border-default px-4 py-3 text-base outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-100"
+                  className="w-full rounded-r-[12px] border border-border-default px-4 py-3 text-base outline-none transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500/20 bg-surface text-text-primary"
                   placeholder="98XXXXXXXX"
                   required
-                  disabled={otpSent}
                 />
               </div>
             </div>
 
-            {otpSent && (
-              <div className="space-y-3">
-                <div>
-                  <label className="mb-1 block text-base font-medium text-text-primary">Enter OTP</label>
-                  <OtpInput
-                    length={6}
-                    value={otp}
-                    onChange={setOtp}
-                    disabled={loading}
-                  />
-                </div>
-
-                <div className="text-center">
-                  {countdown > 0 ? (
-                    <p className="text-xs text-text-muted">
-                      Resend OTP in {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, "0")}
-                    </p>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={handleResendOtp}
-                      className="text-xs font-medium text-text-primary hover:underline"
-                    >
-                      Resend OTP
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-
             <button
               type="submit"
-              disabled={loading || (otpSent && otp.length !== 6)}
-              className="w-full rounded-full bg-accent px-4 py-3 text-base font-semibold text-text-primary transition-colors  disabled:opacity-50"
+              disabled={loading || phoneNumber.length < 10}
+              className="w-full rounded-full bg-accent px-4 py-3.5 text-base font-semibold text-brand-dark transition-all hover:bg-accent-hover hover:shadow-md disabled:opacity-50"
             >
-              {loading
-                ? otpSent ? "Verifying..." : "Sending..."
-                : otpSent ? "Verify & Sign In" : "Send OTP"}
+              {loading ? "Signing in..." : "Sign In with Phone"}
             </button>
           </form>
         )}
 
-        <p className="mt-6 text-center text-base text-text-muted">
+        <p className="mt-6 text-center text-base text-text-secondary">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-medium text-text-primary hover:underline">
+          <Link href="/register" className="font-semibold text-brand-dark hover:text-accent transition-colors">
             Sign Up
           </Link>
         </p>

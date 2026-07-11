@@ -54,7 +54,7 @@ export default function DonationsPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex h-full items-center justify-center">
         <Loader2 size={32} className="animate-spin text-accent" />
       </div>
     );
@@ -114,7 +114,7 @@ export default function DonationsPage() {
                 </span>
               </div>
 
-              <div className="mt-4 grid grid-cols-3 gap-4">
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="rounded-[14px] bg-surface-alt p-3">
                   <p className="text-xs text-text-muted">Amount</p>
                   <p className="text-lg font-bold text-text-primary">Rs {donation.amount}</p>

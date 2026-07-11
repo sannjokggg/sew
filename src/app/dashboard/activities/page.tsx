@@ -20,6 +20,7 @@ const statusStyles: Record<string, string> = {
   Accepted: "bg-blue-100 text-blue-700",
   Rejected: "bg-red-100 text-red-600",
   Registered: "bg-purple-100 text-purple-700",
+  Donated: "bg-pink-100 text-pink-700",
 };
 
 export default function ActivitiesPage() {
@@ -44,6 +45,7 @@ export default function ActivitiesPage() {
     if (row.type === "post") return `Added "${row.name}" in Marketplace`;
     if (row.type === "offer") return `Made an offer on "${row.name}"`;
     if (row.type === "event") return `Registered for "${row.name}"`;
+    if (row.type === "donation") return row.name;
     return row.name;
   };
 

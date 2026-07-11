@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { LogOut, HelpCircle } from "lucide-react";
 import Logo from "@/components/logo";
@@ -9,32 +9,45 @@ import ThemeToggle from "@/components/theme-toggle";
 import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
 import MarketingNavbar from "@/components/marketing-navbar";
-import CustomScrollbar from "@/components/custom-scrollbar";
+import BottomNav from "@/components/bottom-nav";
 import AuthPopup from "@/components/AuthPopup";
+import VerificationCelebration from "@/components/verification-celebration";
 
 const MARKETING_PATHS = ["/", "/about", "/contact"];
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isMarketing = MARKETING_PATHS.includes(pathname);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { status } = useSession();
+  const { status, data: session } = useSession();
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [authRedirectTo, setAuthRedirectTo] = useState<string | undefined>(undefined);
+  const [authInitialStep, setAuthInitialStep] = useState<string | undefined>(undefined);
   const [hasTriggered, setHasTriggered] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    if (status === "unauthenticated" && !hasTriggered && !sessionStorage.getItem("auth_popup_dismissed")) {
+    const check = () => setIsDesktop(window.innerWidth >= 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  useEffect(() => {
+    if (status === "loading") return;
+    if (status === "authenticated" && !session?.user) return;
+    if (status === "unauthenticated" && !session && !hasTriggered && !sessionStorage.getItem("auth_popup_dismissed")) {
       window.dispatchEvent(new CustomEvent("open-auth-popup"));
       setHasTriggered(true);
     }
-  }, [status, hasTriggered]);
+  }, [status, hasTriggered, session]);
 
   useEffect(() => {
     const handleOpenAuth = (e: Event) => {
       const detail = (e as CustomEvent).detail;
       setAuthRedirectTo(detail?.redirectTo);
+      setAuthInitialStep(detail?.initialStep);
       setShowAuthPopup(true);
     };
     window.addEventListener("open-auth-popup", handleOpenAuth);
@@ -46,66 +59,109 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     setShowAuthPopup(false);
   };
 
+  useEffect(() => {
+    if (status !== "authenticated" || !session?.user) return;
+
+    const user = session.user as { isVerified?: boolean; verificationStatus?: string; needsProfileCompletion?: boolean };
+    const isVerified = user?.isVerified || user?.verificationStatus === "verified";
+    const celebrationShown = localStorage.getItem("verification_celebration_shown");
+
+    if (isVerified && !celebrationShown) {
+      const timer = setTimeout(() => {
+        setShowCelebration(true);
+        localStorage.setItem("verification_celebration_shown", "true");
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+
+    if (user?.needsProfileCompletion && !sessionStorage.getItem("profile_completion_prompted")) {
+      sessionStorage.setItem("profile_completion_prompted", "true");
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("open-auth-popup", { detail: { initialStep: "details" } }));
+      }, 1000);
+    }
+  }, [status, session]);
+
   if (isMarketing) {
     return (
       <>
-        <AuthPopup isOpen={showAuthPopup} onClose={closeAuthPopup} redirectTo={authRedirectTo} />
-        <CustomScrollbar scrollContainerRef={scrollRef} />
-        <div ref={scrollRef} className="h-screen w-full overflow-y-auto overflow-x-hidden hide-scrollbar">
-          <div className="flex flex-col min-h-screen w-full">
-            <div className="sticky top-0 z-50 bg-surface/80 backdrop-blur-md py-3 px-4">
-              <MarketingNavbar />
-            </div>
-            <div className="flex-1 px-4">
-              {children}
-            </div>
-          </div>
+        <AuthPopup isOpen={showAuthPopup} onClose={closeAuthPopup} redirectTo={authRedirectTo} initialStep={authInitialStep as "welcome" | "phone" | "otp" | "details" | "email" | undefined} />
+        <VerificationCelebration isOpen={showCelebration} onClose={() => setShowCelebration(false)} />
+        <div className="sticky top-0 z-50 bg-surface/80 backdrop-blur-md py-2 px-2 sm:px-4">
+          <MarketingNavbar />
+        </div>
+        <div className="px-2 sm:px-4 pb-6 lg:pb-4">
+          {children}
         </div>
       </>
     );
   }
 
+  const hideTopBar = !isDesktop && (
+    pathname.startsWith("/dashboard/marketplace") ||
+    pathname.startsWith("/dashboard/events") ||
+    pathname.startsWith("/dashboard/messages")
+  );
+
   return (
     <>
       <AuthPopup isOpen={showAuthPopup} onClose={closeAuthPopup} redirectTo={authRedirectTo} />
-      <div className="fixed top-4 left-4 right-4 z-50 flex items-center gap-0">
-        <Logo />
-        <Navbar />
-      </div>
-      <div className="hidden lg:flex fixed left-4 top-24 bottom-4 z-40 flex-col items-center gap-[34px]">
-        <div className="mt-[5px]">
-          <ThemeToggle />
-        </div>
-        <div className="mt-4">
-          <Sidebar />
-        </div>
-        <div className="mt-auto flex w-[70px] flex-col items-center justify-center gap-1 rounded-[36px] bg-surface py-2">
-          <a
-            href="/dashboard/help"
-            className="flex h-12 w-12 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-border-light hover:text-text-primary"
-            title="Help"
-          >
-            <HelpCircle size={22} />
-          </a>
-          <button
-            onClick={() => signOut({ callbackUrl: "/login" })}
-            title="Logout"
-            className="flex h-12 w-12 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-border-light hover:text-text-primary"
-          >
-            <LogOut size={22} />
-          </button>
-        </div>
-      </div>
-      <div className="h-screen w-full overflow-hidden">
-        <div className="flex flex-col h-full pt-[88px] pl-0 lg:pl-[100px] pr-4 pb-4 gap-5">
-          <div ref={scrollRef} className="flex-1 overflow-y-auto hide-scrollbar">
-            <div className="flex flex-col gap-4">
-              {children}
+      <VerificationCelebration isOpen={showCelebration} onClose={() => setShowCelebration(false)} />
+
+      {isDesktop && (
+        <>
+          <div className="flex fixed top-3 left-4 right-4 z-50 items-center gap-0">
+            <Logo />
+            <Navbar />
+          </div>
+          <div className="flex fixed left-4 top-24 bottom-4 z-40 flex-col items-center gap-[34px]">
+            <div className="mt-[5px]">
+              <ThemeToggle />
+            </div>
+            <div className="mt-4">
+              <Sidebar />
+            </div>
+            <div className="mt-auto flex w-[70px] flex-col items-center justify-center gap-1 rounded-[36px] bg-surface py-2">
+              <a
+                href="/dashboard/help"
+                className="flex h-12 w-12 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-border-light hover:text-text-primary"
+                title="Help"
+              >
+                <HelpCircle size={22} />
+              </a>
+              <button
+                onClick={() => signOut({ callbackUrl: "/login" })}
+                title="Logout"
+                className="flex h-12 w-12 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-border-light hover:text-text-primary"
+              >
+                <LogOut size={22} />
+              </button>
             </div>
           </div>
+        </>
+      )}
+
+      {!isDesktop && !hideTopBar && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-md border-b border-border-light">
+          <div className="flex items-center justify-between px-3 h-11">
+            <Logo />
+            <Navbar />
+          </div>
         </div>
+      )}
+
+      <div
+        className="w-full h-screen flex flex-col overflow-y-auto thin-scrollbar"
+        style={{
+          paddingTop: isDesktop ? 76 : (hideTopBar ? 0 : 44),
+          paddingLeft: isDesktop ? 100 : 0,
+          paddingBottom: !isDesktop ? 64 : 0,
+        }}
+      >
+        {children}
       </div>
-      <CustomScrollbar scrollContainerRef={scrollRef} />
+
+      {!isDesktop && <BottomNav />}
     </>
   );
 }
