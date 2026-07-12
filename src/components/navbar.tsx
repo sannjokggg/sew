@@ -227,7 +227,7 @@ export default function Navbar() {
             </button>
           ) : (
             <button
-              onClick={() => router.push("/register")}
+              onClick={() => window.dispatchEvent(new CustomEvent("open-auth-popup", { detail: { redirectTo: "/dashboard" } }))}
               className="flex h-8 items-center gap-1 bg-accent px-2.5 rounded-full active:scale-90 transition-transform"
             >
               <User size={15} strokeWidth={2} className="text-text-primary" />

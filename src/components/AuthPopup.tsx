@@ -561,7 +561,7 @@ export default function AuthPopup({ isOpen, onClose, redirectTo, initialStep }: 
                 onClick={() => { setEmailMode("signin"); setError(""); }}
                 className={`flex-1 py-2.5 text-sm font-semibold rounded-full transition-all ${
                   emailMode === "signin"
-                    ? "bg-nav-active text-white shadow-sm"
+                    ? "bg-accent text-brand-dark shadow-sm"
                     : "text-text-secondary hover:text-text-primary"
                 }`}
               >
@@ -572,7 +572,7 @@ export default function AuthPopup({ isOpen, onClose, redirectTo, initialStep }: 
                 onClick={() => { setEmailMode("signup"); setError(""); }}
                 className={`flex-1 py-2.5 text-sm font-semibold rounded-full transition-all ${
                   emailMode === "signup"
-                    ? "bg-nav-active text-white shadow-sm"
+                    ? "bg-accent text-brand-dark shadow-sm"
                     : "text-text-secondary hover:text-text-primary"
                 }`}
               >

@@ -377,7 +377,7 @@ export default function MessagesContent() {
   };
 
   return (
-    <div className="flex flex-1 min-h-0 gap-0 overflow-hidden rounded-[18px] lg:rounded-[24px] bg-surface shadow-sm" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
+    <div className="flex flex-1 min-h-0 gap-0 overflow-hidden md:rounded-[24px] bg-surface md:shadow-sm" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       {/* Conversations List */}
       <div className={`w-full md:w-[340px] lg:w-[360px] flex flex-col min-h-0 border-r border-border-light ${showMobileList ? "flex" : "hidden md:flex"}`}>
         <div className="flex items-center justify-between px-4 py-3.5 md:px-5 md:py-4 lg:px-6 lg:py-5">

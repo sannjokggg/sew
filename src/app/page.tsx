@@ -221,7 +221,7 @@ export default function Home() {
             </div>
             <div className="mt-auto">
               <img
-                src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=200&fit=crop"
+                src="/uploads/exchange.jpg"
                 alt="Marketplace"
                 className="w-full h-[180px] sm:h-[250px] object-cover rounded-[12px] sm:rounded-[16px] mt-4 sm:mt-6"
               />
@@ -278,8 +278,8 @@ export default function Home() {
             </div>
             <div className="mt-auto">
               <img
-                src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=200&fit=crop"
-                alt="Education"
+                src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&h=200&fit=crop"
+                alt="Education - Nepal Village Students"
                 className="w-full h-[180px] sm:h-[250px] object-cover rounded-[12px] sm:rounded-[16px] mt-4 sm:mt-6"
               />
             </div>
@@ -316,8 +316,8 @@ export default function Home() {
             </div>
             <div className="mt-auto">
               <img
-                src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&h=200&fit=crop"
-                alt="Food"
+                src="https://images.unsplash.com/photo-1565770772312-2b43cac7d585?w=400&h=200&fit=crop"
+                alt="Food - Nepal Food Poverty"
                 className="w-full h-[180px] sm:h-[250px] object-cover rounded-[12px] sm:rounded-[16px] mt-4 sm:mt-6"
               />
             </div>

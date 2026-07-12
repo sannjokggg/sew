@@ -80,7 +80,7 @@ export default function ProfilePage() {
       <>
         <AuthPopup
           isOpen={showAuth}
-          onClose={() => { setShowAuth(false); router.push("/"); }}
+          onClose={() => setShowAuth(false)}
           redirectTo="/dashboard/profile"
         />
         <div className="flex items-center justify-center min-h-[80vh]">

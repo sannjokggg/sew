@@ -170,7 +170,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       )}
 
       <div
-        className={`w-full h-[117.65vh] flex flex-col ${isMessages ? "overflow-hidden" : "overflow-y-auto thin-scrollbar"}`}
+        className={`w-full flex flex-col ${isMessages && !isDesktop ? "h-dvh overflow-hidden" : "h-[117.65vh] " + (isMessages ? "overflow-hidden" : "overflow-y-auto thin-scrollbar")}`}
         style={{
           ...(isDesktop ? { zoom: 0.85 } as React.CSSProperties : {}),
           paddingTop: isDesktop ? 90 : (hideTopBar ? 0 : 44),
@@ -178,7 +178,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           paddingBottom: !isDesktop ? 64 : 0,
         }}
       >
-        <div className={`${!isDesktop ? "px-3" : ""} ${isMessages ? "flex flex-col flex-1 min-h-0" : ""}`}>
+        <div className={`${!isDesktop && !isMessages ? "px-3" : ""} ${isMessages ? "flex flex-col flex-1 min-h-0" : ""}`}>
           {children}
         </div>
       </div>
