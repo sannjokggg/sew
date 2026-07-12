@@ -65,7 +65,7 @@ export default function CreatePostPage() {
   };
 
   return (
-    <div className="flex flex-col gap-3 sm:gap-6 p-1 sm:p-2 pb-24 sm:pb-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
+    <div className="flex flex-col gap-3 sm:gap-6 py-1 sm:py-2 pb-24 sm:pb-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       {/* Header */}
       <div className="flex items-center gap-2.5 sm:gap-4">
         <Link

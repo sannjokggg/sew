@@ -61,7 +61,7 @@ export default function DonationsPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6">
+    <div className="max-w-5xl mx-auto py-6">
       <div className="flex items-center gap-3 mb-6">
         <Shield size={24} className="text-text-primary" />
         <h1 className="text-2xl font-bold text-text-primary">Donations</h1>

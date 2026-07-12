@@ -119,14 +119,10 @@ export default function Home() {
 
           <div className="mt-5 sm:mt-7 flex flex-wrap items-center gap-2 sm:gap-3">
             <a
-              href="/dashboard/donations"
-              onClick={(e) => {
-                e.preventDefault();
-                setShowDonateModal(true);
-              }}
+              href="/dashboard"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-5 sm:px-7 py-2.5 sm:py-3.5 text-sm sm:text-lg font-semibold text-text-primary transition-colors hover:bg-accent-hover"
             >
-              Donate Now
+              Get Started
               <ArrowUpRight size={18} />
             </a>
             <a

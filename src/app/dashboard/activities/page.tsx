@@ -68,7 +68,7 @@ export default function ActivitiesPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
+    <div className="flex flex-col gap-6 py-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       <div className="flex items-center gap-4">
         <Link href="/dashboard" className="flex h-10 w-10 items-center justify-center rounded-full bg-border-light hover:bg-gray-200 transition-colors">
           <ArrowLeft size={18} strokeWidth={1.5} className="text-text-secondary" />

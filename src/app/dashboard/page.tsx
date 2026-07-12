@@ -47,7 +47,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 lg:gap-6 p-1 lg:p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
+    <div className="flex flex-col gap-4 lg:gap-6 py-1 lg:py-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       <div>
         <h1 className="text-xl lg:text-3xl font-normal text-text-primary">
           Good morning, {name}

@@ -163,7 +163,7 @@ export default function EventDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-6 p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
+      <div className="flex flex-col gap-6 py-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
         <div className="flex items-center justify-center py-32">
           <Loader2 size={32} className="animate-spin text-text-muted" />
         </div>

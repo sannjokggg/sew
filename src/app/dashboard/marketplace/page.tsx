@@ -151,7 +151,7 @@ export default function Marketplace() {
   };
 
   return (
-    <div className="flex flex-col gap-3 sm:gap-6 p-1 sm:p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
+    <div className="flex flex-col gap-3 sm:gap-6 py-1 sm:py-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       {/* Title */}
       <div>
         <h1 className="text-lg sm:text-3xl lg:text-5xl font-normal text-text-primary">Marketplace</h1>

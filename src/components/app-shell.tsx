@@ -114,6 +114,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     );
   }
 
+  const isMessages = pathname.startsWith("/dashboard/messages");
+
   const hideTopBar = !isDesktop && (
     pathname.startsWith("/dashboard/marketplace") ||
     pathname.startsWith("/dashboard/events") ||
@@ -168,7 +170,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       )}
 
       <div
-        className="w-full h-[117.65vh] flex flex-col overflow-y-auto thin-scrollbar"
+        className={`w-full h-[117.65vh] flex flex-col ${isMessages ? "overflow-hidden" : "overflow-y-auto thin-scrollbar"}`}
         style={{
           ...(isDesktop ? { zoom: 0.85 } as React.CSSProperties : {}),
           paddingTop: isDesktop ? 90 : (hideTopBar ? 0 : 44),
@@ -176,7 +178,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           paddingBottom: !isDesktop ? 64 : 0,
         }}
       >
-        {children}
+        <div className={`${!isDesktop ? "px-3" : ""} ${isMessages ? "flex flex-col flex-1 min-h-0" : ""}`}>
+          {children}
+        </div>
       </div>
 
       {!isDesktop && <BottomNav />}

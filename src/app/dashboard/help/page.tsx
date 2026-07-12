@@ -117,7 +117,7 @@ export default function HelpPage() {
   };
 
   return (
-    <div className="flex flex-col gap-8 p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
+    <div className="flex flex-col gap-8 py-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       {/* Hero */}
       <div className="rounded-[24px] bg-gradient-to-br from-[#1D1B17] to-[#2a2824] p-10 text-white">
         <div className="mx-auto max-w-2xl text-center">
