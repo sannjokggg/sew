@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { LogOut, HelpCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 import Logo from "@/components/logo";
 import ThemeToggle from "@/components/theme-toggle";
 import Sidebar from "@/components/sidebar";
@@ -14,10 +15,13 @@ import AuthPopup from "@/components/AuthPopup";
 import VerificationCelebration from "@/components/verification-celebration";
 
 const MARKETING_PATHS = ["/", "/about", "/contact"];
+const STANDALONE_PATHS = ["/login", "/register"];
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const isMarketing = MARKETING_PATHS.includes(pathname);
+  const isStandalone = STANDALONE_PATHS.includes(pathname);
 
   const { status, data: session } = useSession();
   const [showAuthPopup, setShowAuthPopup] = useState(false);
@@ -97,6 +101,23 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     );
   }
 
+  if (isStandalone) {
+    return (
+      <div className="fixed inset-0 z-[200] flex items-start justify-center bg-black/50 overflow-y-auto pt-8 pb-8">
+        <button
+          onClick={() => router.back()}
+          className="fixed top-4 right-4 z-[210] flex h-10 w-10 items-center justify-center rounded-full bg-surface border border-border-default text-text-primary shadow-lg"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+        {children}
+      </div>
+    );
+  }
+
   const hideTopBar = !isDesktop && (
     pathname.startsWith("/dashboard/marketplace") ||
     pathname.startsWith("/dashboard/events") ||
@@ -110,7 +131,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {isDesktop && (
         <>
-          <div className="flex fixed top-3 left-4 right-4 z-50 items-center gap-0" style={isDesktop ? { zoom: 0.90 } as React.CSSProperties : undefined}>
+          <div className="flex fixed top-0 left-4 right-4 z-50 items-center gap-3 rounded-b-[36px] py-1 px-1" style={{ ...(isDesktop ? { zoom: 0.90 } as React.CSSProperties : {}), backgroundColor: "#F3F4F6" }}>
             <Logo />
             <Navbar />
           </div>
@@ -151,7 +172,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       )}
 
       <div
-        className="w-full h-screen flex flex-col overflow-y-auto thin-scrollbar"
+        className="w-full h-[117.65vh] flex flex-col overflow-y-auto thin-scrollbar"
         style={{
           ...(isDesktop ? { zoom: 0.85 } as React.CSSProperties : {}),
           paddingTop: isDesktop ? 90 : (hideTopBar ? 0 : 44),

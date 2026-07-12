@@ -79,7 +79,7 @@ export default function RecentActivities() {
   }, [activities, searchQuery, typeFilter, statusFilter]);
 
   return (
-    <div className="flex h-full flex-col rounded-[24px] bg-surface p-6 shadow-sm">
+    <div className="flex h-full flex-col rounded-[24px] bg-surface p-6 shadow-sm max-h-[452px]">
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-medium text-text-muted">Recent Activities</h3>
         <div className="flex items-center gap-3">

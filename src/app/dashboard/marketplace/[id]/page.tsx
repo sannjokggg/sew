@@ -109,6 +109,7 @@ export default function PostDetail() {
   const [offersPage, setOffersPage] = useState(1);
   const OFFERS_PER_PAGE = 2;
   const [offerContent, setOfferContent] = useState("");
+  const [offerImages, setOfferImages] = useState<string[]>([]);
   const [submittingOffer, setSubmittingOffer] = useState(false);
 
   const sortedOffers = [...offers].sort((a, b) => {
@@ -150,7 +151,7 @@ export default function PostDetail() {
 
   const handleOffer = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!offerContent.trim()) return;
+    if (!offerContent.trim() && offerImages.length === 0) return;
     setSubmittingOffer(true);
     try {
       const res = await fetch("/api/offers", {
@@ -160,11 +161,11 @@ export default function PostDetail() {
           post_id: Number(postId),
           offer_item: offerContent,
           message: "",
-          offer_images: [],
+          offer_images: offerImages,
         }),
       });
       if (res.ok) {
-        setOfferContent(""); setOffersPage(1); fetchPost();
+        setOfferContent(""); setOfferImages([]); setOffersPage(1); fetchPost();
       }
     } finally { setSubmittingOffer(false); }
   };
@@ -417,20 +418,23 @@ export default function PostDetail() {
                 <span className="ml-2 text-sm font-normal text-text-muted">({offers.length})</span>
               </h2>
               {myId !== post.user_id && (
-                <form onSubmit={handleOffer} className="mt-4 flex gap-2 flex-shrink-0">
-                  <input
-                    value={offerContent}
-                    onChange={(e) => setOfferContent(e.target.value)}
-                    placeholder="What are you offering?"
-                    className="flex-1 rounded-full border border-border-default bg-surface-alt px-4 py-2.5 text-sm text-text-primary outline-none placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-surface focus:ring-1 focus:ring-gray-100"
-                  />
-                  <button
-                    type="submit"
-                    disabled={!offerContent.trim() || submittingOffer}
-                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-accent text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {submittingOffer ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} strokeWidth={2} />}
-                  </button>
+                <form onSubmit={handleOffer} className="mt-4 flex flex-col gap-3 flex-shrink-0">
+                  <div className="flex gap-2">
+                    <input
+                      value={offerContent}
+                      onChange={(e) => setOfferContent(e.target.value)}
+                      placeholder="What are you offering?"
+                      className="flex-1 rounded-full border border-border-default bg-surface-alt px-4 py-2.5 text-sm text-text-primary outline-none placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-surface focus:ring-1 focus:ring-gray-100"
+                    />
+                    <button
+                      type="submit"
+                      disabled={(!offerContent.trim() && offerImages.length === 0) || submittingOffer}
+                      className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-accent text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {submittingOffer ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} strokeWidth={2} />}
+                    </button>
+                  </div>
+                  <MultiImageUploader onUpload={setOfferImages} currentImages={offerImages} maxImages={4} />
                 </form>
               )}
               <div className="mt-4 flex flex-col gap-3 overflow-y-auto min-h-0 chat-scrollbar flex-1">
@@ -455,6 +459,19 @@ export default function PostDetail() {
                       </span>
                     </div>
                     <p className="mt-2 text-sm leading-relaxed text-text-secondary">{offer.offer_item}</p>
+                    {offer.offer_images && offer.offer_images.length > 0 && (
+                      <div className="mt-2 flex gap-2 flex-wrap">
+                        {offer.offer_images.map((img, i) => (
+                          <button
+                            key={i}
+                            onClick={() => setLightbox({ src: img, alt: `Offer image ${i + 1}` })}
+                            className="h-[72px] w-[72px] flex-shrink-0 overflow-hidden rounded-[10px] border border-border-light"
+                          >
+                            <img src={img} alt="" className="h-full w-full object-cover" />
+                          </button>
+                        ))}
+                      </div>
+                    )}
                     {myId === post.user_id && (
                       <div className="mt-2.5 flex gap-2 flex-wrap">
                         {offer.status === "pending" && (
@@ -614,20 +631,23 @@ export default function PostDetail() {
             </h2>
 
             {myId !== post.user_id && (
-              <form onSubmit={handleOffer} className="mt-3 flex gap-2">
-                <input
-                  value={offerContent}
-                  onChange={(e) => setOfferContent(e.target.value)}
-                  placeholder="What are you offering?"
-                  className="flex-1 rounded-full border border-border-default bg-surface-alt px-3 py-2 text-sm text-text-primary outline-none placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-surface focus:ring-1 focus:ring-gray-100"
-                />
-                <button
-                  type="submit"
-                  disabled={!offerContent.trim() || submittingOffer}
-                  className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-accent text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {submittingOffer ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} strokeWidth={2} />}
-                </button>
+              <form onSubmit={handleOffer} className="mt-3 flex flex-col gap-3">
+                <div className="flex gap-2">
+                  <input
+                    value={offerContent}
+                    onChange={(e) => setOfferContent(e.target.value)}
+                    placeholder="What are you offering?"
+                    className="flex-1 rounded-full border border-border-default bg-surface-alt px-3 py-2 text-sm text-text-primary outline-none placeholder:text-[#B0B0B0] focus:border-gray-300 focus:bg-surface focus:ring-1 focus:ring-gray-100"
+                  />
+                  <button
+                    type="submit"
+                    disabled={(!offerContent.trim() && offerImages.length === 0) || submittingOffer}
+                    className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-accent text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {submittingOffer ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} strokeWidth={2} />}
+                  </button>
+                </div>
+                <MultiImageUploader onUpload={setOfferImages} currentImages={offerImages} maxImages={4} />
               </form>
             )}
 
@@ -653,6 +673,19 @@ export default function PostDetail() {
                     </span>
                   </div>
                   <p className="mt-1.5 text-sm leading-relaxed text-text-secondary">{offer.offer_item}</p>
+                  {offer.offer_images && offer.offer_images.length > 0 && (
+                    <div className="mt-2 flex gap-2 flex-wrap">
+                      {offer.offer_images.map((img, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setLightbox({ src: img, alt: `Offer image ${i + 1}` })}
+                          className="h-[60px] w-[60px] flex-shrink-0 overflow-hidden rounded-[8px] border border-border-light"
+                        >
+                          <img src={img} alt="" className="h-full w-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
                   {myId === post.user_id && (
                     <div className="mt-2 flex gap-2 flex-wrap">
                       {offer.status === "pending" && (

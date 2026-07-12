@@ -269,8 +269,7 @@ export default function Navbar() {
             </div>
           ) : (
             <button
-              onClick={() => router.push("/register")}
-              className="flex items-center gap-1 bg-accent px-6 h-8 rounded-full active:scale-90 transition-transform"
+              onClick={() => window.dispatchEvent(new CustomEvent("open-auth-popup", { detail: { redirectTo: "/dashboard" } }))}
             >
               <span className="text-[11px] font-semibold text-text-primary">Sign Up</span>
             </button>
