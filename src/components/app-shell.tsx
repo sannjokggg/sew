@@ -87,10 +87,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <>
         <AuthPopup isOpen={showAuthPopup} onClose={closeAuthPopup} redirectTo={authRedirectTo} initialStep={authInitialStep as "welcome" | "phone" | "otp" | "details" | "email" | undefined} />
         <VerificationCelebration isOpen={showCelebration} onClose={() => setShowCelebration(false)} />
-        <div className="sticky top-0 z-50 bg-surface/80 backdrop-blur-md py-2 px-2 sm:px-4">
+        <div className="sticky top-0 z-50 bg-surface/80 backdrop-blur-md py-2 px-2 sm:px-4" style={isDesktop ? { zoom: 0.85 } as React.CSSProperties : undefined}>
           <MarketingNavbar />
         </div>
-        <div className="px-2 sm:px-4 pb-6 lg:pb-4">
+        <div className="px-2 sm:px-4 pb-6 lg:pb-4" style={isDesktop ? { zoom: 0.85 } as React.CSSProperties : undefined}>
           {children}
         </div>
       </>
@@ -110,11 +110,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {isDesktop && (
         <>
-          <div className="flex fixed top-3 left-4 right-4 z-50 items-center gap-0">
+          <div className="flex fixed top-3 left-4 right-4 z-50 items-center gap-0" style={isDesktop ? { zoom: 0.90 } as React.CSSProperties : undefined}>
             <Logo />
             <Navbar />
           </div>
-          <div className="flex fixed left-4 top-24 bottom-4 z-40 flex-col items-center gap-[34px]">
+          <div className="flex fixed left-4 top-24 bottom-4 z-40 flex-col items-center gap-[34px]" style={isDesktop ? { zoom: 0.90 } as React.CSSProperties : undefined}>
             <div className="mt-[5px]">
               <ThemeToggle />
             </div>
@@ -153,7 +153,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <div
         className="w-full h-screen flex flex-col overflow-y-auto thin-scrollbar"
         style={{
-          paddingTop: isDesktop ? 76 : (hideTopBar ? 0 : 44),
+          ...(isDesktop ? { zoom: 0.85 } as React.CSSProperties : {}),
+          paddingTop: isDesktop ? 90 : (hideTopBar ? 0 : 44),
           paddingLeft: isDesktop ? 100 : 0,
           paddingBottom: !isDesktop ? 64 : 0,
         }}
