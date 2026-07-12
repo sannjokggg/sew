@@ -279,7 +279,7 @@ export default function Navbar() {
 
       {/* ===== DESKTOP: full original navbar ===== */}
       {isDesktop && (
-        <div className="flex absolute right-[-6px] items-center gap-4">
+        <div className="flex absolute right-[-1px] items-center gap-4">
           <div className="flex items-center gap-3 bg-surface px-4 h-14 rounded-[36px]">
             <button
               onClick={() => router.push("/dashboard/messages")}
