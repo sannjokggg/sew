@@ -48,8 +48,8 @@ export default function Navbar() {
   const [loadingNotifs, setLoadingNotifs] = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
-  const [isDesktop, setIsDesktop] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 1024);
@@ -62,9 +62,6 @@ export default function Navbar() {
     const handleClickOutside = (e: MouseEvent) => {
       if (bellRef.current && !bellRef.current.contains(e.target as Node)) {
         setBellOpen(false);
-      }
-      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
-        setProfileOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -149,7 +146,7 @@ export default function Navbar() {
 
       {/* ===== MOBILE: tiny bell + profile only ===== */}
       {!isDesktop && (
-        <div className="flex items-center gap-1 ml-auto">
+        <div className="flex items-center gap-1.5 ml-auto">
           <div className="relative" ref={bellRef}>
             <button
               onClick={() => setBellOpen(!bellOpen)}
@@ -213,64 +210,27 @@ export default function Navbar() {
             )}
           </div>
           {session?.user ? (
-            <div className="relative" ref={profileRef}>
-              <button
-                onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2 bg-surface border border-border-default pl-1 pr-2 h-9 rounded-full transition-colors hover:bg-border-light"
-              >
-                <div className="relative shrink-0">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-text-primary">
-                    {(session.user as { image?: string }).image ? (
-                      <img src={(session.user as { image: string }).image} alt="" className="h-full w-full object-cover rounded-full" />
-                    ) : (
-                      (session.user as { name?: string }).name?.[0]?.toUpperCase() || "?"
-                    )}
-                  </div>
-                  <div className="absolute -bottom-[2px] -right-[2px] flex h-[14px] w-[14px] items-center justify-center rounded-full bg-accent ring-[1.5px] ring-surface z-10">
-                    <Check size={8} strokeWidth={3} className="text-text-primary" />
-                  </div>
+            <button
+              onClick={() => router.push("/dashboard/profile")}
+              className="flex h-8 items-center gap-1 bg-surface pl-1 pr-2 rounded-full active:scale-90 transition-transform"
+            >
+              <div className="relative shrink-0">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-accent text-[9px] font-bold text-text-primary">
+                  {(session.user as { image?: string }).image ? (
+                    <img src={(session.user as { image: string }).image} alt="" className="h-full w-full object-cover rounded-full" />
+                  ) : (
+                    (session.user as { name?: string }).name?.[0]?.toUpperCase() || "?"
+                  )}
                 </div>
-                <ChevronDown size={12} className={`text-text-muted transition-transform ${profileOpen ? "rotate-180" : ""}`} />
-              </button>
-              {profileOpen && (
-                <div className="absolute right-0 top-full mt-2 z-50 w-[220px] rounded-2xl bg-surface border border-border-default shadow-lg overflow-hidden">
-                  <div className="px-3 py-3 border-b border-border-light">
-                    <p className="text-[11px] font-semibold text-text-primary truncate">
-                      {(session.user as { name?: string }).name || "User"}
-                    </p>
-                    <p className="text-[9px] text-text-muted truncate mt-0.5">
-                      {(session.user as { email?: string }).email || ""}
-                    </p>
-                  </div>
-                  <div className="py-1">
-                    <button
-                      onClick={() => { router.push("/dashboard/profile"); setProfileOpen(false); }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-[11px] text-text-secondary hover:bg-border-light transition-colors"
-                    >
-                      <User size={12} /> View Profile
-                    </button>
-                    <button
-                      onClick={() => { router.push("/dashboard/settings"); setProfileOpen(false); }}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-[11px] text-text-secondary hover:bg-border-light transition-colors"
-                    >
-                      <Settings size={12} /> Settings
-                    </button>
-                  </div>
-                  <div className="border-t border-border-light py-1">
-                    <button
-                      onClick={() => signOut({ callbackUrl: "/" })}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-[11px] text-red-500 hover:bg-border-light transition-colors"
-                    >
-                      <LogOut size={12} /> Sign Out
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+              </div>
+              <span className="text-[11px] font-semibold text-text-primary leading-tight">{(session.user as { name?: string }).name?.split(" ")[0] || "User"}</span>
+            </button>
           ) : (
             <button
-              onClick={() => window.dispatchEvent(new CustomEvent("open-auth-popup", { detail: { redirectTo: "/dashboard" } }))}
+              onClick={() => router.push("/register")}
+              className="flex h-8 items-center gap-1 bg-accent px-2.5 rounded-full active:scale-90 transition-transform"
             >
+              <User size={15} strokeWidth={2} className="text-text-primary" />
               <span className="text-[11px] font-semibold text-text-primary">Sign Up</span>
             </button>
           )}

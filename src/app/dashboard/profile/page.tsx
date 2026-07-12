@@ -3,6 +3,8 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import AuthPopup from "@/components/AuthPopup";
 
 interface UserProfile {
   id: number;
@@ -36,11 +38,19 @@ interface UserPost {
 }
 
 export default function ProfilePage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [posts, setPosts] = useState<UserPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [postsLoading, setPostsLoading] = useState(true);
+  const [showAuth, setShowAuth] = useState(false);
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      setShowAuth(true);
+    }
+  }, [status]);
 
   const user = profile || session?.user;
   const initial = user?.name?.charAt(0)?.toUpperCase() || "U";
@@ -65,8 +75,23 @@ export default function ProfilePage() {
       .catch(() => setPostsLoading(false));
   }, []);
 
+  if (status === "unauthenticated") {
+    return (
+      <>
+        <AuthPopup
+          isOpen={showAuth}
+          onClose={() => { setShowAuth(false); router.push("/"); }}
+          redirectTo="/dashboard/profile"
+        />
+        <div className="flex items-center justify-center min-h-[80vh]">
+          <p className="text-text-muted text-sm">Please sign in to view your profile.</p>
+        </div>
+      </>
+    );
+  }
+
   return (
-    <div className="flex flex-col gap-4 sm:gap-6 p-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
+    <div className="flex flex-col gap-4 sm:gap-6 py-2" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       <div>
         <h1 className="text-2xl sm:text-3xl lg:text-5xl font-normal text-text-primary">Profile</h1>
         <p className="text-sm sm:text-lg text-text-secondary">Manage your account settings.</p>
