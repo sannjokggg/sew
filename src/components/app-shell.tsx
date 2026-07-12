@@ -127,7 +127,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {isDesktop && (
         <>
-          <div className="flex fixed top-0 left-4 right-4 z-50 items-center gap-3 rounded-b-[36px] py-1 px-1" style={{ ...(isDesktop ? { zoom: 0.90 } as React.CSSProperties : {}), backgroundColor: "#F3F4F6" }}>
+          <div className="flex fixed top-1 left-4 right-4 z-50 items-center gap-3 rounded-b-[36px] py-2 px-1" style={{ ...(isDesktop ? { zoom: 0.90 } as React.CSSProperties : {}), backgroundColor: "#F3F4F6" }}>
             <Logo />
             <Navbar />
           </div>
