@@ -127,11 +127,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {isDesktop && (
         <>
-          <div className="flex fixed top-1 left-4 right-4 z-50 items-center gap-3 rounded-b-[36px] py-2 px-1" style={{ ...(isDesktop ? { zoom: 0.90 } as React.CSSProperties : {}), backgroundColor: "#F3F4F6" }}>
+          <div className="flex fixed top-0 left-0 right-0 z-50 items-center gap-3 px-4 pt-3 pb-2 shadow-sm" style={{ ...(isDesktop ? { zoom: 0.90 } as React.CSSProperties : {}), backgroundColor: "#F3F4F6" }}>
             <Logo />
             <Navbar />
           </div>
-          <div className="flex fixed left-4 top-24 bottom-4 z-40 flex-col items-center gap-[34px]" style={isDesktop ? { zoom: 0.90 } as React.CSSProperties : undefined}>
+          <div className="flex fixed left-4 top-[72px] bottom-4 z-40 flex-col items-center gap-[34px]" style={isDesktop ? { zoom: 0.90 } as React.CSSProperties : undefined}>
             <div className="mt-[5px]">
               <ThemeToggle />
             </div>
