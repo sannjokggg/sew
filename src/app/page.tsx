@@ -479,7 +479,7 @@ export default function Home() {
           <div>
             <div className="flex items-center gap-2 mb-4 sm:mb-6">
               <div className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full">
-                <img src="/logo.png" alt="SewaGo" className="h-8 w-8 sm:h-10 sm:w-10 object-contain" />
+                <img src="/header.png" alt="SewaGo" className="h-8 w-8 sm:h-10 sm:w-10 object-contain" />
               </div>
               <div>
                 <h3 className="text-lg sm:text-xl font-bold text-brand-dark">SewaGo</h3>

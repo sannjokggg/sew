@@ -82,7 +82,7 @@ export default function RecentActivities() {
     <div className="flex h-full flex-col rounded-[24px] bg-surface p-6 shadow-sm max-h-[452px]">
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-medium text-text-muted">Recent Activities</h3>
-        <div className="flex items-center gap-3">
+        <div className="hidden sm:flex items-center gap-3">
           <div className="relative">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
             <input

@@ -229,8 +229,8 @@ export default function PostDetail() {
   return (
     <div className="flex flex-col lg:h-full lg:min-h-0 gap-0 lg:overflow-hidden pb-0 sm:pb-0" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       {/* Mobile: Rounded Image with Back + Overlays */}
-      <div className="lg:hidden">
-        <div className="relative w-full h-[380px] overflow-hidden rounded-b-[20px] bg-surface-alt">
+      <div className="lg:hidden pt-8 px-1">
+        <div className="relative w-full h-[380px] overflow-hidden rounded-[20px] bg-surface-alt">
           {allImages.length > 0 ? (
             <>
               <img

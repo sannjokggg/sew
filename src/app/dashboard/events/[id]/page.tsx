@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
-  ArrowLeft, CalendarDays, Clock, MapPin, Loader2, Share2,
+  ArrowLeft, CalendarDays, Clock, MapPin, Loader2,
   GraduationCap, Cpu, Heart, Users, Trophy, Palette, Briefcase, PartyPopper,
   ChevronLeft, ChevronRight, X, Mail, Phone, UsersRound, LinkIcon,
 } from "lucide-react";
@@ -181,8 +181,8 @@ export default function EventDetailPage() {
   return (
     <div className="flex flex-col lg:h-full lg:min-h-0 gap-0 lg:overflow-hidden pb-0 sm:pb-0" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       {/* Mobile: Full-width Image with Back + Badge Overlay */}
-      <div className="lg:hidden">
-        <div className="relative w-full h-[380px] overflow-hidden rounded-b-[20px] bg-surface-alt">
+      <div className="lg:hidden pt-8 px-1">
+        <div className="relative w-full h-[380px] overflow-hidden rounded-[20px] bg-surface-alt">
           {allImages.length > 0 ? (
             <>
               <img
@@ -421,17 +421,7 @@ export default function EventDetailPage() {
 
             {/* Scrollable section: similar events */}
             <div className="flex-1 min-h-0 rounded-[24px] bg-surface p-6 shadow-sm flex flex-col overflow-hidden">
-              <div className="flex items-center justify-between flex-shrink-0">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-accent to-[#4CAF50] text-base font-semibold text-text-primary">
-                    {event.organizer_name[0]?.toUpperCase() || "?"}
-                  </div>
-                  <div>
-                    <p className="text-base font-semibold text-text-primary">{event.organizer_name}</p>
-                    <p className="text-sm text-text-muted">Organizer</p>
-                  </div>
-                </div>
-              </div>
+
               <div className="mt-4 flex gap-2 flex-shrink-0">
                 {!isPast && event.registration_link && (
                   <a
@@ -448,9 +438,6 @@ export default function EventDetailPage() {
                     RSVP
                   </button>
                 )}
-                <button className="flex h-[46px] w-[46px] flex-shrink-0 items-center justify-center rounded-full border border-border-default text-text-muted transition-colors hover:text-text-secondary">
-                  <Share2 size={18} />
-                </button>
               </div>
               {similarEvents.length > 0 && (
                 <div className="mt-5 overflow-y-auto min-h-0 chat-scrollbar flex-1">
@@ -591,17 +578,6 @@ export default function EventDetailPage() {
 
           <hr className="my-4 border-border-light" />
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-accent to-[#4CAF50] text-base font-semibold text-text-primary">
-                {event.organizer_name[0]?.toUpperCase() || "?"}
-              </div>
-              <div>
-                <p className="text-base font-semibold text-text-primary">{event.organizer_name}</p>
-                <p className="text-sm text-text-muted">Organizer</p>
-              </div>
-            </div>
-          </div>
           <div className="mt-4 flex gap-2">
             {!isPast && event.registration_link && (
               <a
@@ -618,9 +594,6 @@ export default function EventDetailPage() {
                 RSVP
               </button>
             )}
-            <button className="flex h-[46px] w-[46px] flex-shrink-0 items-center justify-center rounded-full border border-border-default text-text-muted transition-colors hover:text-text-secondary">
-              <Share2 size={18} />
-            </button>
           </div>
 
           {similarEvents.length > 0 && (

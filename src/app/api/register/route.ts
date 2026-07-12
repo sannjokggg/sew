@@ -2,19 +2,10 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import pool from "@/lib/db";
 import { initializeAuthTables } from "@/lib/db-init";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { uploadToImageKit } from "@/lib/upload";
 
 async function saveFile(file: File): Promise<string | null> {
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  const uploadDir = path.join(process.cwd(), "public", "uploads");
-  await mkdir(uploadDir, { recursive: true });
-  const ext = file.name.split(".").pop() || "jpg";
-  const filename = `sewago-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const filepath = path.join(uploadDir, filename);
-  await writeFile(filepath, buffer);
-  return `/uploads/${filename}`;
+  return uploadToImageKit(file);
 }
 
 interface RegisterFields {

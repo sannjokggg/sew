@@ -41,7 +41,7 @@ export default function MarketingNavbar() {
       <div className="flex items-center justify-between w-full rounded-[28px] px-4 sm:px-6 py-2">
         <Link href="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
           <div className="flex h-10 w-10 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-full">
-            <img src="/logo.png" alt="SewaGo" className="h-10 w-10 sm:h-14 sm:w-14 object-contain" />
+            <img src="/header.png" alt="SewaGo" className="h-10 w-10 sm:h-14 sm:w-14 object-contain" />
           </div>
           <span className="text-lg sm:text-[22px] font-semibold text-text-primary">SewaGo</span>
         </Link>

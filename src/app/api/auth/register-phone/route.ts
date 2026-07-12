@@ -1,22 +1,16 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { initializeAuthTables } from "@/lib/db-init";
+import { uploadToImageKit } from "@/lib/upload";
 
 async function saveFile(file: File): Promise<string | null> {
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  const uploadDir = path.join(process.cwd(), "public", "uploads");
-  await mkdir(uploadDir, { recursive: true });
-  const ext = file.name.split(".").pop() || "jpg";
-  const filename = `sewago-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const filepath = path.join(uploadDir, filename);
-  await writeFile(filepath, buffer);
-  return `/uploads/${filename}`;
+  return uploadToImageKit(file);
 }
 
 export async function POST(req: Request) {
   try {
+    await initializeAuthTables();
+
     const formData = await req.formData();
     const phoneNumber = formData.get("phoneNumber") as string;
     const firstName = formData.get("firstName") as string;
@@ -39,6 +33,19 @@ export async function POST(req: Request) {
       "SELECT id FROM users WHERE phone_number = $1",
       [cleaned]
     );
+
+    if (email) {
+      const emailCheck = await pool.query(
+        "SELECT id FROM users WHERE email = $1 AND phone_number != $2",
+        [email, cleaned]
+      );
+      if (emailCheck.rows.length > 0) {
+        return NextResponse.json(
+          { error: "This email is already registered with another account" },
+          { status: 400 }
+        );
+      }
+    }
 
     let profilePhotoUrl: string | null = null;
     let idCardUrl: string | null = null;
