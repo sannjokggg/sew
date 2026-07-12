@@ -41,10 +41,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (status === "loading") return;
     if (status === "authenticated" && !session?.user) return;
-    if (status === "unauthenticated" && !session && !hasTriggered && !sessionStorage.getItem("auth_popup_dismissed")) {
-      window.dispatchEvent(new CustomEvent("open-auth-popup"));
-      setHasTriggered(true);
-    }
   }, [status, hasTriggered, session]);
 
   useEffect(() => {
