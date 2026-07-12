@@ -16,6 +16,7 @@ async function ensurePostsTable() {
       image_url TEXT,
       images TEXT,
       is_published BOOLEAN DEFAULT TRUE,
+      is_available BOOLEAN DEFAULT TRUE,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `);
@@ -24,6 +25,9 @@ async function ensurePostsTable() {
   } catch {}
   try {
     await pool.query(`ALTER TABLE posts ADD COLUMN IF NOT EXISTS is_published BOOLEAN DEFAULT TRUE`);
+  } catch {}
+  try {
+    await pool.query(`ALTER TABLE posts ADD COLUMN IF NOT EXISTS is_available BOOLEAN DEFAULT TRUE`);
   } catch {}
 }
 

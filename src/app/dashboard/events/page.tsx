@@ -59,7 +59,7 @@ function formatDate(dateStr: string) {
 
 export default function EventsPage() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [events, setEvents] = useState<Event[]>([]);
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
@@ -147,6 +147,7 @@ export default function EventsPage() {
           </div>
           <button
             onClick={() => {
+              if (status === "loading") return;
               if (session?.user) {
                 setWarning("");
                 router.push("/dashboard/events/create");

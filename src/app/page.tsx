@@ -31,7 +31,7 @@ const faqs = [
   { question: "How does the marketplace work?", answer: "You can list items for exchange, giveaway, or request. Browse sustainable products and connect with others in your community." },
   { question: "How do I find events near me?", answer: "Visit the Events section to discover cleaning campaigns, plantation drives, and community events in your area." },
   { question: "Can I donate to NGOs?", answer: "Yes! We partner with verified NGOs working on climate change, waste management, and social causes." },
-  { question: "Is this platform free to use?", answer: "Yes, browsing and joining events is free. Some marketplace transactions may have minimal fees." },
+  { question: "Is this platform free to use?", answer: "Yes, SewaGo is 100% free to use. Browsing, joining events, exchanging items, giving away, and donating — everything is completely free with no hidden fees." },
 ];
 
 export default function Home() {
@@ -39,7 +39,6 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
-  const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [showDonateModal, setShowDonateModal] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -278,7 +277,7 @@ export default function Home() {
             </div>
             <div className="mt-auto">
               <img
-                src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&h=200&fit=crop"
+                src="/uploads/education.jpg"
                 alt="Education - Nepal Village Students"
                 className="w-full h-[180px] sm:h-[250px] object-cover rounded-[12px] sm:rounded-[16px] mt-4 sm:mt-6"
               />
@@ -316,7 +315,7 @@ export default function Home() {
             </div>
             <div className="mt-auto">
               <img
-                src="https://images.unsplash.com/photo-1565770772312-2b43cac7d585?w=400&h=200&fit=crop"
+                src="/uploads/food.avif"
                 alt="Food - Nepal Food Poverty"
                 className="w-full h-[180px] sm:h-[250px] object-cover rounded-[12px] sm:rounded-[16px] mt-4 sm:mt-6"
               />
@@ -373,48 +372,20 @@ export default function Home() {
           ].map((videoId) => (
             <div
               key={videoId}
-              className="relative rounded-[16px] sm:rounded-[20px] overflow-hidden h-[200px] sm:h-[250px] bg-gray-900 cursor-pointer group"
-              onClick={() => setActiveVideo(videoId)}
+              className="relative rounded-[16px] sm:rounded-[20px] overflow-hidden aspect-video bg-gray-900"
             >
-              <img
-                src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
-                alt="Video thumbnail"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <div className="w-0 h-0 border-t-[8px] sm:border-t-[10px] border-b-[8px] sm:border-b-[10px] border-l-[13px] sm:border-l-[16px] border-t-transparent border-b-transparent border-l-brand-dark ml-0.5 sm:ml-1"></div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {activeVideo && (
-          <div
-            className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4 sm:p-8"
-            onClick={() => setActiveVideo(null)}
-          >
-            <div
-              className="relative w-full max-w-4xl aspect-video rounded-[16px] sm:rounded-[20px] overflow-hidden bg-black"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setActiveVideo(null)}
-                className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 w-8 h-8 sm:w-10 sm:h-10 bg-white/90 rounded-full flex items-center justify-center text-gray-700 hover:bg-white transition-colors"
-              >
-                ✕
-              </button>
               <iframe
-                src={`https://www.youtube.com/embed/${activeVideo}?autoplay=1`}
+                src={`https://www.youtube.com/embed/${videoId}`}
                 title="Climate Impact Video"
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
             </div>
-          </div>
-        )}
+          ))}
+        </div>
+
+
       </div>
 
       {/* Get in Touch Section */}

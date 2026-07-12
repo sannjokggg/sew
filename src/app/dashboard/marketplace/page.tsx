@@ -21,6 +21,7 @@ interface Post {
   images: string[];
   user_name: string;
   created_at: string;
+  is_available: boolean;
 }
 
 const typeConfig: Record<string, { gradient: string; badge: string; icon: typeof Tag }> = {
@@ -52,7 +53,7 @@ function timeAgo(dateStr: string) {
 
 export default function Marketplace() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [posts, setPosts] = useState<Post[]>([]);
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
@@ -102,6 +103,21 @@ export default function Marketplace() {
       }
     } catch (err) {
       console.error("Delete failed:", err);
+    }
+  };
+
+  const handleToggleAvailability = async (id: number, available: boolean) => {
+    try {
+      const res = await fetch(`/api/posts/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_available: available }),
+      });
+      if (res.ok) {
+        setPosts((prev) => prev.map((p) => (p.id === id ? { ...p, is_available: available } : p)));
+      }
+    } catch (err) {
+      console.error("Toggle availability failed:", err);
     }
   };
 
@@ -198,6 +214,7 @@ export default function Marketplace() {
           </div>
           <button
             onClick={() => {
+              if (status === "loading") return;
               if (session?.user) {
                 setWarning("");
                 router.push("/dashboard/marketplace/create");
@@ -246,14 +263,16 @@ export default function Marketplace() {
                     onDelete={handleDelete}
                     onEdit={() => openEditModal(item)}
                     type={item.type}
+                    isAvailable={item.is_available !== false}
+                    onToggleAvailability={isOwner ? handleToggleAvailability : undefined}
                   />
                 </div>
-                <div className={`flex h-[120px] sm:h-[240px] items-center justify-center overflow-hidden rounded-[10px] sm:rounded-[16px] ${(item.images && item.images.length > 0) || item.image_url ? "bg-surface-alt" : "border border-border-default bg-surface"}`}>
+                <div className={`relative flex h-[120px] sm:h-[240px] items-center justify-center overflow-hidden rounded-[10px] sm:rounded-[16px] ${(item.images && item.images.length > 0) || item.image_url ? "bg-surface-alt" : "border border-border-default bg-surface"}`}>
                   {(item.images && item.images.length > 0) || item.image_url ? (
                     <img
                       src={(item.images && item.images[0]) || item.image_url || ""}
                       alt={item.title}
-                      className="cursor-pointer transition-transform hover:scale-105 h-full w-full object-cover"
+                      className={`cursor-pointer transition-transform hover:scale-105 h-full w-full object-cover ${item.is_available === false ? "opacity-60" : ""}`}
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -262,6 +281,11 @@ export default function Marketplace() {
                     />
                   ) : (
                     <Icon size={40} strokeWidth={1.5} className="text-[#B0B0B0] sm:w-20 sm:h-20" />
+                  )}
+                  {item.is_available === false && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="rounded-full bg-red-500/90 px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-sm font-bold text-white shadow-lg">Not Available</span>
+                    </div>
                   )}
                 </div>
                 <div className="mt-2 sm:mt-4">

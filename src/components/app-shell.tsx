@@ -12,6 +12,7 @@ import Navbar from "@/components/navbar";
 import MarketingNavbar from "@/components/marketing-navbar";
 import BottomNav from "@/components/bottom-nav";
 import AuthPopup from "@/components/AuthPopup";
+import ProfileCompletionModal from "@/components/ProfileCompletionModal";
 import VerificationCelebration from "@/components/verification-celebration";
 
 const MARKETING_PATHS = ["/", "/about", "/contact"];
@@ -29,6 +30,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [authInitialStep, setAuthInitialStep] = useState<string | undefined>(undefined);
   const [hasTriggered, setHasTriggered] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [showProfileCompletion, setShowProfileCompletion] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
@@ -46,13 +48,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const handleOpenAuth = (e: Event) => {
       const detail = (e as CustomEvent).detail;
+      if (status === "authenticated" && session?.user) return;
       setAuthRedirectTo(detail?.redirectTo);
       setAuthInitialStep(detail?.initialStep);
       setShowAuthPopup(true);
     };
     window.addEventListener("open-auth-popup", handleOpenAuth);
     return () => window.removeEventListener("open-auth-popup", handleOpenAuth);
-  }, []);
+  }, [status, session]);
 
   const closeAuthPopup = () => {
     sessionStorage.setItem("auth_popup_dismissed", "true");
@@ -77,7 +80,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     if (user?.needsProfileCompletion && !sessionStorage.getItem("profile_completion_prompted")) {
       sessionStorage.setItem("profile_completion_prompted", "true");
       setTimeout(() => {
-        window.dispatchEvent(new CustomEvent("open-auth-popup", { detail: { initialStep: "details" } }));
+        setShowProfileCompletion(true);
       }, 1000);
     }
   }, [status, session]);
@@ -86,6 +89,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return (
       <>
         <AuthPopup isOpen={showAuthPopup} onClose={closeAuthPopup} redirectTo={authRedirectTo} initialStep={authInitialStep as "welcome" | "phone" | "otp" | "details" | "email" | undefined} />
+        <ProfileCompletionModal isOpen={showProfileCompletion} onClose={() => setShowProfileCompletion(false)} />
         <VerificationCelebration isOpen={showCelebration} onClose={() => setShowCelebration(false)} />
         <div className="sticky top-0 z-50 bg-surface/80 backdrop-blur-md py-2 px-2 sm:px-4" style={isDesktop ? { zoom: 0.85 } as React.CSSProperties : undefined}>
           <MarketingNavbar />
@@ -125,6 +129,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <AuthPopup isOpen={showAuthPopup} onClose={closeAuthPopup} redirectTo={authRedirectTo} />
+      <ProfileCompletionModal isOpen={showProfileCompletion} onClose={() => setShowProfileCompletion(false)} />
       <VerificationCelebration isOpen={showCelebration} onClose={() => setShowCelebration(false)} />
 
       {isDesktop && (

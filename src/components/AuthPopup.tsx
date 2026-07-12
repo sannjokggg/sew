@@ -50,8 +50,14 @@ export default function AuthPopup({ isOpen, onClose, redirectTo, initialStep }: 
   const [idCardFile, setIdCardFile] = useState<File | null>(null);
   const profileInputRef = useRef<HTMLInputElement>(null);
   const idCardInputRef = useRef<HTMLInputElement>(null);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [isGoogleCompletion, setIsGoogleCompletion] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && status === "authenticated" && session?.user) {
+      handleClose();
+    }
+  }, [isOpen, status, session]);
 
   useEffect(() => {
     if (!otpExpiresAt) return;

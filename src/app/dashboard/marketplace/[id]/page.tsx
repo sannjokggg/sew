@@ -47,6 +47,7 @@ interface PostDetail {
   user_email: string;
   created_at: string;
   comments: Comment[];
+  is_available: boolean;
 }
 
 interface SimilarPost {
@@ -149,6 +150,21 @@ export default function PostDetail() {
     setViewerScale((prev) => Math.min(Math.max(prev + (e.deltaY > 0 ? -0.15 : 0.15), 1), 3));
   }, []);
 
+  const handleToggleAvailability = async (id: number, available: boolean) => {
+    try {
+      const res = await fetch(`/api/posts/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_available: available }),
+      });
+      if (res.ok) {
+        setPost((prev) => prev ? { ...prev, is_available: available } : prev);
+      }
+    } catch (err) {
+      console.error("Toggle availability failed:", err);
+    }
+  };
+
   const handleOffer = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!offerContent.trim() && offerImages.length === 0) return;
@@ -220,7 +236,7 @@ export default function PostDetail() {
               <img
                 src={allImages[selectedImage]}
                 alt={post.title}
-                className="h-full w-full object-cover"
+                className={`h-full w-full object-cover ${post.is_available === false ? "opacity-60" : ""}`}
                 onClick={() => setLightbox({ src: allImages[selectedImage], alt: post.title })}
               />
               <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30 pointer-events-none" />
@@ -228,6 +244,11 @@ export default function PostDetail() {
           ) : (
             <div className="flex h-full items-center justify-center">
               <Icon size={80} strokeWidth={1.2} className="text-[#B0B0B0]" />
+            </div>
+          )}
+          {post.is_available === false && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+              <span className="rounded-full bg-red-500/90 px-5 py-2 text-sm font-bold text-white shadow-lg">Not Available</span>
             </div>
           )}
 
@@ -294,13 +315,18 @@ export default function PostDetail() {
                   <img
                     src={allImages[selectedImage]}
                     alt={post.title}
-                    className="relative max-h-full w-full cursor-pointer object-contain transition-transform duration-200"
+                    className={`relative max-h-full w-full cursor-pointer object-contain transition-transform duration-200 ${post.is_available === false ? "opacity-60" : ""}`}
                     style={{ transform: `scale(${viewerScale})` }}
                     onClick={() => {
                       if (viewerScale > 1) return;
                       setLightbox({ src: allImages[selectedImage], alt: post.title });
                     }}
                   />
+                  {post.is_available === false && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <span className="rounded-full bg-red-500/90 px-5 py-2 text-sm font-bold text-white shadow-lg">Not Available</span>
+                    </div>
+                  )}
                   {allImages.length > 1 && (
                     <>
                       <button
@@ -394,6 +420,8 @@ export default function PostDetail() {
                       setEditError("");
                       setEditSaving(false);
                     }}
+                    isAvailable={post.is_available !== false}
+                    onToggleAvailability={handleToggleAvailability}
                   />
                 )}
               </div>
@@ -413,11 +441,16 @@ export default function PostDetail() {
             </div>
 
             <div className="flex-1 min-h-0 rounded-[24px] bg-surface p-6 shadow-sm flex flex-col overflow-hidden">
+              {post.is_available === false && (
+                <div className="mb-4 rounded-[14px] border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 flex-shrink-0">
+                  This item is no longer available.
+                </div>
+              )}
               <h2 className="text-lg font-semibold text-text-primary flex-shrink-0">
                 Offers
                 <span className="ml-2 text-sm font-normal text-text-muted">({offers.length})</span>
               </h2>
-              {myId !== post.user_id && (
+              {myId !== post.user_id && post.is_available !== false && (
                 <form onSubmit={handleOffer} className="mt-4 flex flex-col gap-3 flex-shrink-0">
                   <div className="flex gap-2">
                     <input
@@ -602,6 +635,8 @@ export default function PostDetail() {
                   setEditError("");
                   setEditSaving(false);
                 }}
+                isAvailable={post.is_available !== false}
+                onToggleAvailability={handleToggleAvailability}
               />
             )}
           </div>
@@ -625,12 +660,17 @@ export default function PostDetail() {
 
           {/* Offers */}
           <div>
+            {post.is_available === false && (
+              <div className="mb-3 rounded-[12px] border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                This item is no longer available.
+              </div>
+            )}
             <h2 className="text-base font-semibold text-text-primary">
               Offers
               <span className="ml-2 text-xs font-normal text-text-muted">({offers.length})</span>
             </h2>
 
-            {myId !== post.user_id && (
+            {myId !== post.user_id && post.is_available !== false && (
               <form onSubmit={handleOffer} className="mt-3 flex flex-col gap-3">
                 <div className="flex gap-2">
                   <input
