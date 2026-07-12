@@ -36,9 +36,13 @@ yarn-error.log*
 # vercel
 .vercel
 
-# uploaded images
+# uploaded images (user uploads ignored, static assets whitelisted)
 public/uploads/*
 !public/uploads/.gitkeep
+!public/uploads/qr.jpeg
+!public/uploads/exchange.jpg
+!public/uploads/education.jpg
+!public/uploads/food.avif
 
 # typescript
 *.tsbuildinfo
