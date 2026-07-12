@@ -179,10 +179,10 @@ export default function EventDetailPage() {
   const allImages = event.images?.length > 0 ? event.images : event.image_url ? [event.image_url] : [];
 
   return (
-    <div className="flex flex-col lg:h-full lg:min-h-0 gap-0 lg:overflow-hidden pb-20 sm:pb-0" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
+    <div className="flex flex-col lg:h-full lg:min-h-0 gap-0 lg:overflow-hidden pb-0 sm:pb-0" style={{ fontFamily: "var(--font-inter), Inter, sans-serif" }}>
       {/* Mobile: Full-width Image with Back + Badge Overlay */}
-      <div className="lg:hidden px-4">
-        <div className="relative w-full h-[380px] rounded-[20px] overflow-hidden bg-surface-alt shadow-sm">
+      <div className="lg:hidden">
+        <div className="relative w-full h-[380px] overflow-hidden rounded-b-[20px] bg-surface-alt">
           {allImages.length > 0 ? (
             <>
               <img
@@ -489,8 +489,8 @@ export default function EventDetailPage() {
       </div>
 
       {/* Mobile: Content Below Image */}
-      <div className="lg:hidden p-4 pt-3">
-        <div className="rounded-[20px] bg-surface p-5 shadow-sm">
+      <div className="lg:hidden pt-3">
+        <div className="px-3"><div className="rounded-[20px] bg-surface p-5 shadow-sm">
           <div className="flex items-start justify-between">
             <div className="flex flex-wrap items-center gap-2">
               <span className={`rounded-full px-3 py-1 text-xs font-semibold ${cfg.badge}`}>
@@ -628,7 +628,7 @@ export default function EventDetailPage() {
               <hr className="my-4 border-border-light" />
               <div>
                 <h2 className="text-base font-semibold text-text-primary mb-3">Similar Events</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   {similarEvents.map((item) => {
                     const itemCfg = categoryConfig[item.category] || categoryConfig.Community;
                     const ItemIcon = itemCfg.icon;
@@ -657,7 +657,7 @@ export default function EventDetailPage() {
               </div>
             </>
           )}
-        </div>
+        </div></div>
       </div>
 
       {lightbox && (
