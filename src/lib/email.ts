@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 const SITE_URL = process.env.NEXTAUTH_URL || "https://www.sewago.org";
-const LOGO_URL = `${SITE_URL}/header.png`;
+const LOGO_URL = "https://ik.imagekit.io/ud6vwfuhf/logo.png";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || "smtp.ionos.com",
@@ -115,7 +115,7 @@ function emailWrapper(content: string, preheader?: string): string {
                         <td valign="top" width="50%" style="padding-left:16px;">
                           <span style="font-size:12px;font-weight:700;color:#B8F25E;text-transform:uppercase;letter-spacing:1px;">Contact Us</span>
                           <p style="margin:10px 0 0;font-size:13px;color:#e5e5e5;line-height:20px;">
-                            <strong style="color:#ffffff;">Sanjok Gahrti</strong><br />
+                            <strong style="color:#ffffff;">Sanjok Gharti</strong><br />
                             <span style="color:#a3a3a3;">Admin, SewaGo Nepal</span>
                           </p>
                           <p style="margin:10px 0 0;font-size:12px;color:#a3a3a3;line-height:20px;">
@@ -147,64 +147,6 @@ function emailWrapper(content: string, preheader?: string): string {
                       <span style="color:#404040;">|</span>
                       <a href="${SITE_URL}/dashboard/donations" style="color:#a3a3a3;text-decoration:none;margin:0 8px;">Donate</a>
                     </p>
-                  </td>
-                </tr>
-
-                <!-- Social Icons -->
-                <tr>
-                  <td align="center" style="padding:0 40px 20px;">
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <!-- LinkedIn -->
-                        <td style="padding:0 4px;">
-                          <a href="#" target="_blank" style="text-decoration:none;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                              <tr>
-                                <td style="width:32px;height:32px;background-color:rgba(255,255,255,0.1);border-radius:50%;text-align:center;vertical-align:middle;">
-                                  <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE5IDBoLTE0Yy0yLjc2MSAwLTUgMi4yMzktNSA1djE0YzAgMi43NjEgMi4yMzkgNSA1IDVoMTRjMi43NjIgMCA1LTIuMjM5IDUtNXYtMTRjMC0yLjc2MS0yLjIzOC01LTUtNXptLTExIDE5aC0zdi0xMWgzdjExem0tMS41LTEyLjI2OGMtLjk2NiAwLTEuNzUtLjc5LTEuNzUtMS43NjRzLjc4NC0xLjc2NCAxLjc1LTEuNzY0IDEuNzUuNzkgMS43NSAxLjc2NC0uNzgzIDEuNzY0LTEuNzUgMS43NjR6bTEzLjUgMTIuMjY4aC0zdi01LjYwNGMwLTMuMzY4LTQtMy4xMTMtNCAwdjUuNjA0aC0zdi0xMWgzdjEuNzY1YzEuMzk2LTIuNTg2IDctMi43NzcgNyAyLjQ3NnY2Ljc1OXoiLz48L3N2Zz4=" alt="LinkedIn" width="14" height="14" style="display:block;margin:9px auto;" />
-                                </td>
-                              </tr>
-                            </table>
-                          </a>
-                        </td>
-                        <!-- Instagram -->
-                        <td style="padding:0 4px;">
-                          <a href="#" target="_blank" style="text-decoration:none;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                              <tr>
-                                <td style="width:32px;height:32px;background-color:rgba(255,255,255,0.1);border-radius:50%;text-align:center;vertical-align:middle;">
-                                  <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEyIDIuMTYzYzMuMjA0IDAgMy41ODQuMDEyIDQuODUuMDcgMy4yNTIuMTQ4IDQuNzcxIDEuNjkxIDQuOTE5IDQuOTE5LjA1OCAxLjI2NS4wNjkgMS42NDUuMDY5IDQuODQ5IDAgMy4yMDUtLjAxMiAzLjU4NC0uMDY5IDQuODQ5LS4xNDkgMy4yMjUtMS42NjQgNC43NzEtNC45MTkgNC45MTktMS4yNjYuMDU4LTEuNjQ0LjA3LTQuODUuMDctMy4yMDQgMC0zLjU4NC0uMDEyLTQuODQ5LS4wNy0zLjI2LS4xNDktNC43NzEtMS42OTktNC45MTktNC45Mi0uMDU4LTEuMjY1LS4wNy0xLjY0NC0uMDctNC44NDkgMC0zLjIwNC4wMTMtMy41ODMuMDctNC44NDkuMTQ5LTMuMjI3IDEuNjY0LTQuNzcxIDQuOTE5LTQuOTE5IDEuMjY2LS4wNTcgMS42NDUtLjA2OSA0Ljg0OS0uMDY5em0wLTIuMTYzYy0zLjI1OSAwLTMuNjY3LjAxNC00Ljk0Ny4wNzItNC4zNTguMi02Ljc4IDIuNjE4LTYuOTggNi45OC0uMDU5IDEuMjgxLS4wNzMgMS42ODktLjAzIDQuOTQ4IDAgMy4yNTkuMDE0IDMuNjY4LjA3MiA0Ljk0OC4yIDQuMzU4IDIuNjE4IDYuNzggNi45OCA2Ljk4IDEuMjgxLjA1OCAxLjY4OS4wNzIgNC45NDguMDcyIDMuMjU5IDAgMy42NjgtLjAxNCA0Ljk0OC0uMDcyIDQuMzU0LS4yIDYuNzgyLTIuNjE4IDYuOTc5LTYuOTguMDU5LTEuMjguMDczLTEuNjg5LjA3My00Ljk0OCAwLTMuMjU5LS4wMTQtMy42NjYtLjA3Mi00Ljk0Ny0uMTk2LTQuMzU0LTIuNjE3LTYuNzgtNi45NzktNi45OC0xLjI4MS0uMDU5LTEuNjktLjA3My00Ljk0OS0uMDczem0wIDUuODM4Yy0zLjQwMyAwLTYuMTYyIDIuNzU5LTYuMTYyIDYuMTYyczIuNzU5IDYuMTYzIDYuMTYyIDYuMTYzIDYuMTYyLTIuNzU5IDYuMTYyLTYuMTYzYzAtMy40MDMtMi43NTktNi4xNjItNi4xNjItNi4xNjJ6bTAgMTAuMTYyYy0yLjIwOSAwLTQtMS43OS00LTQgMC0yLjIwOSAxLjc5MS00IDQtNHM0IDEuNzkxIDQgNGMwIDIuMjEtMS43OTEgNC00IDR6bTYuNDA2LTExLjg0NS0uNzk2IDAtMS40NDEuNjQ1LTEuNDQxIDEuNDQgLjY0NSAxLjQ0IDEuNDQxIDEuNDRjLjc5NSAwIDEuNDM5LS42NDUgMS40MzktMS40NHMtLjY0NC0xLjQ0LTEuNDM5LTEuNDR6Ii8+PC9zdmc+" alt="Instagram" width="14" height="14" style="display:block;margin:9px auto;" />
-                                </td>
-                              </tr>
-                            </table>
-                          </a>
-                        </td>
-                        <!-- Facebook -->
-                        <td style="padding:0 4px;">
-                          <a href="#" target="_blank" style="text-decoration:none;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                              <tr>
-                                <td style="width:32px;height:32px;background-color:rgba(255,255,255,0.1);border-radius:50%;text-align:center;vertical-align:middle;">
-                                  <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTkgOGgtM3Y0aDN2MTJoNXYtMTJoMy42NDJsLjM1OC00aC00di0xLjY2N2MwLS45NTUuMTkyLTEuMzMzIDEuMTE1LTEuMzMzSDIydi01aC0zLjgwOGMtMy41OTYgMC01LjE5MiAxLjU4My01LjE5MiA0LjYxNXYzLjM4NXoiLz48L3N2Zz4=" alt="Facebook" width="14" height="14" style="display:block;margin:9px auto;" />
-                                </td>
-                              </tr>
-                            </table>
-                          </a>
-                        </td>
-                        <!-- YouTube -->
-                        <td style="padding:0 4px;">
-                          <a href="#" target="_blank" style="text-decoration:none;">
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                              <tr>
-                                <td style="width:32px;height:32px;background-color:rgba(255,255,255,0.1);border-radius:50%;text-align:center;vertical-align:middle;">
-                                  <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE5LjYxNSAzLjE4NGMtMy42MDQtLjI0Ni0xMS42MzEtLjI0NS0xNS4yMyAwLTMuODk3LjI2Ni00LjM1NiAyLjYyLTQuMzg1IDguODE2LjAyOSA2LjE4NS40ODQgOC41NDkgNC4zODUgOC44MTYgMy42LjI0NSAxMS42MjYuMjQ2IDE1LjIzIDAgMy44OTctLjI2NiA0LjM1Ni0yLjYyIDQuMzg1LTguODE2LS4wMjktNi4xODUtLjQ4NC04LjU0OS00LjM4NS04LjgxNnptLTEwLjYxNSAxMi44MTZ2LTgsOCAzLjk5My04IDQuMDA3eiIvPjwvc3ZnPg==" alt="YouTube" width="14" height="14" style="display:block;margin:9px auto;" />
-                                </td>
-                              </tr>
-                            </table>
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
                   </td>
                 </tr>
 

@@ -108,7 +108,7 @@ export default function Dashboard() {
 
         {/* Impact Stats Grid */}
         <div className="lg:flex-[3.5] rounded-[18px] lg:rounded-[24px] bg-surface p-4 lg:p-5 shadow-sm grid grid-cols-2 gap-2.5 lg:gap-3">
-          <div className="rounded-[16px] bg-gradient-to-br from-[#B8F25E] to-[#4CAF50] p-3.5 lg:p-5 flex flex-col justify-between">
+          <div className="rounded-[16px] bg-[#B8F25E] p-3.5 lg:p-5 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs lg:text-base font-medium text-text-primary">Items Reused</span>
               <span className="flex h-7 w-7 lg:h-8 lg:w-8 items-center justify-center rounded-full bg-white/40">

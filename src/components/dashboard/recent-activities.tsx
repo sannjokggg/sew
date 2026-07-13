@@ -80,91 +80,110 @@ export default function RecentActivities() {
 
   return (
     <div className="flex h-full flex-col rounded-[24px] bg-surface p-6 shadow-sm max-h-[452px]">
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-medium text-text-muted">Recent Activities</h3>
-        <div className="hidden sm:flex items-center gap-3">
-          <div className="relative">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-52 rounded-full border border-gray-200 bg-gray-50 py-2 pl-9 pr-4 text-sm text-text-secondary placeholder:text-text-muted focus:border-[#B8F25E] focus:outline-none"
-            />
-            {searchQuery && (
-              <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary">
-                <X size={12} />
-              </button>
-            )}
-          </div>
-          <div className="relative">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-gray-50 transition-colors"
-            >
-              <SlidersHorizontal size={16} />
-              <span>Filter</span>
-              {(typeFilter !== "All" || statusFilter !== "All") && (
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#B8F25E] text-xs font-bold text-text-primary">
-                  {(typeFilter !== "All" ? 1 : 0) + (statusFilter !== "All" ? 1 : 0)}
-                </span>
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-medium text-text-muted">Recent Activities</h3>
+          
+          {/* Desktop Filter */}
+          <div className="hidden sm:flex items-center gap-3">
+            <div className="relative">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-52 rounded-full border border-gray-200 bg-gray-50 py-2 pl-9 pr-4 text-sm text-text-secondary placeholder:text-text-muted focus:border-[#B8F25E] focus:outline-none"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary">
+                  <X size={12} />
+                </button>
               )}
-            </button>
-            {showFilters && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setShowFilters(false)} />
-                <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-[12px] border border-border-light bg-surface p-4 shadow-lg">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Type</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {typeFilters.map((t) => (
+            </div>
+            <div className="relative">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-text-secondary hover:bg-gray-50 transition-colors"
+              >
+                <SlidersHorizontal size={16} />
+                <span>Filter</span>
+                {(typeFilter !== "All" || statusFilter !== "All") && (
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#B8F25E] text-xs font-bold text-text-primary">
+                    {(typeFilter !== "All" ? 1 : 0) + (statusFilter !== "All" ? 1 : 0)}
+                  </span>
+                )}
+              </button>
+              {showFilters && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setShowFilters(false)} />
+                  <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-[12px] border border-border-light bg-surface p-4 shadow-lg">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Type</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {typeFilters.map((t) => (
+                        <button
+                          key={t}
+                          onClick={() => setTypeFilter(t)}
+                          className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                            typeFilter === t
+                              ? "bg-[#B8F25E] text-text-primary"
+                              : "bg-gray-100 text-text-secondary hover:bg-gray-200"
+                          }`}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-text-muted">Status</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {statusFilters.map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => setStatusFilter(s)}
+                          className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                            statusFilter === s
+                              ? "bg-[#B8F25E] text-text-primary"
+                              : "bg-gray-100 text-text-secondary hover:bg-gray-200"
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="mt-4 flex gap-2">
                       <button
-                        key={t}
-                        onClick={() => setTypeFilter(t)}
-                        className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                          typeFilter === t
-                            ? "bg-[#B8F25E] text-text-primary"
-                            : "bg-gray-100 text-text-secondary hover:bg-gray-200"
-                        }`}
+                        onClick={() => { setTypeFilter("All"); setStatusFilter("All"); }}
+                        className="flex-1 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-text-secondary hover:bg-gray-50"
                       >
-                        {t}
+                        Reset
                       </button>
-                    ))}
-                  </div>
-                  <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-text-muted">Status</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {statusFilters.map((s) => (
                       <button
-                        key={s}
-                        onClick={() => setStatusFilter(s)}
-                        className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                          statusFilter === s
-                            ? "bg-[#B8F25E] text-text-primary"
-                            : "bg-gray-100 text-text-secondary hover:bg-gray-200"
-                        }`}
+                        onClick={() => setShowFilters(false)}
+                        className="flex-1 rounded-full bg-[#B8F25E] px-3 py-1.5 text-xs font-semibold text-text-primary"
                       >
-                        {s}
+                        Apply
                       </button>
-                    ))}
+                    </div>
                   </div>
-                  <div className="mt-4 flex gap-2">
-                    <button
-                      onClick={() => { setTypeFilter("All"); setStatusFilter("All"); }}
-                      className="flex-1 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-text-secondary hover:bg-gray-50"
-                    >
-                      Reset
-                    </button>
-                    <button
-                      onClick={() => setShowFilters(false)}
-                      className="flex-1 rounded-full bg-[#B8F25E] px-3 py-1.5 text-xs font-semibold text-text-primary"
-                    >
-                      Apply
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
+        </div>
+
+        {/* Mobile Filter */}
+        <div className="sm:hidden flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+          {typeFilters.map((t) => (
+            <button
+              key={t}
+              onClick={() => setTypeFilter(t)}
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition-all ${
+                typeFilter === t ? "bg-black text-white" : "bg-gray-100 text-gray-600"
+              }`}
+            >
+              {t}
+            </button>
+          ))}
         </div>
       </div>
 

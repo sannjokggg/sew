@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
   CalendarDays, Loader2, GraduationCap, Cpu, Heart,
-  Users, Trophy, Palette, Briefcase, PartyPopper, Search, X,
+  Users, Trophy, Palette, Briefcase, PartyPopper, Search, X, LayoutGrid, ChevronRight,
 } from "lucide-react";
 import ImageLightbox from "@/components/image-lightbox";
 import ThreeDotMenu from "@/components/three-dot-menu";
@@ -31,6 +31,7 @@ interface Event {
 }
 
 const categoryConfig: Record<string, { icon: typeof GraduationCap; color: string; bg: string; badge: string }> = {
+  All: { icon: LayoutGrid, color: "text-text-primary", bg: "bg-gray-50", badge: "bg-surface text-text-primary" },
   Education: { icon: GraduationCap, color: "text-[#3B82F6]", bg: "bg-blue-50", badge: "bg-blue-100 text-blue-700" },
   Technology: { icon: Cpu, color: "text-[#8B5CF6]", bg: "bg-purple-50", badge: "bg-purple-100 text-purple-700" },
   "Health & Wellness": { icon: Heart, color: "text-[#EF4444]", bg: "bg-red-50", badge: "bg-red-100 text-red-700" },
@@ -66,6 +67,13 @@ export default function EventsPage() {
   const [warning, setWarning] = useState("");
   const [loading, setLoading] = useState(true);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+  const filterScrollRef = useRef<HTMLDivElement>(null);
+  const filterScrollRefDesktop = useRef<HTMLDivElement>(null);
+
+  const scrollFilters = (dir: "left" | "right") => {
+    const el = window.innerWidth < 640 ? filterScrollRef.current : filterScrollRefDesktop.current;
+    el?.scrollBy({ left: dir === "left" ? -150 : 150, behavior: "smooth" });
+  };
 
   useEffect(() => {
     fetch("/api/events")
@@ -114,23 +122,49 @@ export default function EventsPage() {
       )}
 
       <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-1.5 sm:gap-2 overflow-x-auto hide-scrollbar pb-1">
-          {filterCategories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={`shrink-0 rounded-full px-3.5 sm:px-5 py-1.5 sm:py-2.5 text-xs sm:text-base font-medium transition-all duration-200 cursor-pointer ${
-                filter === cat
-                  ? "bg-[#1D1B17] text-white shadow-sm"
-                  : "bg-surface text-[#666666] hover:bg-gray-100 hover:text-[#222222]"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        <div className="flex items-center gap-1">
+          {/* Mobile: events-style scrollable pills */}
+          <div ref={filterScrollRef} className="flex gap-1 sm:hidden overflow-x-auto hide-scrollbar pb-1 flex-1">
+            {filterCategories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-medium transition-all duration-200 cursor-pointer ${
+                  filter === cat
+                    ? "bg-[#1D1B17] text-white shadow-sm"
+                    : "bg-surface text-[#666666] hover:bg-gray-100 hover:text-[#222222]"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+          <button onClick={() => scrollFilters("right")} className="sm:hidden shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-surface text-text-muted hover:bg-gray-100">
+            <ChevronRight size={14} />
+          </button>
+          {/* Desktop: pill-bar with icons */}
+          <div ref={filterScrollRefDesktop} className="hidden sm:flex items-center gap-[2px] bg-surface px-2 h-14 rounded-[36px] overflow-x-auto hide-scrollbar flex-1 max-w-[600px]">
+            {filterCategories.map((cat) => {
+              const Icon = categoryConfig[cat]?.icon || CalendarDays;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setFilter(cat)}
+                  className={`flex items-center gap-2 px-[22px] py-2 rounded-[36px] text-xs sm:text-base font-medium transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                    filter === cat
+                      ? "bg-nav-active text-white shadow-md"
+                      : "text-text-muted hover:bg-border-light hover:text-text-primary"
+                  }`}
+                >
+                  <Icon size={18} />
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 sm:gap-2 rounded-full border border-border-default bg-surface px-2.5 sm:px-4 py-2 sm:py-3 flex-1 sm:flex-initial">
+        <div className="flex items-center gap-2 h-14">
+          <div className="flex items-center gap-1.5 sm:gap-2 rounded-full sm:rounded-[36px] border border-border-default bg-surface px-2.5 sm:px-4 py-2 sm:py-3 flex-1 sm:flex-initial h-14">
             <Search size={14} className="text-text-muted sm:w-[18px] sm:h-[18px]" />
             <input
               type="text"
@@ -156,7 +190,7 @@ export default function EventsPage() {
                 window.dispatchEvent(new CustomEvent("open-auth-popup", { detail: { redirectTo: "/dashboard/events/create" } }));
               }
             }}
-            className="shrink-0 inline-flex items-center justify-center rounded-full bg-accent px-3.5 sm:px-5 py-2 sm:py-3 text-xs sm:text-base font-semibold text-text-primary transition-colors hover:bg-accent-hover"
+            className="shrink-0 inline-flex items-center justify-center rounded-full sm:rounded-[36px] bg-accent px-3.5 sm:px-5 py-2 sm:py-3 text-xs sm:text-base font-semibold text-text-primary transition-colors hover:bg-accent-hover h-14"
           >
             + Add
           </button>

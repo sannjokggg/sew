@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 import pool from "@/lib/db";
 import { initializeAuthTables } from "@/lib/db-init";
 import { uploadToImageKit } from "@/lib/upload";
@@ -16,12 +17,18 @@ export async function POST(req: Request) {
     const firstName = formData.get("firstName") as string;
     const lastName = formData.get("lastName") as string;
     const email = formData.get("email") as string | null;
+    const password = formData.get("password") as string | null;
     const dob = formData.get("dob") as string | null;
     const address = formData.get("address") as string | null;
 
-    if (!phoneNumber || !firstName || !lastName) {
+    const missingFields: string[] = [];
+    if (!phoneNumber || !phoneNumber.trim()) missingFields.push("Phone number");
+    if (!firstName || !firstName.trim()) missingFields.push("First name");
+    if (!lastName || !lastName.trim()) missingFields.push("Last name");
+
+    if (missingFields.length > 0) {
       return NextResponse.json(
-        { error: "Phone number, first name, and last name are required" },
+        { error: `Please enter your ${missingFields.join(", ")}` },
         { status: 400 }
       );
     }
@@ -60,6 +67,12 @@ export async function POST(req: Request) {
       idCardUrl = await saveFile(idCardFile);
     }
 
+    // Hash password if provided
+    let hashedPassword: string | null = null;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
     if (existing.rows.length > 0) {
       const sets: string[] = ["name = $1", "first_name = $2", "last_name = $3"];
       const values: unknown[] = [fullName, firstName, lastName];
@@ -68,6 +81,11 @@ export async function POST(req: Request) {
       if (email) {
         sets.push(`email = $${idx}`);
         values.push(email);
+        idx++;
+      }
+      if (hashedPassword) {
+        sets.push(`password = $${idx}`);
+        values.push(hashedPassword);
         idx++;
       }
       if (dob) {
@@ -100,14 +118,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, userId: existing.rows[0].id });
     } else {
       const result = await pool.query(
-        `INSERT INTO users (name, first_name, last_name, email, phone_number, dob, address, profile_photo, id_card_url, verification_status, is_verified)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'pending', FALSE)
+        `INSERT INTO users (name, first_name, last_name, email, password, phone_number, dob, address, profile_photo, id_card_url, verification_status, is_verified)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'pending', FALSE)
          RETURNING id`,
         [
           fullName,
           firstName,
           lastName,
           email || null,
+          hashedPassword,
           cleaned,
           dob || null,
           address || null,
@@ -121,10 +140,13 @@ export async function POST(req: Request) {
         userId: result.rows[0].id,
       });
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Register phone error:", error);
+    const msg = error?.code === "23505"
+      ? "This phone number or email is already registered. Please use a different one."
+      : "Registration failed. Please check your details and try again.";
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: msg },
       { status: 500 }
     );
   }
